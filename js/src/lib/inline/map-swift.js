@@ -1,0 +1,1 @@
+var MapSwift = MapSwift || {};
