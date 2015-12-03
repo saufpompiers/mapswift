@@ -16,6 +16,8 @@
 		5523D26B1C0F366600069905 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5523D26A1C0F366600069905 /* Assets.xcassets */; };
 		5523D26E1C0F366600069905 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5523D26C1C0F366600069905 /* LaunchScreen.storyboard */; };
 		5523D2731C0F36D500069905 /* MapSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5523D2431C0F35EF00069905 /* MapSwift.framework */; };
+		5523D2781C104DF500069905 /* mapswift-ios.html in Resources */ = {isa = PBXBuildFile; fileRef = 5523D2761C104DF500069905 /* mapswift-ios.html */; };
+		55F3FE801C106187007333CE /* map-swift-editor.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 55F3FE7F1C106187007333CE /* map-swift-editor.min.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		5523D26A1C0F366600069905 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5523D26D1C0F366600069905 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5523D26F1C0F366600069905 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5523D2761C104DF500069905 /* mapswift-ios.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "mapswift-ios.html"; path = "Resources/mapswift-ios.html"; sourceTree = "<group>"; };
+		55F3FE7F1C106187007333CE /* map-swift-editor.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "map-swift-editor.min.js"; path = "Resources/map-swift-editor.min.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +98,7 @@
 		5523D2451C0F35EF00069905 /* MapSwift */ = {
 			isa = PBXGroup;
 			children = (
+				5523D2741C104D7200069905 /* Resources */,
 				5523D2461C0F35EF00069905 /* MapSwift.h */,
 				5523D2481C0F35EF00069905 /* Info.plist */,
 			);
@@ -120,6 +125,15 @@
 				5523D26F1C0F366600069905 /* Info.plist */,
 			);
 			path = MapSwiftExample;
+			sourceTree = "<group>";
+		};
+		5523D2741C104D7200069905 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				55F3FE7F1C106187007333CE /* map-swift-editor.min.js */,
+				5523D2761C104DF500069905 /* mapswift-ios.html */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +251,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55F3FE801C106187007333CE /* map-swift-editor.min.js in Resources */,
+				5523D2781C104DF500069905 /* mapswift-ios.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +520,7 @@
 				5523D2591C0F35EF00069905 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5523D25A1C0F35EF00069905 /* Build configuration list for PBXNativeTarget "MapSwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +529,7 @@
 				5523D25C1C0F35EF00069905 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5523D2701C0F366600069905 /* Build configuration list for PBXNativeTarget "MapSwiftExample" */ = {
 			isa = XCConfigurationList;
@@ -520,6 +538,7 @@
 				5523D2721C0F366600069905 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

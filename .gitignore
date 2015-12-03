@@ -3,6 +3,8 @@
 build/
 js/site/
 js/node_modules/
+js/.grunt/
+js/SpecRunner.html
 *.pbxuser
 !default.pbxuser
 *.mode1v3

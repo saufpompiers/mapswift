@@ -14,14 +14,13 @@ npm install
 */
 module.exports = function (grunt) {
 	'use strict';
-	var timestamp = Date.now(),
-		packagingFiles = {
+	var packagingFiles = {
 			css: {},
 			js: {}
 		};
 
-	packagingFiles.js['site/map-swift-editor-' + timestamp + '.min.js'] = ['site/lib/external/*.js', 'site/lib/editor/*.js'];
-	packagingFiles.css['site/map-swift-editor-' + timestamp + '.min.css'] = ['src/style/editor/map-swift-editor.css'];
+	packagingFiles.js['site/map-swift-editor.min.js'] = ['site/lib/external/*.js', 'site/lib/editor/*.js'];
+	packagingFiles.css['site/map-swift-editor.min.css'] = ['src/style/editor/map-swift-editor.css'];
 
 	grunt.initConfig({
 		htmlbuild: {
@@ -131,7 +130,7 @@ module.exports = function (grunt) {
 					keepRunner: true,
 					specs: 'specs/*.js',
 					vendor: 'site/lib/external/browserified.js',
-					helpers: ['src/lib/inline/mm.js']
+					helpers: ['src/lib/inline/map-swift.js']
 				}
 			}
 		}
