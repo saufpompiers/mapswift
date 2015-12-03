@@ -43,4 +43,7 @@ MapSwift.WebKitProtocol = function () {
 		result = component[selector].apply(component, command.args);
 		return commandResponse(command, result);
 	};
+	self.componentIdForCommand = function (command) {
+		return command && command.componentId;
+	};
 };
