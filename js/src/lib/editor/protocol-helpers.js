@@ -1,31 +1,46 @@
-/*global MapSwift*/
-MapSwift.ProtocolHelpers = (function () {
+/*global MapSwift, _*/
+MapSwift.WebKitProtocol = function () {
 	'use strict';
-	var self = {},
-		nextId = 0;
-	self.resetCounters = function () {
-		nextId = 0;
-	};
-	self.wkProxyErrorResponse = function (command, error) {
+	var self = this,
+		nextId = 0,
+		nextMessageId = function () {
+			return ++nextId;
+		},
+		jsonSafe = function (obj) {
+			if (!obj) {
+				return false;
+			}
+			return JSON.parse(JSON.stringify(obj));
+		},
+		commandResponse = function (command, result) {
+			return {
+				completed: true,
+				id: command.id,
+				componentId: command.componentId,
+				selector: command.selector,
+				result: jsonSafe(result)
+			};
+		};
+
+	self.errorResponse = function (command, error) {
 		if (command) {
 			return {completed: false, id: command.id, componentId: command.componentId, errors: [error]};
 		} else {
 			return {completed: false, errors: ['no-command', error]};
 		}
 	};
-	self.wkProxyResponse = function (command, result) {
-		return {
-			completed: true,
-			id: command.id,
-			componentId: command.componentId,
-			selector: command.selector,
-			result: self.jsonSafe(result)};
+
+	self.message = function (componentId, callArgs) {
+		return _.extend({componentId: componentId}, { id: nextMessageId(), args: callArgs });
 	};
-	self.jsonSafe = function (obj) {
-		return JSON.parse(JSON.stringify(obj));
+
+	self.applyCommandToComponent = function (command, component) {
+		var selector = command.selector,
+			result;
+		if (!selector) {
+			return self.errorResponse(command, 'no-selector');
+		}
+		result = component[selector].apply(component, command.args);
+		return commandResponse(command, result);
 	};
-	self.nextMessageId = function () {
-		return ++nextId;
-	};
-	return self;
-}());
+};

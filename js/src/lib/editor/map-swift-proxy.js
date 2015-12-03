@@ -1,16 +1,16 @@
-/*global MapSwift, observable, _*/
-MapSwift.WebKitViewProxy = function (messageHandlers) {
+/*global MapSwift*/
+MapSwift.WebKitViewProxy = function (messageSenders, protocol) {
 	'use strict';
 	var self = this,
 		componentProxies = {};
 	self.forComponent = function (component, identifier) {
 		var proxy = componentProxies[identifier],
-			wkMessageSender = messageHandlers && messageHandlers[identifier];
-		if (!wkMessageSender) {
+			messageSender = messageSenders && messageSenders[identifier];
+		if (!messageSenders) {
 			throw 'no-sender:' + identifier;
 		}
 		if (!proxy) {
-			proxy = new MapSwift.WebKitViewComponentProxy(identifier, component, wkMessageSender);
+			proxy = new MapSwift.WebKitViewComponentProxy(identifier, component, protocol, messageSender);
 			componentProxies[identifier] = component;
 		}
 		return proxy;
@@ -26,28 +26,3 @@ MapSwift.WebKitViewProxy = function (messageHandlers) {
 
 };
 
-MapSwift.WebKitViewComponentProxy = function (identifier, component, wkMessageSender) {
-	'use strict';
-	var self = observable(this),
-		baseArgs = {componentId: identifier},
-		doSend = function (synchronised, callArgs) {
-			var args = _.extend({}, baseArgs, { id: MapSwift.ProtocolHelpers.nextMessageId(), args: callArgs });
-
-			wkMessageSender.postMessage(MapSwift.ProtocolHelpers.jsonSafe(args));
-		};
-
-	self.sendToSwift = function () {
-		var callArgs = Array.prototype.slice.call(arguments, 0);
-		doSend(false, callArgs);
-	};
-	self.sentFromSwift = function (command) {
-		var selector = command.selector,
-			result;
-		if (!selector) {
-			return MapSwift.wkProxyErrorResponse(command, 'no-selector');
-		}
-		result = component[selector].apply(component, command.args);
-		return MapSwift.ProtocolHelpers.wkProxyResponse(command, result);
-	};
-
-};
