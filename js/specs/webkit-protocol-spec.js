@@ -62,4 +62,18 @@ describe('MapSwift.WebKitProtocol', function () {
 			expect(underTest.message('comp', ['1'])).toEqual({componentId: 'comp', id: 4, args: ['1']});
 		});
 	});
+	describe('componentIdForCommand', function () {
+		it('should return the componentId if the command contains it', function () {
+			expect(underTest.componentIdForCommand({componentId: 'comp', id: 1, args: ['1']})).toEqual('comp');
+		});
+		it('should be falsy if command is undefined', function () {
+			expect(underTest.componentIdForCommand()).toBeFalsy();
+		});
+		it('should be falsy if command invalid', function () {
+			expect(underTest.componentIdForCommand('foo')).toBeFalsy();
+		});
+		it('should be falsy if command has no commandId', function () {
+			expect(underTest.componentIdForCommand({name: 'foo'})).toBeFalsy();
+		});
+	});
 });

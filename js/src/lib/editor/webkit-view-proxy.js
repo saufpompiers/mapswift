@@ -12,6 +12,8 @@ MapSwift.WebKitViewProxy = function (messageSenders, protocol) {
 		if (!proxy) {
 			proxy = new MapSwift.WebKitViewComponentProxy(identifier, component, protocol, messageSender);
 			componentProxies[identifier] = proxy;
+		} else {
+			throw new Error(identifier + ' already-proxied');
 		}
 		return proxy;
 	};
