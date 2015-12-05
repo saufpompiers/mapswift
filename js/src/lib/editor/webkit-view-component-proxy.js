@@ -11,5 +11,12 @@ MapSwift.WebKitViewComponentProxy = function (identifier, component, protocol, m
 	self.sentFromSwift = function (command) {
 		return protocol.applyCommandToComponent(command, component);
 	};
-
+	self.withEvents = function () {
+		var events = Array.prototype.slice.call(arguments, 0);
+		events.forEach(function (eventName) {
+			component.removeEventListener(eventName, self.sendToSwift);
+			component.addEventListener(eventName, self.sendToSwift);
+		});
+		return self;
+	};
 };
