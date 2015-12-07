@@ -5,7 +5,22 @@
 </head>
 <body>
 	<div>Map Swift javascript host</div>
-<script type="text/javascript">var MapSwift = MapSwift || {};
+<script type="text/javascript">/*global window, console*/
+var MapSwift = MapSwift || {};
+
+window.onload = function () {
+	'use strict';
+	try {
+		if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.proxy) {
+			window.webkit.messageHandlers.proxy.postMessage('page-loaded');
+		}
+		MapSwift.editorMain({messageHandlerNames: ['pingModel']});
+	} catch (e) {
+		console.log(e);
+	}
+};
+
+/* ios_insert_here */
 </script>
 </body>
 </html>

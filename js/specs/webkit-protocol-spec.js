@@ -53,13 +53,13 @@ describe('MapSwift.WebKitProtocol', function () {
 	});
 	describe('message', function () {
 		it('should return a message object', function () {
-			expect(underTest.message('comp', ['1', 2, true, {foo: 'bar'}])).toEqual({componentId: 'comp', id: 1, args: ['1', 2, true, {foo: 'bar'}]});
+			expect(underTest.message('comp', 'eventName1', ['1', 2, true, {foo: 'bar'}])).toEqual({componentId: 'comp', id: 1, eventName: 'eventName1', args: ['1', 2, true, {foo: 'bar'}]});
 		});
 		it('should increment a the call id', function () {
-			expect(underTest.message('comp', ['1'])).toEqual({componentId: 'comp', id: 1, args: ['1']});
-			expect(underTest.message('comp', ['1'])).toEqual({componentId: 'comp', id: 2, args: ['1']});
-			expect(underTest.message('comp', ['1'])).toEqual({componentId: 'comp', id: 3, args: ['1']});
-			expect(underTest.message('comp', ['1'])).toEqual({componentId: 'comp', id: 4, args: ['1']});
+			expect(underTest.message('comp', 'ev', ['1'])).toEqual({componentId: 'comp', id: 1, eventName: 'ev', args: ['1']});
+			expect(underTest.message('comp', 'ev', ['1'])).toEqual({componentId: 'comp', id: 2, eventName: 'ev', args: ['1']});
+			expect(underTest.message('comp', 'ev', ['1'])).toEqual({componentId: 'comp', id: 3, eventName: 'ev', args: ['1']});
+			expect(underTest.message('comp', 'ev', ['1'])).toEqual({componentId: 'comp', id: 4, eventName: 'ev', args: ['1']});
 		});
 	});
 	describe('componentIdForCommand', function () {

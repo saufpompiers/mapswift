@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 					prefix: '/',
 					scripts: {
 						external: ['site/lib/external/*.js', 'site/external/*.js'],
-						editor: ['site/lib/editor/*.js', 'site/map-swift-editor*.min.js'],
+						editor: ['site/lib/editor/*.js', 'site/map-swift-editor*.js'],
 						inlined: 'site/lib/inline/*.js'
 					},
 					styles: {
@@ -95,6 +95,14 @@ module.exports = function (grunt) {
 				files: packagingFiles.js
 			}
 		},
+		concat: {
+			options: {
+			},
+			lib: {
+				src: ['site/lib/external/*.js', 'site/lib/editor/*.js'],
+				dest: 'site/map-swift-editor.js'
+			}
+		},
 		cssmin: {
 			combine: {
 				files: packagingFiles.css
@@ -141,7 +149,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('preparesite', ['clean:site', 'copy:site', 'browserify:external']);
 	grunt.registerTask('buildsite', ['preparesite', 'htmlbuild:site']);
-	grunt.registerTask('packagejs', ['uglify:site', 'clean:sitelib', 'copy:inline']);
+	grunt.registerTask('packagejs', ['concat:lib', 'clean:sitelib', 'copy:inline']);
 	grunt.registerTask('packagecss', ['cssmin:combine', 'clean:sitecss']);
 	grunt.registerTask('package', ['preparesite', 'packagejs', 'packagecss', 'htmlbuild:site', 'clean:packagedsite']);
 
@@ -152,6 +160,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-notify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-jscs');
 	grunt.loadNpmTasks('grunt-contrib-jshint');

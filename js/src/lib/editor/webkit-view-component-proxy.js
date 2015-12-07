@@ -1,21 +1,26 @@
 /*global MapSwift*/
 MapSwift.WebKitViewComponentProxy = function (identifier, component, protocol, messageSender) {
 	'use strict';
-	var self = this;
+	var self = this,
+		eventListeners = {};
 
-	self.sendToSwift = function () {
-		var callArgs = Array.prototype.slice.call(arguments, 0),
-			message = protocol.message(identifier, callArgs);
-		messageSender.postMessage(message);
-	};
 	self.sentFromSwift = function (command) {
 		return protocol.applyCommandToComponent(command, component);
 	};
 	self.withEvents = function () {
 		var events = Array.prototype.slice.call(arguments, 0);
 		events.forEach(function (eventName) {
-			component.removeEventListener(eventName, self.sendToSwift);
-			component.addEventListener(eventName, self.sendToSwift);
+			var oldListener = eventListeners[eventName],
+				eventListener = function () {
+					var callArgs = Array.prototype.slice.call(arguments, 0),
+						message = protocol.message(identifier, eventName, callArgs);
+					messageSender.postMessage(message);
+				};
+			if (oldListener) {
+				component.removeEventListener(eventName, oldListener);
+			}
+			component.addEventListener(eventName, eventListener);
+			eventListeners[eventName] = eventListener;
 		});
 		return self;
 	};

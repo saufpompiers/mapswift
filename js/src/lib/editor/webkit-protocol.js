@@ -30,8 +30,8 @@ MapSwift.WebKitProtocol = function () {
 		}
 	};
 
-	self.message = function (componentId, callArgs) {
-		return _.extend({componentId: componentId}, { id: nextMessageId(), args: callArgs });
+	self.message = function (componentId, eventName, callArgs) {
+		return _.extend({componentId: componentId}, { id: nextMessageId(), eventName: eventName,  args: callArgs });
 	};
 
 	self.applyCommandToComponent = function (command, component) {

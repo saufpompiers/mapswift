@@ -23,11 +23,17 @@ MapSwift.editorMain = function (config) {
 	};
 
 	window.components = {
+		containerProxy: containerProxy,
 		pingModel: pingModel
 	};
+	if (window.webkit && window.webkit.messageHandlers && window.webkit && window.webkit.messageHandlers.proxy) {
+		window.webkit.messageHandlers.proxy.postMessage('lib-loaded');
+	}
 };
+
 /*
 MapSwift.editorMain({messageHandlerNames:['pingModel']})
 containerProxies.pingModel.sentFromSwift({componentId: 'pingModel', selector: 'echo', args: ['hello']})
+containerProxies.pingModel.sentFromSwift({componentId: 'pingModel', selector: 'start', args: ['hello', 3000]})
 
 */

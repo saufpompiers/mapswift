@@ -7,12 +7,25 @@
 //
 
 import UIKit
+import MapSwift
 
 class ViewController: UIViewController {
-
+    var mapSwift:MapSwiftCore?
+    var mapSwiftComponents:MapSwiftComponents?
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let mapSwift = MapSwiftCore()
+        self.mapSwift = mapSwift
+        mapSwift.loadComponents { (components, error) -> () in
+            self.mapSwiftComponents = components;
+            if let error = error {
+                print("mapSwift.loadComponents error:\(error.localizedDescription)")
+            }
+            if let components = self.mapSwiftComponents {
+                components.pingModel.echo("hello")
+            }
+        }
+
     }
 
     override func didReceiveMemoryWarning() {

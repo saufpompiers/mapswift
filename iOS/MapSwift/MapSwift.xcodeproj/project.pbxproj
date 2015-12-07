@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		5523D2471C0F35EF00069905 /* MapSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 5523D2461C0F35EF00069905 /* MapSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5523D24E1C0F35EF00069905 /* MapSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5523D2431C0F35EF00069905 /* MapSwift.framework */; };
-		5523D2531C0F35EF00069905 /* MapSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5523D2521C0F35EF00069905 /* MapSwiftTests.swift */; };
 		5523D2641C0F366600069905 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5523D2631C0F366600069905 /* AppDelegate.swift */; };
 		5523D2661C0F366600069905 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5523D2651C0F366600069905 /* ViewController.swift */; };
 		5523D2691C0F366600069905 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5523D2671C0F366600069905 /* Main.storyboard */; };
@@ -17,7 +16,16 @@
 		5523D26E1C0F366600069905 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5523D26C1C0F366600069905 /* LaunchScreen.storyboard */; };
 		5523D2731C0F36D500069905 /* MapSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5523D2431C0F35EF00069905 /* MapSwift.framework */; };
 		5523D2781C104DF500069905 /* mapswift-ios.html in Resources */ = {isa = PBXBuildFile; fileRef = 5523D2761C104DF500069905 /* mapswift-ios.html */; };
+		55610E511C15B7120030F416 /* MapSwiftPingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E501C15B7120030F416 /* MapSwiftPingModel.swift */; };
+		55610E531C15CF340030F416 /* MapSwiftResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E521C15CF340030F416 /* MapSwiftResources.swift */; };
+		55610E561C15D9280030F416 /* NSURLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E551C15D9280030F416 /* NSURLExtensions.swift */; };
+		55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E571C15E6FE0030F416 /* MapSwiftCore.swift */; };
+		55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E591C15E9180030F416 /* MapSwiftComponents.swift */; };
+		55610E5C1C15FA840030F416 /* map-swift-editor.js in Resources */ = {isa = PBXBuildFile; fileRef = 55610E5B1C15FA840030F416 /* map-swift-editor.js */; };
 		55F3FE801C106187007333CE /* map-swift-editor.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 55F3FE7F1C106187007333CE /* map-swift-editor.min.js */; };
+		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
+		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
+		55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,7 +43,6 @@
 		5523D2461C0F35EF00069905 /* MapSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapSwift.h; sourceTree = "<group>"; };
 		5523D2481C0F35EF00069905 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5523D24D1C0F35EF00069905 /* MapSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5523D2521C0F35EF00069905 /* MapSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSwiftTests.swift; sourceTree = "<group>"; };
 		5523D2541C0F35EF00069905 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5523D2611C0F366600069905 /* MapSwiftExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapSwiftExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5523D2631C0F366600069905 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,7 +52,17 @@
 		5523D26D1C0F366600069905 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5523D26F1C0F366600069905 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5523D2761C104DF500069905 /* mapswift-ios.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "mapswift-ios.html"; path = "Resources/mapswift-ios.html"; sourceTree = "<group>"; };
+		55610E501C15B7120030F416 /* MapSwiftPingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftPingModel.swift; sourceTree = "<group>"; };
+		55610E521C15CF340030F416 /* MapSwiftResources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftResources.swift; sourceTree = "<group>"; };
+		55610E551C15D9280030F416 /* NSURLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensions.swift; sourceTree = "<group>"; };
+		55610E571C15E6FE0030F416 /* MapSwiftCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftCore.swift; sourceTree = "<group>"; };
+		55610E591C15E9180030F416 /* MapSwiftComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftComponents.swift; sourceTree = "<group>"; };
+		55610E5B1C15FA840030F416 /* map-swift-editor.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "map-swift-editor.js"; path = "Resources/map-swift-editor.js"; sourceTree = "<group>"; };
 		55F3FE7F1C106187007333CE /* map-swift-editor.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "map-swift-editor.min.js"; path = "Resources/map-swift-editor.min.js"; sourceTree = "<group>"; };
+		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
+		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
+		55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyProtocol.swift; sourceTree = "<group>"; };
+		55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftProxyResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +115,9 @@
 		5523D2451C0F35EF00069905 /* MapSwift */ = {
 			isa = PBXGroup;
 			children = (
+				55610E541C15D8EB0030F416 /* Utils */,
+				55610E4F1C15B6E60030F416 /* Models */,
+				55F3FE811C13203F007333CE /* WKProxy */,
 				5523D2741C104D7200069905 /* Resources */,
 				5523D2461C0F35EF00069905 /* MapSwift.h */,
 				5523D2481C0F35EF00069905 /* Info.plist */,
@@ -108,7 +128,7 @@
 		5523D2511C0F35EF00069905 /* MapSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				5523D2521C0F35EF00069905 /* MapSwiftTests.swift */,
+				55F3FE841C1320DA007333CE /* WKProxy */,
 				5523D2541C0F35EF00069905 /* Info.plist */,
 			);
 			path = MapSwiftTests;
@@ -123,6 +143,7 @@
 				5523D26A1C0F366600069905 /* Assets.xcassets */,
 				5523D26C1C0F366600069905 /* LaunchScreen.storyboard */,
 				5523D26F1C0F366600069905 /* Info.plist */,
+				55F3FE891C155DBD007333CE /* MapSwift.playground */,
 			);
 			path = MapSwiftExample;
 			sourceTree = "<group>";
@@ -130,10 +151,47 @@
 		5523D2741C104D7200069905 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				55610E5B1C15FA840030F416 /* map-swift-editor.js */,
 				55F3FE7F1C106187007333CE /* map-swift-editor.min.js */,
 				5523D2761C104DF500069905 /* mapswift-ios.html */,
+				55610E521C15CF340030F416 /* MapSwiftResources.swift */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		55610E4F1C15B6E60030F416 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				55610E501C15B7120030F416 /* MapSwiftPingModel.swift */,
+				55610E571C15E6FE0030F416 /* MapSwiftCore.swift */,
+				55610E591C15E9180030F416 /* MapSwiftComponents.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		55610E541C15D8EB0030F416 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				55610E551C15D9280030F416 /* NSURLExtensions.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		55F3FE811C13203F007333CE /* WKProxy */ = {
+			isa = PBXGroup;
+			children = (
+				55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */,
+				55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */,
+				55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */,
+			);
+			path = WKProxy;
+			sourceTree = "<group>";
+		};
+		55F3FE841C1320DA007333CE /* WKProxy */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = WKProxy;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,6 +267,7 @@
 		5523D23A1C0F35EF00069905 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = MapSwift;
 				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Sauf Pompiers Ltd";
@@ -252,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55F3FE801C106187007333CE /* map-swift-editor.min.js in Resources */,
+				55610E5C1C15FA840030F416 /* map-swift-editor.js in Resources */,
 				5523D2781C104DF500069905 /* mapswift-ios.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +340,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55610E561C15D9280030F416 /* NSURLExtensions.swift in Sources */,
+				55610E511C15B7120030F416 /* MapSwiftPingModel.swift in Sources */,
+				55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */,
+				55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */,
+				55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */,
+				55610E531C15CF340030F416 /* MapSwiftResources.swift in Sources */,
+				55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */,
+				55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +355,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5523D2531C0F35EF00069905 /* MapSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +489,7 @@
 		5523D2581C0F35EF00069905 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -433,12 +501,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.saufpompiers.ios.MapSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		5523D2591C0F35EF00069905 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
