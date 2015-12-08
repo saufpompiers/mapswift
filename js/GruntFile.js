@@ -130,7 +130,7 @@ module.exports = function (grunt) {
 		},
 		jasmine: {
 			all: {
-				src: 'src/lib/**/*.js',
+				src: 'src/lib/editor/*.js',
 				options: {
 					outfile: 'SpecRunner.html',
 					summary: true,

@@ -11,24 +11,35 @@ import WebKit
 public class MapSwiftCore {
     let container:WKWebView
     let containerProtocol:MapSwiftProxyProtocol
-    var components:MapSwiftComponents?
+    var _components:MapSwiftComponents?
 
     public init() {
         let config = WKWebViewConfiguration()
         self.container = WKWebView(frame: CGRectMake(0, 0, 500, 500), configuration: config)
-        containerProtocol = MapSwiftWKProxyProtocol(container: container)
+        containerProtocol = MapSwiftWKProxyProtocol(container: container, resources: MapSwiftResources.sharedInstance)
+    }
+    public func start() {
+        containerProtocol.start()
     }
 
-    public func loadComponents(then:((components:MapSwiftComponents?, error:NSError?)->())) {
-        if let components = self.components {
-            then(components:components, error:nil)
-            return
-        }
-        containerProtocol.loadResources(MapSwiftResources.sharedInstance) { (error) -> () in
-            if error == nil {
-                self.components = MapSwiftComponents(pingModel:MapSwiftPingModel(proxy: self.containerProtocol))
+    public var components:MapSwiftComponents? {
+        get {
+            if let components = _components {
+                return components
             }
-            then(components:self.components, error:error)
+            if containerProtocol.isReady {
+                _components = MapSwiftComponents(pingModel:MapSwiftPingModel(proxy: self.containerProtocol))
+            }
+            return _components
+        }
+    }
+
+    public var delegate:MapSwiftProxyProtocolDelegate? {
+        get {
+            return containerProtocol.delegate
+        }
+        set(val) {
+            containerProtocol.delegate = val
         }
     }
 }

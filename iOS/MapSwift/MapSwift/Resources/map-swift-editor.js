@@ -14888,12 +14888,16 @@ MapSwift.editorMain = function (config) {
 		containerProxy: containerProxy,
 		pingModel: pingModel
 	};
-	if (window.webkit && window.webkit.messageHandlers && window.webkit && window.webkit.messageHandlers.proxy) {
-		window.webkit.messageHandlers.proxy.postMessage('lib-loaded');
-	}
+	return true;
 };
+if (window.webkit && window.webkit.messageHandlers && window.webkit && window.webkit.messageHandlers['map-swift-proxy']) {
+	window.webkit.messageHandlers['map-swift-proxy'].postMessage('map-swift-lib-loaded');
+}
 
+//MapSwift.editorMain({messageHandlerNames: ['pingModel']});
 /*
+components.containerProxy.sendFromSwift({componentId: 'pingModel', selector: 'echo', args: ['hello']})
+
 MapSwift.editorMain({messageHandlerNames:['pingModel']})
 containerProxies.pingModel.sentFromSwift({componentId: 'pingModel', selector: 'echo', args: ['hello']})
 containerProxies.pingModel.sentFromSwift({componentId: 'pingModel', selector: 'start', args: ['hello', 3000]})

@@ -9,16 +9,26 @@
 import WebKit
 public typealias MapSwiftProxyEventHandler = ((eventName:String, args:[AnyObject])->())
 
+public protocol MapSwiftProxyProtocolDelegate:class {
+    func proxyDidChangeStatus(status:MapSwiftProxyStatus)
+    func proxyDidRecieveError(error:NSError)
+}
+public enum MapSwiftProxyStatus { case NotInitialised, LoadingPage, LoadingLibraries, ExecutingMain, LoadingError, Ready}
 public protocol MapSwiftProxyProtocol:class {
 
+    var delegate:MapSwiftProxyProtocolDelegate? {get set}
+    var isReady:Bool {get}
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse)->()))
     func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler)
-    func loadResources(resources:MapSwiftResources, then:((error:NSError?)->()))
+    func start()
 }
 
 class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHandler {
     let container:WKWebView;
-    enum Status { case NotInitialised, LoadingLibraries, LoadingError, Ready}
+    let resources:MapSwiftResources
+    weak var delegate:MapSwiftProxyProtocolDelegate?
+
+
     var serialQueue = dispatch_queue_create("com.saufpompiers.MapSwiftWKProxyProtocol", DISPATCH_QUEUE_SERIAL)
     let notReadyError = NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "notReady", NSLocalizedRecoverySuggestionErrorKey:"Use MapSwiftWKProxyProtocol.loadResources to make ready"]);
 
@@ -36,8 +46,29 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
     }
 
     var listeners:Dictionary<String, MapSwiftProxyEventHandler> = [:]
-    var status = Status.NotInitialised
-    init(container:WKWebView) {
+    private var _status = MapSwiftProxyStatus.NotInitialised
+    var status:MapSwiftProxyStatus {
+        get {
+            return _status
+        }
+        set(val) {
+            if (_status == val) {
+                return
+            }
+            _status = val
+            if let delegate = self.delegate {
+                delegate.proxyDidChangeStatus(_status)
+            }
+        }
+    }
+    var isReady:Bool {
+        get {
+            return _status == MapSwiftProxyStatus.Ready
+        }
+    }
+
+    init(container:WKWebView, resources:MapSwiftResources) {
+        self.resources = resources
         self.container = container
     }
 
@@ -52,49 +83,64 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
         }
         return "[]";
     }
-    var callback:((error:NSError?)->())?
-    func loadResources(resources:MapSwiftResources, then:((error:NSError?)->())) {
-        self.callback = then
+    func start() {
         dispatch_async(serialQueue, {
-            if self.status != Status.NotInitialised {
-                then(error: nil)
+            if self.status != MapSwiftProxyStatus.NotInitialised {
                 return
             }
 
-            if self.status != Status.NotInitialised {
-                then(error: self.notReadyError)
-                return
-            }
-            self.status = Status.LoadingLibraries
-            let containerUrl = resources.containerHTMLURL()
+            self.status = MapSwiftProxyStatus.LoadingLibraries
+            let containerUrl = self.resources.containerHTMLURL()
             if let containerHtml = containerUrl.mapswift_fileContent {
-                if let libJS = resources.containerLibrary {
-                    let containerHtmlFull = containerHtml.stringByReplacingOccurrencesOfString("/* ios_insert_here */", withString: libJS);
-                self.container.configuration.userContentController.addScriptMessageHandler(self, name: "proxy");
-                print("loading");
-                self.container.loadHTMLString(containerHtmlFull, baseURL: containerUrl)
-                }
+                self.container.configuration.userContentController.addScriptMessageHandler(self, name: "map-swift-proxy");
+                self.container.loadHTMLString(containerHtml, baseURL: containerUrl)
             } else {
-                self.status = Status.LoadingError
-                then(error: self.notReadyError)
-                return
+                self.status = MapSwiftProxyStatus.LoadingError
             }
 
         })
     }
+    private func loadingError(error:NSError) {
+        self.status = MapSwiftProxyStatus.LoadingError
+        if let delegate = self.delegate {
+            delegate.proxyDidRecieveError(error)
+        }
+    }
+
+    private func loadPageLibs() {
+        self.status = MapSwiftProxyStatus.LoadingLibraries
+        if let libJS = resources.containerLibrary {
+            self.container.evaluateJavaScript(libJS) { (result, error) in
+                if let error = error {
+                    self.loadingError(error)
+                    return
+                }
+            }
+        }
+    }
+    private func execPageMain() {
+        self.status = MapSwiftProxyStatus.ExecutingMain
+        let js = "MapSwift.editorMain({messageHandlerNames: ['pingModel']});"
+        self.container.evaluateJavaScript(js) { (result, error) in
+            if let error = error {
+                self.loadingError(error)
+                return
+            }
+            self.status = MapSwiftProxyStatus.Ready
+        }
+
+    }
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         print("message:\(message.body)")
-
-        if let body = message.body as? String where body == "lib-loaded" {
-            if let callback = self.callback {
-                self.status = Status.Ready
-                callback(error:nil)
-            }
+        if let body = message.body as? String where body == "map-swift-page-loaded" {
+            self.loadPageLibs()
+        } else if let body = message.body as? String where body == "map-swift-lib-loaded" {
+            self.execPageMain();
         }
     }
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse)->())) {
         dispatch_async(serialQueue, {
-            if self.status != Status.Ready {
+            if self.status != MapSwiftProxyStatus.Ready {
                 let response = MapSwiftProxyResponse(id:"", completed:false, componentId:componentId, selector:selector, result: nil, error:self.notReadyError);
                 then(response:response);
                 return
@@ -103,6 +149,7 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
             let commandJS = "components.containerProxy.sendFromSwift({componentId: '\(componentId)', selector: '\(selector)', args: \(self.getArgsString(args))});"
             self.container.evaluateJavaScript(commandJS) { (result, error) in
                 print("evaluateJavaScript:\(commandJS) result:\(result) error:\(error)")
+
                 let completed = error == nil ? false : true
 
                 let response = MapSwiftProxyResponse(id:"", completed:completed, componentId:componentId, selector:selector, result: nil, error:error);

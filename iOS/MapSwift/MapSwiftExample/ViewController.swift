@@ -9,22 +9,14 @@
 import UIKit
 import MapSwift
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, MapSwiftProxyProtocolDelegate {
     var mapSwift:MapSwiftCore?
-    var mapSwiftComponents:MapSwiftComponents?
     override func viewDidLoad() {
         super.viewDidLoad()
         let mapSwift = MapSwiftCore()
+        mapSwift.delegate = self
         self.mapSwift = mapSwift
-        mapSwift.loadComponents { (components, error) -> () in
-            self.mapSwiftComponents = components;
-            if let error = error {
-                print("mapSwift.loadComponents error:\(error.localizedDescription)")
-            }
-            if let components = self.mapSwiftComponents {
-                components.pingModel.echo("hello")
-            }
-        }
+        mapSwift.start()
 
     }
 
@@ -33,6 +25,19 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    //MARK: - MapSwiftProxyProtocolDelegate
+    func proxyDidChangeStatus(status: MapSwiftProxyStatus) {
+        print("proxyDidChangeStatus:\(status)")
+        if status == MapSwiftProxyStatus.Ready {
+            if let mapSwift = self.mapSwift  {
+                if let components = mapSwift.components {
+                    components.pingModel.echo("hello")
+                }
+            }
+        }
+    }
+    func proxyDidRecieveError(error: NSError) {
+        print("proxyDidRecieveError:\(error.localizedDescription)")
+    }
 }
 
