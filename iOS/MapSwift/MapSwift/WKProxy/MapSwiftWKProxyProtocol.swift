@@ -127,10 +127,19 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
     }
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         print("message:\(message.body)")
-        if let body = message.body as? String where body == "map-swift-page-loaded" {
-            self.loadPageLibs()
-        } else if let body = message.body as? String where body == "map-swift-lib-loaded" {
-            self.execPageMain();
+        if let bodyDictionary = message.body as? NSDictionary, type =  bodyDictionary["type"] as? String, args = bodyDictionary["args"] as? [AnyObject] {
+            if type == "error" {
+                let error = NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "\(args)"]);
+                self.loadingError(error)
+            } else if type == "status" {
+                if let status = args[0] as? String {
+                    if status == "map-swift-page-loaded" {
+                        self.loadPageLibs()
+                    } else if status == "map-swift-lib-loaded" {
+                        self.execPageMain();
+                    }
+                }
+            }
         }
     }
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse)->())) {
