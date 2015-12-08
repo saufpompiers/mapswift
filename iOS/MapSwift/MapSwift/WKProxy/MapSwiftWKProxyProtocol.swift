@@ -23,30 +23,33 @@ public protocol MapSwiftProxyProtocol:class {
     func start()
 }
 
-class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHandler {
+class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
     let container:WKWebView;
     let resources:MapSwiftResources
     weak var delegate:MapSwiftProxyProtocolDelegate?
+    let serialQueue = dispatch_queue_create("com.saufpompiers.MapSwiftWKProxyProtocol", DISPATCH_QUEUE_SERIAL)
 
 
-    var serialQueue = dispatch_queue_create("com.saufpompiers.MapSwiftWKProxyProtocol", DISPATCH_QUEUE_SERIAL)
-    let notReadyError = NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "notReady", NSLocalizedRecoverySuggestionErrorKey:"Use MapSwiftWKProxyProtocol.loadResources to make ready"]);
-
-    @objc class MapSwiftWKProxyListener: NSObject, WKScriptMessageHandler {
+    @objc class MapSwiftWKProxyEventListener: NSObject, WKScriptMessageHandler {
         let eventHandler:MapSwiftProxyEventHandler
-        let componentId:String
-        init(componentId:String, eventHandler:MapSwiftProxyEventHandler) {
-            self.componentId = componentId
+        init(eventHandler:MapSwiftProxyEventHandler) {
             self.eventHandler = eventHandler
             super.init()
         }
         func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+            if let bodyDictionary = message.body as? NSDictionary, eventName =  bodyDictionary["eventName"] as? String, args = bodyDictionary["args"] as? [AnyObject] {
+                self.eventHandler(eventName: eventName, args: args)
+            } else {
+                print("unrecognised message:\(message.body)")
+            }
 
         }
     }
 
     var listeners:Dictionary<String, MapSwiftProxyEventHandler> = [:]
     private var _status = MapSwiftProxyStatus.NotInitialised
+    private var proxyEventListener:MapSwiftWKProxyEventListener?
+
     var status:MapSwiftProxyStatus {
         get {
             return _status
@@ -92,7 +95,24 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
             self.status = MapSwiftProxyStatus.LoadingLibraries
             let containerUrl = self.resources.containerHTMLURL()
             if let containerHtml = containerUrl.mapswift_fileContent {
-                self.container.configuration.userContentController.addScriptMessageHandler(self, name: "map-swift-proxy");
+                let listener = MapSwiftWKProxyEventListener() { (eventName, args) -> () in
+                    switch eventName {
+                    case "error":
+                        let error = NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "\(args)"]);
+                        self.loadingError(error)
+                    case "status":
+                        if let status = args[0] as? String {
+                            if status == "map-swift-page-loaded" {
+                                self.loadPageLibs()
+                            } else if status == "map-swift-lib-loaded" {
+                                self.execPageMain();
+                            }
+                        }
+                    default:
+                        print("unknown event:\(eventName) args:\(args)")
+                    }
+                }
+                self.container.configuration.userContentController.addScriptMessageHandler(listener, name: "map-swift-proxy");
                 self.container.loadHTMLString(containerHtml, baseURL: containerUrl)
             } else {
                 self.status = MapSwiftProxyStatus.LoadingError
@@ -125,27 +145,11 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
         }
 
     }
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        print("message:\(message.body)")
-        if let bodyDictionary = message.body as? NSDictionary, type =  bodyDictionary["type"] as? String, args = bodyDictionary["args"] as? [AnyObject] {
-            if type == "error" {
-                let error = NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "\(args)"]);
-                self.loadingError(error)
-            } else if type == "status" {
-                if let status = args[0] as? String {
-                    if status == "map-swift-page-loaded" {
-                        self.loadPageLibs()
-                    } else if status == "map-swift-lib-loaded" {
-                        self.execPageMain();
-                    }
-                }
-            }
-        }
-    }
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse)->())) {
         dispatch_async(serialQueue, {
             if self.status != MapSwiftProxyStatus.Ready {
-                let response = MapSwiftProxyResponse(id:"", completed:false, componentId:componentId, selector:selector, result: nil, error:self.notReadyError);
+                let notReadyError = NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "notReady", NSLocalizedRecoverySuggestionErrorKey:"Use MapSwiftWKProxyProtocol.loadResources to make ready"]);
+                let response = MapSwiftProxyResponse(id:"", completed:false, componentId:componentId, selector:selector, result: nil, error:notReadyError);
                 then(response:response);
                 return
             }
@@ -162,7 +166,7 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
         })
     }
     func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler) {
-        let listener = MapSwiftWKProxyListener(componentId: componentId, eventHandler: callBack)
+        let listener = MapSwiftWKProxyEventListener(eventHandler: callBack)
         container.configuration.userContentController.addScriptMessageHandler(listener, name: componentId);
     }
 }

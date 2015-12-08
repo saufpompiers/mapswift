@@ -14889,12 +14889,12 @@ MapSwift.editorMain = function (config) {
 		pingModel: pingModel
 	};
 	if (messageHandlers['map-swift-proxy']) {
-		messageHandlers['map-swift-proxy'].postMessage({type: 'status', args: ['map-swift-main-complete']});
+		messageHandlers['map-swift-proxy'].postMessage({eventName: 'status', args: ['map-swift-main-complete']});
 	}
 };
 
 if (window.webkit && window.webkit.messageHandlers && window.webkit && window.webkit.messageHandlers['map-swift-proxy']) {
-	window.webkit.messageHandlers['map-swift-proxy'].postMessage({type: 'status', args: ['map-swift-lib-loaded']});
+	window.webkit.messageHandlers['map-swift-proxy'].postMessage({eventName: 'status', args: ['map-swift-lib-loaded']});
 }
 
 //MapSwift.editorMain({messageHandlerNames: ['pingModel', 'map-swift-proxy']});
