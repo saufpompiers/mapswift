@@ -22,7 +22,6 @@
 		55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E571C15E6FE0030F416 /* MapSwiftCore.swift */; };
 		55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E591C15E9180030F416 /* MapSwiftComponents.swift */; };
 		55610E5C1C15FA840030F416 /* map-swift-editor.js in Resources */ = {isa = PBXBuildFile; fileRef = 55610E5B1C15FA840030F416 /* map-swift-editor.js */; };
-		55F3FE801C106187007333CE /* map-swift-editor.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 55F3FE7F1C106187007333CE /* map-swift-editor.min.js */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
 		55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */; };
@@ -58,7 +57,6 @@
 		55610E571C15E6FE0030F416 /* MapSwiftCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftCore.swift; sourceTree = "<group>"; };
 		55610E591C15E9180030F416 /* MapSwiftComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftComponents.swift; sourceTree = "<group>"; };
 		55610E5B1C15FA840030F416 /* map-swift-editor.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "map-swift-editor.js"; path = "Resources/map-swift-editor.js"; sourceTree = "<group>"; };
-		55F3FE7F1C106187007333CE /* map-swift-editor.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "map-swift-editor.min.js"; path = "Resources/map-swift-editor.min.js"; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
 		55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyProtocol.swift; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 			isa = PBXGroup;
 			children = (
 				55610E5B1C15FA840030F416 /* map-swift-editor.js */,
-				55F3FE7F1C106187007333CE /* map-swift-editor.min.js */,
 				5523D2761C104DF500069905 /* mapswift-ios.html */,
 				55610E521C15CF340030F416 /* MapSwiftResources.swift */,
 			);
@@ -310,7 +307,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55F3FE801C106187007333CE /* map-swift-editor.min.js in Resources */,
 				55610E5C1C15FA840030F416 /* map-swift-editor.js in Resources */,
 				5523D2781C104DF500069905 /* mapswift-ios.html in Resources */,
 			);

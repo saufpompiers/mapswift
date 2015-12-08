@@ -14888,7 +14888,7 @@ MapSwift.editorMain = function (config) {
 		containerProxy: containerProxy,
 		pingModel: pingModel
 	};
-	return true;
+	return 'OK';
 };
 if (window.webkit && window.webkit.messageHandlers && window.webkit && window.webkit.messageHandlers['map-swift-proxy']) {
 	window.webkit.messageHandlers['map-swift-proxy'].postMessage('map-swift-lib-loaded');

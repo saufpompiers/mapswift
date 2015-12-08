@@ -110,12 +110,7 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
     private func loadPageLibs() {
         self.status = MapSwiftProxyStatus.LoadingLibraries
         if let libJS = resources.containerLibrary {
-            self.container.evaluateJavaScript(libJS) { (result, error) in
-                if let error = error {
-                    self.loadingError(error)
-                    return
-                }
-            }
+            self.container.evaluateJavaScript(libJS) { (result, error) in }
         }
     }
     private func execPageMain() {
@@ -150,11 +145,10 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol, WKScriptMessageHa
             self.container.evaluateJavaScript(commandJS) { (result, error) in
                 print("evaluateJavaScript:\(commandJS) result:\(result) error:\(error)")
 
-                let completed = error == nil ? false : true
+                let completed = error == nil ? true : false
 
                 let response = MapSwiftProxyResponse(id:"", completed:completed, componentId:componentId, selector:selector, result: nil, error:error);
                 then(response:response);
-
             }
         })
     }
