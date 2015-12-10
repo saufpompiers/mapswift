@@ -24,7 +24,7 @@ MapSwift.WebKitProtocol = function () {
 
 	self.errorResponse = function (command, error) {
 		if (command) {
-			return {completed: false, id: command.id, componentId: command.componentId, errors: [error]};
+			return {completed: false, id: command.id, componentId: command.componentId, selector: command.selector, errors: [error]};
 		} else {
 			return {completed: false, errors: ['no-command', error]};
 		}

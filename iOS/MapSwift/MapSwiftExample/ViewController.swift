@@ -31,7 +31,9 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate {
         if status == MapSwiftProxyStatus.Ready {
             if let mapSwift = self.mapSwift  {
                 if let components = mapSwift.components {
-                    components.pingModel.echo("hello")
+                    components.pingModel.echo("echo", then: { (response) -> () in
+                        print("response:\(response)")
+                    })
                 }
             }
         }

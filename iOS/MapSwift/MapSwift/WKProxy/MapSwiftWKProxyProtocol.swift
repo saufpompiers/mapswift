@@ -18,7 +18,7 @@ public protocol MapSwiftProxyProtocol:class {
 
     var delegate:MapSwiftProxyProtocolDelegate? {get set}
     var isReady:Bool {get}
-    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse)->()))
+    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->()))
     func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler)
     func start()
 }
@@ -75,17 +75,25 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
         self.container = container
     }
 
-    private func getArgsString(args:[AnyObject]) -> String {
+    private let EMPTY_ARGS_STRING = "[]"
+    private func getArgsString(args:[AnyObject]) -> String? {
+
+        if args.count == 0 {
+            return EMPTY_ARGS_STRING
+        }
         do {
             let argsData = try NSJSONSerialization.dataWithJSONObject(args, options: NSJSONWritingOptions(rawValue: 0))
-            if let s = NSString(data: argsData, encoding: NSUTF8StringEncoding) as? String {
-                return s
+            if let argsString = NSString(data: argsData, encoding: NSUTF8StringEncoding) as? String {
+                return argsString
+            } else {
+                return EMPTY_ARGS_STRING
             }
         } catch let err as NSError {
             print("Error \(err.localizedDescription) generating args string for \(args)")
         }
-        return "[]";
+        return nil;
     }
+
     func start() {
         dispatch_async(serialQueue, {
             if self.status != MapSwiftProxyStatus.NotInitialised {
@@ -145,23 +153,23 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
         }
 
     }
-    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse)->())) {
+    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->())) {
         dispatch_async(serialQueue, {
             if self.status != MapSwiftProxyStatus.Ready {
-                let notReadyError = NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "notReady", NSLocalizedRecoverySuggestionErrorKey:"Use MapSwiftWKProxyProtocol.loadResources to make ready"]);
-                let response = MapSwiftProxyResponse(id:"", completed:false, componentId:componentId, selector:selector, result: nil, error:notReadyError);
-                then(response:response);
-                return
-            }
-
-            let commandJS = "components.containerProxy.sendFromSwift({componentId: '\(componentId)', selector: '\(selector)', args: \(self.getArgsString(args))});"
-            self.container.evaluateJavaScript(commandJS) { (result, error) in
-                print("evaluateJavaScript:\(commandJS) result:\(result) error:\(error)")
-
-                let completed = error == nil ? true : false
-
-                let response = MapSwiftProxyResponse(id:"", completed:completed, componentId:componentId, selector:selector, result: nil, error:error);
-                then(response:response);
+                then(response:nil, error: MapSwiftError.ProtocolNotReady);
+            } else if let argsString = self.getArgsString(args) {
+                let commandJS = "components.containerProxy.sendFromSwift({componentId: '\(componentId)', selector: '\(selector)', args: \(argsString)});"
+                self.container.evaluateJavaScript(commandJS) { (result, error) in
+    //                print("evaluateJavaScript:\(commandJS)" )
+                    if let resultDictionary = result as? NSDictionary {
+                        let proxyResponse = resultDictionary.toMapSwiftProxyResponse(error)
+                        then(response: proxyResponse, error: error)
+                    } else {
+                        then(response:nil, error: error);
+                    }
+                }
+            } else {
+                then(response:nil, error: MapSwiftError.InvalidProtocolRequestArgs);
             }
         })
     }
