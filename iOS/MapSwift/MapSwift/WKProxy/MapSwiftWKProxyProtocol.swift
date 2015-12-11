@@ -7,38 +7,6 @@
 //
 
 import WebKit
-public typealias MapSwiftProxyEventHandler = ((eventName:String, args:[AnyObject])->())
-
-public protocol MapSwiftProxyProtocolDelegate:class {
-    func proxyDidChangeStatus(status:MapSwiftProxyStatus)
-    func proxyDidSendLog(args:[AnyObject])
-    func proxyDidRecieveError(error:NSError)
-}
-public enum MapSwiftProxyStatus { case NotInitialised, LoadingPage, LoadingLibraries, ExecutingMain, LoadingError, Ready}
-public protocol MapSwiftProxyProtocol:class {
-
-    var delegate:MapSwiftProxyProtocolDelegate? {get set}
-    var isReady:Bool {get}
-    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->()))
-    func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler)
-    func start()
-}
-
-@objc class MapSwiftWKProxyEventListener: NSObject, WKScriptMessageHandler {
-    let eventHandler:MapSwiftProxyEventHandler
-    init(eventHandler:MapSwiftProxyEventHandler) {
-        self.eventHandler = eventHandler
-        super.init()
-    }
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let bodyDictionary = message.body as? NSDictionary, eventName =  bodyDictionary["eventName"] as? String, args = bodyDictionary["args"] as? [AnyObject] {
-            self.eventHandler(eventName: eventName, args: args)
-        } else {
-            print("unrecognised message:\(message.body)")
-        }
-
-    }
-}
 
 class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
 
@@ -85,18 +53,13 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
         }
     }
     //MARK: - Private helper methods
-    private var status:MapSwiftProxyStatus {
-        get {
-            return _status
+    private func changeStatus(latest:MapSwiftProxyStatus) {
+        if (_status == latest) {
+            return
         }
-        set(val) {
-            if (_status == val) {
-                return
-            }
-            _status = val
-            if let delegate = self.delegate {
-                delegate.proxyDidChangeStatus(_status)
-            }
+        _status = latest
+        if let delegate = self.delegate {
+            delegate.proxyDidChangeStatus(_status)
         }
     }
 
@@ -120,21 +83,21 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
     }
 
     private func loadPageLibs() {
-        self.status = MapSwiftProxyStatus.LoadingLibraries
+        self.changeStatus(MapSwiftProxyStatus.LoadingLibraries)
         if let libJS = resources.containerLibrary {
             self.container.evaluateJavaScript(libJS) { (result, error) in }
         }
     }
 
     private func execPageMain() {
-        self.status = MapSwiftProxyStatus.ExecutingMain
+        self.changeStatus(MapSwiftProxyStatus.ExecutingMain)
         let js = "MapSwift.editorMain();"
         self.container.evaluateJavaScript(js) { (result, error) in
             if let error = error {
                 self.loadingError(error)
                 return
             }
-            self.status = MapSwiftProxyStatus.Ready
+            self.changeStatus(MapSwiftProxyStatus.Ready)
         }
 
     }
@@ -147,7 +110,7 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
     }
 
     private func loadingError(error:NSError) {
-        self.status = MapSwiftProxyStatus.LoadingError
+        self.changeStatus(MapSwiftProxyStatus.LoadingError)
         if let delegate = self.delegate {
             delegate.proxyDidRecieveError(error)
         }
@@ -163,17 +126,17 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
 
     func start() {
         dispatch_async(serialQueue, {
-            if self.status != MapSwiftProxyStatus.NotInitialised {
+            if self._status != MapSwiftProxyStatus.NotInitialised {
                 return
             }
 
-            self.status = MapSwiftProxyStatus.LoadingLibraries
+            self.changeStatus(MapSwiftProxyStatus.LoadingLibraries)
             let containerUrl = self.resources.containerHTMLURL()
             if let containerHtml = containerUrl.mapswift_fileContent {
                 self.container.configuration.userContentController.addScriptMessageHandler(self.listener, name: "map-swift-proxy");
                 self.container.loadHTMLString(containerHtml, baseURL: containerUrl)
             } else {
-                self.status = MapSwiftProxyStatus.LoadingError
+                self.changeStatus(MapSwiftProxyStatus.LoadingError)
             }
 
         })
@@ -181,7 +144,7 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
 
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->())) {
         dispatch_async(serialQueue, {
-            if self.status != MapSwiftProxyStatus.Ready {
+            if !self.isReady {
                 then(response:nil, error: MapSwiftError.ProtocolNotReady);
             } else if let argsString = self.getArgsString(args) {
                 let commandJS = "components.containerProxy.sendFromSwift({componentId: '\(componentId)', selector: '\(selector)', args: \(argsString)});"
