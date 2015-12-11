@@ -38,7 +38,7 @@ describe('MapSwift.ProxyMessageSender', function () {
 			expect(window.console.log).toHaveBeenCalledWith('postMessage', 'my-listener', 'hello');
 		});
 	});
-	['Status', 'Error'].forEach(function (messageType) {
+	['Status', 'Error', 'Log'].forEach(function (messageType) {
 		var messageTypeLower = messageType.toLocaleLowerCase(),
 			selector = 'post' + messageType + 'Message';
 		describe('post' + messageType +  'Message', function () {

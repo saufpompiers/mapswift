@@ -13,11 +13,18 @@ public class MapSwiftCore {
     let containerProtocol:MapSwiftProxyProtocol
     var _components:MapSwiftComponents?
 
-    public init() {
-        let config = WKWebViewConfiguration()
-        self.container = WKWebView(frame: CGRectMake(0, 0, 500, 500), configuration: config)
-        containerProtocol = MapSwiftWKProxyProtocol(container: container, resources: MapSwiftResources.sharedInstance)
+    public init(container:WKWebView, containerProtocol:MapSwiftProxyProtocol) {
+        self.container = container
+        self.containerProtocol = containerProtocol
     }
+
+    public convenience init() {
+        let config = WKWebViewConfiguration()
+        let container = WKWebView(frame: CGRectMake(0, 0, 500, 500), configuration: config)
+        let containerProtocol = MapSwiftWKProxyProtocol(container: container, resources: MapSwiftResources.sharedInstance)
+        self.init(container:container, containerProtocol:containerProtocol)
+    }
+
     public func start() {
         containerProtocol.start()
     }

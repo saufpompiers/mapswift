@@ -28,8 +28,14 @@ var MapSwift = MapSwift || {
 
 			self.postMessage(message);
 		};
+		self.postLogMessage = function () {
+			var callArgs = Array.prototype.slice.call(arguments, 0),
+				message = {id: nextMessageId(), eventName: 'log', componentId: listenerName, args: callArgs};
+
+			self.postMessage(message);
+		};
 	}
 };
 
 MapSwift.proxyMessageSender = new MapSwift.ProxyMessageSender('map-swift-proxy');
-
+MapSwift.log = MapSwift.proxyMessageSender.postLogMessage;

@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension NSURL {
+public extension NSURL {
     var mapswift_fileContent:String? {
         get {
             if let data = NSData(contentsOfURL: self) {

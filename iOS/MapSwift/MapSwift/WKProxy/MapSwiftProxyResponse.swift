@@ -8,20 +8,6 @@
 
 import UIKit
 
-extension NSDictionary {
-    func toMapSwiftProxyResponse(error:NSError?) -> MapSwiftProxyResponse {
-        var completed = false;
-        if let wasCompleted = self["completed"] as? Bool {
-            completed = wasCompleted
-        }
-        let componentId = self["componentId"] as? String
-        let selector = self["selector"] as? String
-        let id = self["id"] as? String
-        let result = self["result"]
-        let errors = self["errors"] as? [String]
-        return MapSwiftProxyResponse(id: id, completed: completed, componentId: componentId, selector: selector, result: result, errors: errors)
-    }
-}
 public struct MapSwiftProxyResponse {
     let id:String?
     let completed:Bool
@@ -29,5 +15,19 @@ public struct MapSwiftProxyResponse {
     let selector:String?
     let result:AnyObject?
     let errors:[String]?
+
+    static func fromNSDictionary(dictionary:NSDictionary) -> MapSwiftProxyResponse {
+        var completed = false;
+        if let wasCompleted = dictionary["completed"] as? Bool {
+            completed = wasCompleted
+        }
+        let componentId = dictionary["componentId"] as? String
+        let selector = dictionary["selector"] as? String
+        let id = dictionary["id"] as? String
+        let result = dictionary["result"]
+        let errors = dictionary["errors"] as? [String]
+        return MapSwiftProxyResponse(id: id, completed: completed, componentId: componentId, selector: selector, result: result, errors: errors)
+    }
+
 
 }

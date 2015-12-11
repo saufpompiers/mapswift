@@ -22,6 +22,13 @@
 		55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E571C15E6FE0030F416 /* MapSwiftCore.swift */; };
 		55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E591C15E9180030F416 /* MapSwiftComponents.swift */; };
 		55610E5C1C15FA840030F416 /* map-swift-editor.js in Resources */ = {isa = PBXBuildFile; fileRef = 55610E5B1C15FA840030F416 /* map-swift-editor.js */; };
+		557856111C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557856101C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift */; };
+		557856151C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557856141C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift */; };
+		557856171C1B010D001C5E17 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557856161C1B010D001C5E17 /* NSDateExtensions.swift */; };
+		557856191C1B01E1001C5E17 /* NSDateExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557856181C1B01E1001C5E17 /* NSDateExtensionsTests.swift */; };
+		5578561B1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578561A1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift */; };
+		5578561D1C1B0CFB001C5E17 /* MapSwiftProxyResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578561C1C1B0CFB001C5E17 /* MapSwiftProxyResponseTests.swift */; };
+		5578561F1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578561E1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
@@ -58,6 +65,14 @@
 		55610E571C15E6FE0030F416 /* MapSwiftCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftCore.swift; sourceTree = "<group>"; };
 		55610E591C15E9180030F416 /* MapSwiftComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftComponents.swift; sourceTree = "<group>"; };
 		55610E5B1C15FA840030F416 /* map-swift-editor.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "map-swift-editor.js"; path = "Resources/map-swift-editor.js"; sourceTree = "<group>"; };
+		557856101C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeIntervalExtensions.swift; sourceTree = "<group>"; };
+		557856131C1AF738001C5E17 /* MapSwiftTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MapSwiftTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		557856141C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeIntervalExtensionsTests.swift; sourceTree = "<group>"; };
+		557856161C1B010D001C5E17 /* NSDateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtensions.swift; sourceTree = "<group>"; };
+		557856181C1B01E1001C5E17 /* NSDateExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtensionsTests.swift; sourceTree = "<group>"; };
+		5578561A1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftProxyEchoResponse.swift; sourceTree = "<group>"; };
+		5578561C1C1B0CFB001C5E17 /* MapSwiftProxyResponseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftProxyResponseTests.swift; sourceTree = "<group>"; };
+		5578561E1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftProxyEchoResponseTests.swift; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
@@ -128,6 +143,7 @@
 		5523D2511C0F35EF00069905 /* MapSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				557856121C1AF705001C5E17 /* Utils */,
 				55F3FE841C1320DA007333CE /* WKProxy */,
 				5523D2541C0F35EF00069905 /* Info.plist */,
 			);
@@ -173,6 +189,18 @@
 			children = (
 				55610E551C15D9280030F416 /* NSURLExtensions.swift */,
 				55A864961C19797800F587D1 /* MapSwiftError.swift */,
+				557856101C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift */,
+				557856161C1B010D001C5E17 /* NSDateExtensions.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		557856121C1AF705001C5E17 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				557856131C1AF738001C5E17 /* MapSwiftTests-Bridging-Header.h */,
+				557856141C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift */,
+				557856181C1B01E1001C5E17 /* NSDateExtensionsTests.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -183,6 +211,7 @@
 				55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */,
 				55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */,
 				55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */,
+				5578561A1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift */,
 			);
 			path = WKProxy;
 			sourceTree = "<group>";
@@ -190,6 +219,8 @@
 		55F3FE841C1320DA007333CE /* WKProxy */ = {
 			isa = PBXGroup;
 			children = (
+				5578561C1C1B0CFB001C5E17 /* MapSwiftProxyResponseTests.swift */,
+				5578561E1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift */,
 			);
 			path = WKProxy;
 			sourceTree = "<group>";
@@ -268,7 +299,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MapSwift;
-				LastSwiftUpdateCheck = 0710;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Sauf Pompiers Ltd";
 				TargetAttributes = {
@@ -339,13 +370,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				557856171C1B010D001C5E17 /* NSDateExtensions.swift in Sources */,
 				55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */,
 				55610E561C15D9280030F416 /* NSURLExtensions.swift in Sources */,
+				557856111C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift in Sources */,
 				55610E511C15B7120030F416 /* MapSwiftPingModel.swift in Sources */,
 				55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */,
 				55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */,
 				55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */,
 				55610E531C15CF340030F416 /* MapSwiftResources.swift in Sources */,
+				5578561B1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift in Sources */,
 				55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */,
 				55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */,
 			);
@@ -355,6 +389,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				557856191C1B01E1001C5E17 /* NSDateExtensionsTests.swift in Sources */,
+				5578561F1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift in Sources */,
+				557856151C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift in Sources */,
+				5578561D1C1B0CFB001C5E17 /* MapSwiftProxyResponseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,20 +564,25 @@
 		5523D25B1C0F35EF00069905 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MapSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saufpompiers.ios.MapSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MapSwiftTests/Utils/MapSwiftTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		5523D25C1C0F35EF00069905 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MapSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.saufpompiers.ios.MapSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MapSwiftTests/Utils/MapSwiftTests-Bridging-Header.h";
 			};
 			name = Release;
 		};

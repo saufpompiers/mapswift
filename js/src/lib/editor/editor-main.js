@@ -7,7 +7,6 @@ MapSwift.editorMain = function () {
 		pingModel = new MapSwift.PingModel();
 
 	containerProxy.proxyComponent(pingModel, 'pingModel').withEvents('ping');
-
 	window.components = {
 		containerProxy: containerProxy,
 		pingModel: pingModel
@@ -21,7 +20,7 @@ MapSwift.editorMain = function () {
 	MapSwift.proxyMessageSender.postStatusMessage('map-swift-lib-loaded');
 })();
 
-
+MapSwift.log('MapSwift Libraries loaded', 'Call MapSwift.editorMain(); to start MapSwift');
 /*
 MapSwift.editorMain();
 components.containerProxy.sendFromSwift({componentId: 'pingModel', selector: 'echo', args: ['hello']})

@@ -56,9 +56,13 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         print("proxyDidRecieveError:\(error.localizedDescription)")
     }
 
+    func proxyDidSendLog(args: [AnyObject]) {
+        print("proxyDidSendLog:\(args)")
+    }
+
     //MARK: - MapSwiftPingModelDelegate 
     func ping(identifier: String, sent: NSDate) {
-        let latency = sent.timeIntervalSinceNow * -1000
+        let latency = (sent.timeIntervalSinceNow * -1).mapswift_JSTimeInterval
         print("\(identifier) latency:\(latency)ms");
         pingCount++
         if pingCount > 4 {
