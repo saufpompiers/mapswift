@@ -19,4 +19,9 @@ public class MapSwiftError {
             return NSError(domain: "com.saufpompiers", code: 2, userInfo: [NSLocalizedDescriptionKey: "Invalid arguments supplied to protocol", NSLocalizedRecoverySuggestionErrorKey:"Arguments must be transformable into JSON"])
         }
     }
+    public class func InvalidResponseFromProxy(response:MapSwiftProxyResponse?) -> NSError {
+            return NSError(domain: "com.saufpompiers", code: 3, userInfo: [NSLocalizedDescriptionKey: "An Invalid response was received from the protocol",
+                NSLocalizedFailureReasonErrorKey: "\(response)"])
+    }
+
 }

@@ -10,7 +10,7 @@ describe('MapSwift.WebKitProtocol', function () {
 	});
 	describe('errorResponse', function () {
 		it('should return error', function () {
-			expect(underTest.errorResponse({id: 1, componentId: 'mapmodel'}, 'reason')).toEqual({completed: false, id: 1, componentId: 'mapmodel', errors: ['reason']});
+			expect(underTest.errorResponse({id: 1, componentId: 'mapmodel'}, 'reason')).toEqual(jasmine.objectContaining({completed: false, id: 1, componentId: 'mapmodel', errors: ['reason']}));
 		});
 		it('should return error when there is no command', function () {
 			expect(underTest.errorResponse(undefined, 'reason')).toEqual({completed: false, errors: ['no-command', 'reason']});

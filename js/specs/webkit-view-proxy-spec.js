@@ -2,7 +2,6 @@
 describe('MapSwift.WebKitViewProxy', function () {
 	'use strict';
 	var underTest,
-		messageSenders,
 		components,
 		protocol;
 	beforeEach(function () {
@@ -10,12 +9,8 @@ describe('MapSwift.WebKitViewProxy', function () {
 			component1: jasmine.createSpyObj('component1', ['foo']),
 			component2: jasmine.createSpyObj('component1', ['bar'])
 		};
-		messageSenders = {
-			component1: jasmine.createSpyObj('component1', ['postMessage']),
-			component2: jasmine.createSpyObj('component1', ['postMessage'])
-		};
 		protocol = jasmine.createSpyObj('protocol', ['componentIdForCommand', 'errorResponse', 'applyCommandToComponent', 'message']);
-		underTest = new MapSwift.WebKitViewProxy(messageSenders, protocol);
+		underTest = new MapSwift.WebKitViewProxy(protocol);
 	});
 	describe('sendFromSwift', function () {
 		beforeEach(function () {
@@ -38,7 +33,7 @@ describe('MapSwift.WebKitViewProxy', function () {
 		it('should create a WebKitViewComponentProxy for the component and identifier', function () {
 			spyOn(MapSwift, 'WebKitViewComponentProxy').and.callThrough();
 			expect(underTest.proxyComponent(components.component1, 'component1')).not.toBeUndefined();
-			expect(MapSwift.WebKitViewComponentProxy).toHaveBeenCalledWith('component1', components.component1, protocol, messageSenders.component1);
+			expect(MapSwift.WebKitViewComponentProxy).toHaveBeenCalledWith('component1', components.component1, protocol, jasmine.any(Object));
 		});
 		it('should throw an exception if a proxy has already been created for the identifier', function () {
 			var throwerOnSecond = function () {
@@ -55,7 +50,7 @@ describe('MapSwift.WebKitViewProxy', function () {
 			expect(underTest.forComponentIdentier('component1')).toEqual(proxy);
 		});
 		it('should be falsy if no proxy created for identifier', function () {
-			var proxy = underTest.proxyComponent(components.component1, 'component2');
+			underTest.proxyComponent(components.component1, 'component2');
 
 			expect(underTest.forComponentIdentier('component1')).toBeFalsy();
 

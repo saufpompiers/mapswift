@@ -19,37 +19,65 @@ extension MapSwiftProxyResponse {
     }
 }
 
+public protocol MapSwiftPingModelDelegate:class {
+    func ping(identifier:String, sent:NSDate)
+}
 public class MapSwiftPingModel {
     public struct MapSwiftEchoResponse {
-        let identifier:String
-        let sent:NSDate
-        let reply:NSDate
-        let received:NSDate
+        public let identifier:String
+        public let sent:NSDate
+        public let reply:NSDate
+        public let received:NSDate
+        public var description:String {
+            get {
+                let out = (reply.timeIntervalSinceReferenceDate - sent.timeIntervalSinceReferenceDate) * 1000
+                let back = (received.timeIntervalSinceReferenceDate - reply.timeIntervalSinceReferenceDate) * 1000
+                return "\(identifier) [out:\(out)ms back:\(back)ms]"
+            }
+        }
     }
     let COMPONENT_ID = "pingModel"
     let proxy:MapSwiftProxyProtocol
+    public weak var delegate:MapSwiftPingModelDelegate?
 
     init(proxy:MapSwiftProxyProtocol) {
         self.proxy = proxy
         self.proxy.addProxyListener(COMPONENT_ID) { (eventName, args) -> () in
-            print("\(eventName), args:\(args)")
+            if let delegate = self.delegate, identifer = args[0] as? String, timestamp = args[1] as? Double {
+                let div:Double = 1000
+                let receivedTI = (timestamp / div) as NSTimeInterval
+                let timeSent = NSDate(timeIntervalSince1970: receivedTI)
+                delegate.ping(identifer, sent: timeSent)
+            }
         }
     }
-
-    public func echo(message:String, then:((response:MapSwiftEchoResponse?)->())) {
-        print("echo:\(message)")
-        proxy.sendCommand(COMPONENT_ID, selector: "echo", args: [message]) { (response, error) -> () in
-            let sent = NSDate()
+    private func exec(selector:String, args:[AnyObject], then: (()->()), fail:((error:NSError)->())) {
+        proxy.sendCommand(COMPONENT_ID, selector: selector, args: args) { (response, error) -> () in
             if let error = error {
-                print("echo error:\(error.localizedDescription)")
-                return
-            }
-            if let response = response {
-                then(response: response.mapSwiftEchoResponse(sent, received: NSDate()))
+                fail(error: error)
             } else {
-                then(response: nil)
+                then()
             }
+        }
+    }
+    public func start(identifier:String, interval:NSTimeInterval, then:(()->()), fail:((error:NSError)->())) {
+        let intervalMilis = floor(interval*1000)
+        self.exec("start", args:[identifier, intervalMilis], then:then, fail: fail);
+    }
+    public func stop(then:(()->()), fail:((error:NSError)->())) {
+        self.exec("stop", args:[], then:then, fail: fail);
+    }
 
+    public func echo(message:String, then:((response:MapSwiftEchoResponse)->()), fail:((error:NSError)->())) {
+        let sent = NSDate()
+        proxy.sendCommand(COMPONENT_ID, selector: "echo", args: [message]) { (response, error) -> () in
+            if let error = error {
+                fail(error: error)
+            } else if let response = response, echoResponse = response.mapSwiftEchoResponse(sent, received: NSDate()) {
+                then(response: echoResponse)
+            } else {
+                fail(error: MapSwiftError.InvalidResponseFromProxy(response))
+            }
         }
     }
 }

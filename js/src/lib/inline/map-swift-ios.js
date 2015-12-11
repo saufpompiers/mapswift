@@ -1,18 +1,17 @@
-/*global window, console*/
+/*global window, console, MapSwift*/
 window.onload = function () {
 	'use strict';
 	try {
-		if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers['map-swift-proxy']) {
-			window.webkit.messageHandlers['map-swift-proxy'].postMessage({eventName: 'status', args: ['map-swift-page-loaded']});
-		}
+		MapSwift.proxyMessageSender.postStatusMessage('map-swift-page-loaded');
 	} catch (e) {
 		console.log(e);
 	}
 };
 window.onerror = function (msg, url, line, col, error) {
 	'use strict';
-	var message = {eventName: 'error', args: [msg, url, line, col, error]};
-	if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers['map-swift-proxy']) {
-		window.webkit.messageHandlers['map-swift-proxy'].postMessage(message);
+	try {
+		MapSwift.proxyMessageSender.postErrorMessage(msg, url, line, col, error);
+	} catch (e) {
+		console.log(e);
 	}
 };

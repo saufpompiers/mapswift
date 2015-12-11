@@ -1,14 +1,12 @@
 /*global MapSwift*/
-MapSwift.WebKitViewProxy = function (messageSenders, protocol) {
+MapSwift.WebKitViewProxy = function (protocol) {
 	'use strict';
 	var self = this,
 		componentProxies = {};
 	self.proxyComponent = function (component, identifier) {
 		var proxy = componentProxies[identifier],
-			messageSender = messageSenders && messageSenders[identifier];
-		if (!messageSenders) {
-			throw 'no-sender:' + identifier;
-		}
+			messageSender = new MapSwift.ProxyMessageSender(identifier);
+
 		if (!proxy) {
 			proxy = new MapSwift.WebKitViewComponentProxy(identifier, component, protocol, messageSender);
 			componentProxies[identifier] = proxy;

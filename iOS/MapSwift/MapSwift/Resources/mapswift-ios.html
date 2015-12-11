@@ -5,26 +5,59 @@
 </head>
 <body>
 	<div>Map Swift javascript host</div>
-<script type="text/javascript">/*global window, console*/
+<script type="text/javascript">/*global window, console, MapSwift*/
 window.onload = function () {
 	'use strict';
 	try {
-		if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers['map-swift-proxy']) {
-			window.webkit.messageHandlers['map-swift-proxy'].postMessage({eventName: 'status', args: ['map-swift-page-loaded']});
-		}
+		MapSwift.proxyMessageSender.postStatusMessage('map-swift-page-loaded');
 	} catch (e) {
 		console.log(e);
 	}
 };
 window.onerror = function (msg, url, line, col, error) {
 	'use strict';
-	var message = {eventName: 'error', args: [msg, url, line, col, error]};
-	if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers['map-swift-proxy']) {
-		window.webkit.messageHandlers['map-swift-proxy'].postMessage(message);
+	try {
+		MapSwift.proxyMessageSender.postErrorMessage(msg, url, line, col, error);
+	} catch (e) {
+		console.log(e);
 	}
 };
 
-var MapSwift = MapSwift || {};
+/*global window, console*/
+var MapSwift = MapSwift || {
+	ProxyMessageSender: function (listenerName) {
+		'use strict';
+		var self = this,
+			nextId = 0,
+			nextMessageId = function () {
+				return ++nextId;
+			};
+		self.postMessage = function (message) {
+			if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers[listenerName]) {
+				window.webkit.messageHandlers[listenerName].postMessage(message);
+			} else if (window.webkit && window.webkit.messageHandlers && MapSwift.proxyMessageSender) {
+				MapSwift.proxyMessageSender.postErrorMessage('no-listener', listenerName, message);
+			} else {
+				console.log('postMessage', listenerName, message);
+			}
+		};
+		self.postStatusMessage = function () {
+			var callArgs = Array.prototype.slice.call(arguments, 0),
+				message = {id: nextMessageId(), eventName: 'status', componentId: listenerName, args: callArgs};
+
+			self.postMessage(message);
+		};
+		self.postErrorMessage = function () {
+			var callArgs = Array.prototype.slice.call(arguments, 0),
+				message = {id: nextMessageId(), eventName: 'error', componentId: listenerName, args: callArgs};
+
+			self.postMessage(message);
+		};
+	}
+};
+
+MapSwift.proxyMessageSender = new MapSwift.ProxyMessageSender('map-swift-proxy');
+
 </script>
 </body>
 </html>

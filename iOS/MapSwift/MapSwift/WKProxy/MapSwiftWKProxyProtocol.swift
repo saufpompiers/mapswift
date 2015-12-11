@@ -143,7 +143,7 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
     }
     private func execPageMain() {
         self.status = MapSwiftProxyStatus.ExecutingMain
-        let js = "MapSwift.editorMain({messageHandlerNames: ['pingModel']});"
+        let js = "MapSwift.editorMain();"
         self.container.evaluateJavaScript(js) { (result, error) in
             if let error = error {
                 self.loadingError(error)
@@ -160,7 +160,6 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
             } else if let argsString = self.getArgsString(args) {
                 let commandJS = "components.containerProxy.sendFromSwift({componentId: '\(componentId)', selector: '\(selector)', args: \(argsString)});"
                 self.container.evaluateJavaScript(commandJS) { (result, error) in
-    //                print("evaluateJavaScript:\(commandJS)" )
                     if let resultDictionary = result as? NSDictionary {
                         let proxyResponse = resultDictionary.toMapSwiftProxyResponse(error)
                         then(response: proxyResponse, error: error)
