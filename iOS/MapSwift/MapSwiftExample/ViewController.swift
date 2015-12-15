@@ -34,14 +34,12 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         // Dispose of any resources that can be recreated.
     }
     private func sendEcho() {
-        if let mapSwift = self.mapSwift  {
-            if let components = mapSwift.components {
-                components.pingModel.delegate = self;
-                components.pingModel.echo("echo", then: { response  in
-                    print("\(response.description)")
-                    components.pingModel.start("pingTest", interval:5, then:self.donePrinter("pingModel.start"), fail:self.errorPrinter)
-                    }, fail: errorPrinter)
-            }
+        if let mapSwift = self.mapSwift, components = mapSwift.components {
+            components.pingModel.delegate = self;
+            components.pingModel.echo("echo", then: { response  in
+                print("\(response.description)")
+                components.pingModel.start("pingTest", interval:5, then:self.donePrinter("pingModel.start"), fail:self.errorPrinter)
+                }, fail: errorPrinter)
         }
 
     }

@@ -9,12 +9,10 @@
 import UIKit
 import WebKit
 public class MapSwiftCore {
-    let container:WKWebView
-    let containerProtocol:MapSwiftProxyProtocol
-    var _components:MapSwiftComponents?
+    private let containerProtocol:MapSwiftProxyProtocol
+    private var _components:MapSwiftComponents?
 
-    public init(container:WKWebView, containerProtocol:MapSwiftProxyProtocol) {
-        self.container = container
+    public init(containerProtocol:MapSwiftProxyProtocol) {
         self.containerProtocol = containerProtocol
     }
 
@@ -22,7 +20,7 @@ public class MapSwiftCore {
         let config = WKWebViewConfiguration()
         let container = WKWebView(frame: CGRectMake(0, 0, 500, 500), configuration: config)
         let containerProtocol = MapSwiftWKProxyProtocol(container: container, resources: MapSwiftResources.sharedInstance)
-        self.init(container:container, containerProtocol:containerProtocol)
+        self.init(containerProtocol:containerProtocol)
     }
 
     public func start() {
