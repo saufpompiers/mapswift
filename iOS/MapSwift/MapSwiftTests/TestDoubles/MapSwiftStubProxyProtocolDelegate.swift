@@ -10,10 +10,10 @@ import UIKit
 import MapSwift
 
 class MapSwiftStubProxyProtocolDelegate:NSObject, MapSwiftProxyProtocolDelegate {
-    var addProxyListenerCalls:[MapSwiftProxyStatus] = []
 
+    var proxyDidChangeStatusCalls:[MapSwiftProxyStatus] = []
     func proxyDidChangeStatus(status:MapSwiftProxyStatus) {
-        addProxyListenerCalls.append(status)
+        proxyDidChangeStatusCalls.append(status)
     }
 
     typealias ProxyDidSendLogCall = [AnyObject]

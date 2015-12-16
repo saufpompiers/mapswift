@@ -16,7 +16,7 @@ public class MapSwiftResources {
         return Static.instance
     }
 
-    var bundle:NSBundle {
+    private var bundle:NSBundle {
         get {
             return NSBundle(forClass: MapSwiftResources.self)
         }
