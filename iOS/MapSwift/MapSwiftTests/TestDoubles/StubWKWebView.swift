@@ -21,4 +21,18 @@ class StubWKWebView: WKWebView {
         loadHTMLStringCalls.append(LoadHTMLStringCall(string:string, baseURL:baseURL))
         return nil
     }
+
+    typealias LoadFileURLCall = (URL: NSURL, allowingReadAccessToURL: NSURL)
+    var loadFileURLCalls:[LoadFileURLCall] = []
+    override func loadFileURL(URL: NSURL, allowingReadAccessToURL readAccessURL: NSURL) -> WKNavigation? {
+        loadFileURLCalls.append((URL:URL, allowingReadAccessToURL:readAccessURL))
+        return nil
+    }
+
+    var _configuration:WKWebViewConfiguration = StubWKWebViewConfiguration()
+    override var configuration:WKWebViewConfiguration {
+        get {
+            return _configuration
+        }
+    }
 }

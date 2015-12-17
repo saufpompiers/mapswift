@@ -39,6 +39,7 @@
 		557856211C1B1C3E001C5E17 /* MapSwiftWKProxyEventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557856201C1B1C3E001C5E17 /* MapSwiftWKProxyEventListener.swift */; };
 		557856231C1B1C76001C5E17 /* MapSwiftProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557856221C1B1C76001C5E17 /* MapSwiftProxyProtocol.swift */; };
 		558055BB1C21C3F90063F39D /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055BA1C21C3F90063F39D /* StringExtensions.swift */; };
+		558055BD1C22F8060063F39D /* StubWKWebViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055BC1C22F8060063F39D /* StubWKWebViewConfiguration.swift */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
@@ -93,6 +94,7 @@
 		557856201C1B1C3E001C5E17 /* MapSwiftWKProxyEventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyEventListener.swift; sourceTree = "<group>"; };
 		557856221C1B1C76001C5E17 /* MapSwiftProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftProxyProtocol.swift; sourceTree = "<group>"; };
 		558055BA1C21C3F90063F39D /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		558055BC1C22F8060063F39D /* StubWKWebViewConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubWKWebViewConfiguration.swift; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				556637E31C2015840010044E /* StubWKWebView.swift */,
 				556637E51C20183D0010044E /* StubWKUserContentController.swift */,
 				556637E91C2022330010044E /* MapSwiftStubResources.swift */,
+				558055BC1C22F8060063F39D /* StubWKWebViewConfiguration.swift */,
 			);
 			path = TestDoubles;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				558055BD1C22F8060063F39D /* StubWKWebViewConfiguration.swift in Sources */,
 				557856191C1B01E1001C5E17 /* NSDateExtensionsTests.swift in Sources */,
 				5578561F1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift in Sources */,
 				557856151C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift in Sources */,

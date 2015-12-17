@@ -9,10 +9,9 @@
 import Foundation
 
 public class MapSwiftError {
-    public class var ProtocolNotReady:NSError {
-        get {
-            return NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "The protocol is not ready for use", NSLocalizedRecoverySuggestionErrorKey:"Use MapSwiftWKProxyProtocol.start to make ready"])
-        }
+    public class func ProtocolNotInRequiredState(requiredState:MapSwiftProxyStatus) -> NSError {
+        return NSError(domain: "com.saufpompiers", code: 1, userInfo: [NSLocalizedDescriptionKey: "The protocol is not in state:\(requiredState)"])
+
     }
     public class var InvalidProtocolRequestArgs:NSError {
         get {
