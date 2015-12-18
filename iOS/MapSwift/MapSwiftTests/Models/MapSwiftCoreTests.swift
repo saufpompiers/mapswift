@@ -13,11 +13,13 @@ class MapSwiftCoreTests: XCTestCase {
     var underTest:MapSwiftCore!
     var stubProtocol:MapSwiftStubProxyProtocol!
     var stubDelegate:MapSwiftStubProxyProtocolDelegate!
-    var failHandler:((error:NSError) -> ())!
+    var failHandler:((error:NSError?) -> ())!
     override func setUp() {
         super.setUp()
-        failHandler = {(error:NSError) -> () in
-            XCTFail("unexpected error:\(error.localizedDescription)")
+        failHandler = {(error:NSError?) -> () in
+            if let error = error {
+                XCTFail("unexpected error:\(error.localizedDescription)")
+            }
         };
         stubProtocol = MapSwiftStubProxyProtocol()
         stubDelegate = MapSwiftStubProxyProtocolDelegate();
@@ -29,7 +31,7 @@ class MapSwiftCoreTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-
+//MARK: - Stubbed tests
     func test_start_should_start_protocol() {
         underTest.ready({ (components) -> () in }, fail:failHandler)
         XCTAssertEqual(stubProtocol.startCalls, 1)
@@ -45,4 +47,19 @@ class MapSwiftCoreTests: XCTestCase {
             XCTFail("proxy call not passed")
         }
     }
+
+//MARK: - Integration Tests
+
+    func test_integrated_should_return_components() {
+        underTest = MapSwiftCore()
+        let expectation = expectationWithDescription("should return components");
+
+        underTest.ready({ (components) -> () in
+            expectation.fulfill()
+        }, fail: failHandler)
+
+        waitForExpectationsWithTimeout(20.0, handler: failHandler)
+    }
+
+
 }
