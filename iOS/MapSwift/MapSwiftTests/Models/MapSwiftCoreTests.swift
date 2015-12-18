@@ -32,12 +32,12 @@ class MapSwiftCoreTests: XCTestCase {
     }
 
     func test_should_return_nil_components_if_protocol_not_ready() {
-        XCTAssertNil(underTest.components)
+        XCTAssertNil(try! underTest.components())
     }
 
     func test_should_return_components_if_protocol_is_ready() {
         stubProtocol.isReady = true
-        XCTAssertNotNil(underTest.components)
+        XCTAssertNotNil(try! underTest.components())
     }
 
     func test_should_attach_delegate_to_protocol() {

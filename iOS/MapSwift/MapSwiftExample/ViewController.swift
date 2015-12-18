@@ -12,6 +12,8 @@ import MapSwift
 class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftPingModelDelegate {
     var mapSwift:MapSwiftCore?
     var pingCount = 0
+    var components:MapSwiftComponents?
+
     let errorPrinter = { (error:NSError) in
         print("error:\(error)")
     }
@@ -34,7 +36,7 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         // Dispose of any resources that can be recreated.
     }
     private func sendEcho() {
-        if let mapSwift = self.mapSwift, components = mapSwift.components {
+        if let components = components {
             components.pingModel.delegate = self;
             components.pingModel.echo("echo", then: { response  in
                 print("\(response.description)")
@@ -47,6 +49,14 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
     func proxyDidChangeStatus(status: MapSwiftProxyStatus) {
         print("proxyDidChangeStatus:\(status)")
         if status == MapSwiftProxyStatus.Ready {
+            if let mapSwift = self.mapSwift {
+                do {
+                components = try mapSwift.components()
+                } catch let error as NSError {
+                    print("error generating components:\(error.localizedDescription)")
+                }
+            }
+
             self.sendEcho()
         }
     }
@@ -64,7 +74,7 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         print("\(identifier) latency:\(latency)ms");
         pingCount++
         if pingCount > 4 {
-            if let mapSwift = self.mapSwift, components = mapSwift.components {
+            if let components = components {
                 components.pingModel.stop(self.donePrinter("pingModel.stop"), fail: self.errorPrinter);
             }
         }

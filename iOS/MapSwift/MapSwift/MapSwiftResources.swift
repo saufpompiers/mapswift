@@ -9,6 +9,7 @@
 import UIKit
 
 public class MapSwiftResources {
+    let JavascriptTrueFuncCall = "\n(function () {return true;})();\n"
     class var sharedInstance : MapSwiftResources {
         struct Static {
             static let instance:MapSwiftResources = MapSwiftResources()
@@ -29,7 +30,10 @@ public class MapSwiftResources {
     public var containerLibrary:String? {
         get {
             let url = bundle.URLForResource("map-swift-editor", withExtension: "js")!
-            return url.mapswift_fileContent
+            if let content = url.mapswift_fileContent {
+                return content + JavascriptTrueFuncCall
+            }
+            return nil
         }
     }
 }

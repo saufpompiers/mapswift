@@ -22,6 +22,6 @@ public protocol MapSwiftProxyProtocol:class {
     var delegate:MapSwiftProxyProtocolDelegate? {get set}
     var isReady:Bool {get}
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->()))
-    func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler)
+    func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler) throws
     func start()
 }

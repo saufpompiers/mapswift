@@ -18,9 +18,9 @@ public class MapSwiftPingModel {
     let proxy:MapSwiftProxyProtocol
     public weak var delegate:MapSwiftPingModelDelegate?
 
-    init(proxy:MapSwiftProxyProtocol) {
+    init(proxy:MapSwiftProxyProtocol) throws {
         self.proxy = proxy
-        self.proxy.addProxyListener(COMPONENT_ID) { (eventName, args) -> () in
+        try self.proxy.addProxyListener(COMPONENT_ID) { (eventName, args) -> () in
             if let delegate = self.delegate, identifer = args[0] as? String, timestamp = args[1] as? Int {
                 delegate.ping(identifer, sent: NSDate.MapSwift_fromJSTimestamp(timestamp))
             }

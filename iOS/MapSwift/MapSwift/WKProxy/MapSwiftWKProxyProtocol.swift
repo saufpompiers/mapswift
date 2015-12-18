@@ -149,7 +149,10 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
         })
     }
 
-    func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler) {
+    func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler) throws {
+        if !self.isReady {
+            throw MapSwiftError.ProtocolNotInRequiredState(MapSwiftProxyStatus.Ready);
+        }
         let listener = MapSwiftWKProxyEventListener(eventHandler: callBack)
         container.configuration.userContentController.addScriptMessageHandler(listener, name: componentId);
     }

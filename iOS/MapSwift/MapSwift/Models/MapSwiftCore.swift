@@ -27,16 +27,19 @@ public class MapSwiftCore {
         containerProtocol.start()
     }
 
-    public var components:MapSwiftComponents? {
-        get {
-            if let components = _components {
-                return components
-            }
-            if containerProtocol.isReady {
-                _components = MapSwiftComponents(pingModel:MapSwiftPingModel(proxy: self.containerProtocol))
-            }
-            return _components
+    public func components() throws  -> MapSwiftComponents? {
+        if let components = _components {
+            return components
         }
+        if containerProtocol.isReady {
+            do {
+                let pingModel = try MapSwiftPingModel(proxy: self.containerProtocol)
+                _components = MapSwiftComponents(pingModel:pingModel)
+            } catch let error as NSError {
+                print("unable to create components error:\(error.localizedDescription)")
+            }
+        }
+        return _components
     }
 
     public var delegate:MapSwiftProxyProtocolDelegate? {
