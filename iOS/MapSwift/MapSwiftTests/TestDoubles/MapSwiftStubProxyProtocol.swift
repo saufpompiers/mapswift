@@ -13,11 +13,11 @@ class MapSwiftStubProxyProtocol: NSObject, MapSwiftProxyProtocol {
     var delegate:MapSwiftProxyProtocolDelegate?
     var isReady:Bool = false
 
-    typealias SendCommandCall = (componentId:String, selector:String, args:[AnyObject], then:(response:MapSwiftProxyResponse?, error:NSError?)->())
+    typealias SendCommandCall = (componentId:String, selector:String, args:[AnyObject], then:MapSwiftProxyProtocolSendCommandThen, fail:MapSwiftProxyProtocolFail)
     var sendCommandCalls:[SendCommandCall] = []
 
-    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->())) {
-        let thisCall = SendCommandCall(componentId:componentId, selector:selector, args:args, then:then)
+    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:MapSwiftProxyProtocolSendCommandThen, fail:MapSwiftProxyProtocolFail) {
+        let thisCall = SendCommandCall(componentId:componentId, selector:selector, args:args, then:then, fail:fail)
         sendCommandCalls.append(thisCall)
     }
 

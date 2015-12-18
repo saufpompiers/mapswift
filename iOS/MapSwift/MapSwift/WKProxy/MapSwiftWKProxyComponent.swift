@@ -16,7 +16,7 @@ public class MapSwiftWKProxyComponent {
         self.componentId = componentId
         self.proxyProtocol = proxyProtocol;
     }
-    public func sendCommand(selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->())) {
-        self.proxyProtocol.sendCommand(componentId, selector: selector, args: args, then: then);
+    public func sendCommand(selector:String, args:[AnyObject], then:MapSwiftProxyProtocolSendCommandThen, fail:MapSwiftProxyProtocolFail) {
+        self.proxyProtocol.sendCommand(componentId, selector: selector, args: args, then: then, fail: fail);
     }
 }

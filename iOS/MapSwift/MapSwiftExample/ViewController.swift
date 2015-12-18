@@ -53,15 +53,15 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
                 do {
                 components = try mapSwift.components()
                 } catch let error as NSError {
-                    print("error generating components:\(error.localizedDescription)")
+                    errorPrinter(error)
                 }
             }
-
             self.sendEcho()
         }
     }
+
     func proxyDidRecieveError(error: NSError) {
-        print("proxyDidRecieveError:\(error.localizedDescription)")
+        errorPrinter(error)
     }
 
     func proxyDidSendLog(args: [AnyObject]) {

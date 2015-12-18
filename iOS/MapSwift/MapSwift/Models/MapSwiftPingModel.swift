@@ -28,35 +28,28 @@ public class MapSwiftPingModel {
     }
     
     //MARK: - Prvate helpers methods
-    private func exec(selector:String, args:[AnyObject], then: (()->()), fail:((error:NSError)->())) {
-        proxy.sendCommand(COMPONENT_ID, selector: selector, args: args) { (response, error) -> () in
-            if let error = error {
-                fail(error: error)
-            } else {
-                then()
-            }
-        }
+    private func exec(selector:String, args:[AnyObject], then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
+        proxy.sendCommand(COMPONENT_ID, selector: selector, args: args, then:{ (response) -> () in then() }, fail: fail)
     }
 
-    //MARK: - Prvate API
-    public func start(identifier:String, interval:NSTimeInterval, then:(()->()), fail:((error:NSError)->())) {
+    //MARK: - Public API
+    public func start(identifier:String, interval:NSTimeInterval, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
         let intervalMilis = floor(interval*1000)
         self.exec("start", args:[identifier, intervalMilis], then:then, fail: fail);
     }
-    public func stop(then:(()->()), fail:((error:NSError)->())) {
+
+    public func stop(then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
         self.exec("stop", args:[], then:then, fail: fail);
     }
 
-    public func echo(message:String, then:((response:MapSwiftProxyEchoResponse)->()), fail:((error:NSError)->())) {
+    public func echo(message:String, then:((response:MapSwiftProxyEchoResponse)->()), fail:MapSwiftProxyProtocolFail) {
         let sent = NSDate()
-        proxy.sendCommand(COMPONENT_ID, selector: "echo", args: [message]) { (response, error) -> () in
-            if let error = error {
-                fail(error: error)
-            } else if let response = response, echoResponse = MapSwiftProxyEchoResponse.fromProxyResponse(response, sent: sent, received: NSDate()) {
+        proxy.sendCommand(COMPONENT_ID, selector: "echo", args: [message], then:{ (response) -> () in
+            if let echoResponse = MapSwiftProxyEchoResponse.fromProxyResponse(response, sent: sent, received: NSDate()) {
                 then(response: echoResponse)
             } else {
                 fail(error: MapSwiftError.InvalidResponseFromProxy(response))
             }
-        }
+        }, fail: fail)
     }
 }

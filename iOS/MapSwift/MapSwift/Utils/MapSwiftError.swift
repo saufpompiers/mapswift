@@ -22,5 +22,10 @@ public class MapSwiftError {
             return NSError(domain: "com.saufpompiers", code: 3, userInfo: [NSLocalizedDescriptionKey: "An Invalid response was received from the protocol",
                 NSLocalizedFailureReasonErrorKey: "\(response)"])
     }
+    public class func UnrecognisedResponseFromWKContainer(response:AnyObject?) -> NSError {
+        return NSError(domain: "com.saufpompiers", code: 4, userInfo: [NSLocalizedDescriptionKey: "No response was received from the weblkit container",
+            NSLocalizedFailureReasonErrorKey: "\(response)"])
+
+    }
 
 }

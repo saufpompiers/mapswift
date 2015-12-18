@@ -205,5 +205,5 @@ class MapSwiftWKProxyProtocolTests: XCTestCase  {
 
     }
 
-    
+
 }

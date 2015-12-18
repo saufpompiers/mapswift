@@ -127,24 +127,23 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
             dispatch_sync(serialQueue, doStart)
         }
     }
-
-    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:((response:MapSwiftProxyResponse?, error:NSError?)->())) {
+    func sendCommand(componentId:String, selector:String, args:[AnyObject], then:MapSwiftProxyProtocolSendCommandThen, fail:MapSwiftProxyProtocolFail) {
         dispatch_async(serialQueue, {
             if !self.isReady {
-                then(response:nil, error: MapSwiftError.ProtocolNotInRequiredState(MapSwiftProxyStatus.Ready));
+                fail(error: MapSwiftError.ProtocolNotInRequiredState(MapSwiftProxyStatus.Ready));
             } else if let argsString = String.mapswift_jsArgsString(args) {
                 let commandJS = "components.containerProxy.sendFromSwift({componentId: '\(componentId)', selector: '\(selector)', args: \(argsString)});"
                 self.container.evaluateJavaScript(commandJS) { (result, error) in
                     if let error = error {
-                        then(response:nil, error: error);
+                        fail(error: error);
                     } else if let resultDictionary = result as? NSDictionary {
-                        then(response: MapSwiftProxyResponse.fromNSDictionary(resultDictionary), error: error)
+                        then(response: MapSwiftProxyResponse.fromNSDictionary(resultDictionary))
                     } else {
-                        then(response:nil, error: nil);
+                        fail(error: MapSwiftError.UnrecognisedResponseFromWKContainer(result));
                     }
                 }
             } else {
-                then(response:nil, error: MapSwiftError.InvalidProtocolRequestArgs);
+                fail(error: MapSwiftError.InvalidProtocolRequestArgs);
             }
         })
     }
