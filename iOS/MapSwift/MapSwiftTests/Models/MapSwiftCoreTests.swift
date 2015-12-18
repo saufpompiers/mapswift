@@ -13,8 +13,12 @@ class MapSwiftCoreTests: XCTestCase {
     var underTest:MapSwiftCore!
     var stubProtocol:MapSwiftStubProxyProtocol!
     var stubDelegate:MapSwiftStubProxyProtocolDelegate!
+    var failHandler:((error:NSError) -> ())!
     override func setUp() {
         super.setUp()
+        failHandler = {(error:NSError) -> () in
+            XCTFail("unexpected error:\(error.localizedDescription)")
+        };
         stubProtocol = MapSwiftStubProxyProtocol()
         stubDelegate = MapSwiftStubProxyProtocolDelegate();
         underTest = MapSwiftCore(containerProtocol: stubProtocol)
@@ -25,23 +29,20 @@ class MapSwiftCoreTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     func test_start_should_start_protocol() {
-        underTest.start()
+        underTest.ready({ (components) -> () in }, fail:failHandler)
         XCTAssertEqual(stubProtocol.startCalls, 1)
     }
 
-    func test_should_return_nil_components_if_protocol_not_ready() {
-        XCTAssertNil(try! underTest.components())
-    }
-
-    func test_should_return_components_if_protocol_is_ready() {
-        stubProtocol.isReady = true
-        XCTAssertNotNil(try! underTest.components())
-    }
 
     func test_should_attach_delegate_to_protocol() {
         underTest.delegate = stubDelegate
-        XCTAssertTrue(stubDelegate.isEqual(stubProtocol.delegate!))
+        stubProtocol.delegate!.proxyDidChangeStatus(MapSwiftProxyStatus.Ready)
+        if let call = stubDelegate.proxyDidChangeStatusCalls.last {
+            XCTAssertEqual(call, MapSwiftProxyStatus.Ready)
+        } else {
+            XCTFail("proxy call not passed")
+        }
     }
 }

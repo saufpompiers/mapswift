@@ -14,3 +14,8 @@ if let data = data {
     let s = NSString(data: data, encoding: NSUTF8StringEncoding);
     let command = "containerProxies.pingModel.sentFromSwift()"
 }
+
+
+
+
+

@@ -8,12 +8,17 @@
 
 import UIKit
 import WebKit
-public class MapSwiftCore {
+
+public class MapSwiftCore  {
+    public typealias StartThen = ((components:MapSwiftComponents)->())
+
     private let containerProtocol:MapSwiftProxyProtocol
     private var _components:MapSwiftComponents?
-
+    private let proxyDelegateWrapper:MapSwiftProxyProtocolDelegateWrapper
     public init(containerProtocol:MapSwiftProxyProtocol) {
+        self.proxyDelegateWrapper = MapSwiftProxyProtocolDelegateWrapper()
         self.containerProtocol = containerProtocol
+        self.containerProtocol.delegate = self.proxyDelegateWrapper
     }
 
     public convenience init() {
@@ -23,31 +28,41 @@ public class MapSwiftCore {
         self.init(containerProtocol:containerProtocol)
     }
 
-    public func start() {
-        containerProtocol.start()
+    private func buildMapSwiftComponents() throws -> MapSwiftComponents {
+        let pingModel = try MapSwiftPingModel(proxy: self.containerProtocol)
+        return MapSwiftComponents(pingModel:pingModel)
     }
 
-    public func components() throws  -> MapSwiftComponents? {
-        if let components = _components {
-            return components
-        }
-        if containerProtocol.isReady {
+    public func ready(then:StartThen, fail:MapSwiftProxyProtocolFail) {
+        func thenBuildComponents()  {
             do {
-                let pingModel = try MapSwiftPingModel(proxy: self.containerProtocol)
-                _components = MapSwiftComponents(pingModel:pingModel)
+                let components = try self.buildMapSwiftComponents()
+                self._components = components
+                then(components: components)
             } catch let error as NSError {
-                print("unable to create components error:\(error.localizedDescription)")
+                fail(error: error);
             }
         }
-        return _components
+        if let components = self._components {
+            then(components: components)
+        } else if containerProtocol.isReady {
+            thenBuildComponents()
+        } else if let _ = self.proxyDelegateWrapper.readyCallback {
+            fail(error: MapSwiftError.ProtocolNotInRequiredState(MapSwiftProxyStatus.NotInitialised))
+            return;
+        } else {
+            self.proxyDelegateWrapper.readyCallback = thenBuildComponents
+            containerProtocol.start()
+        }
     }
 
     public var delegate:MapSwiftProxyProtocolDelegate? {
         get {
-            return containerProtocol.delegate
+            return proxyDelegateWrapper.passThroughDelegate
         }
         set(val) {
-            containerProtocol.delegate = val
+            proxyDelegateWrapper.passThroughDelegate = val
         }
     }
+
 }

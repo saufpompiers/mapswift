@@ -27,7 +27,11 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         let mapSwift = MapSwiftCore()
         mapSwift.delegate = self
         self.mapSwift = mapSwift
-        mapSwift.start()
+        mapSwift.ready({ (components) -> () in
+            self.components = components
+            components.pingModel.delegate = self;
+            self.sendEcho()
+        }, fail: errorPrinter)
 
     }
 
@@ -35,29 +39,19 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
     private func sendEcho() {
         if let components = components {
-            components.pingModel.delegate = self;
             components.pingModel.echo("echo", then: { response  in
                 print("\(response.description)")
                 components.pingModel.start("pingTest", interval:5, then:self.donePrinter("pingModel.start"), fail:self.errorPrinter)
-                }, fail: errorPrinter)
+            }, fail: errorPrinter)
         }
-
     }
+
     //MARK: - MapSwiftProxyProtocolDelegate
     func proxyDidChangeStatus(status: MapSwiftProxyStatus) {
         print("proxyDidChangeStatus:\(status)")
-        if status == MapSwiftProxyStatus.Ready {
-            if let mapSwift = self.mapSwift {
-                do {
-                components = try mapSwift.components()
-                } catch let error as NSError {
-                    errorPrinter(error)
-                }
-            }
-            self.sendEcho()
-        }
     }
 
     func proxyDidRecieveError(error: NSError) {
