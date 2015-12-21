@@ -19,6 +19,7 @@ public protocol MapSwiftProxyProtocolDelegate:class {
 public enum MapSwiftProxyStatus { case NotInitialised, LoadingPage, LoadingLibraries, ExecutingMain, LoadingError, Ready}
 
 public typealias MapSwiftProxyProtocolSendCommandThen = ((response:MapSwiftProxyResponse)->())
+public typealias MapSwiftProxyProtocolExecCommandArgStringThen = ((response:String)->())
 public typealias MapSwiftProxyProtocolFail = ((error:NSError)->())
 public typealias MapSwiftProxyProtocolThen = (()->())
 
@@ -26,6 +27,7 @@ public protocol MapSwiftProxyProtocol:class {
 
     var delegate:MapSwiftProxyProtocolDelegate? {get set}
     var isReady:Bool {get}
+    func execCommandArgString(componentId:String, selector:String, argString:String, then:MapSwiftProxyProtocolExecCommandArgStringThen, fail:MapSwiftProxyProtocolFail)
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:MapSwiftProxyProtocolSendCommandThen, fail:MapSwiftProxyProtocolFail);
     func addProxyListener(componentId:String, callBack:MapSwiftProxyEventHandler) throws
     func start()

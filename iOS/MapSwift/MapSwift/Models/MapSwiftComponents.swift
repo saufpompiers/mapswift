@@ -10,4 +10,5 @@ import UIKit
 
 public struct MapSwiftComponents {
     public let pingModel:MapSwiftPingModel
+    public let mapModel:MapSwiftMapModel
 }

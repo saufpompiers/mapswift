@@ -31,7 +31,8 @@ public class MapSwiftCore  {
 
     private func buildMapSwiftComponents() throws -> MapSwiftComponents {
         let pingModel = try MapSwiftPingModel(proxy: self.containerProtocol)
-        return MapSwiftComponents(pingModel:pingModel)
+        let mapModel = try MapSwiftMapModel(proxy: self.containerProtocol)
+        return MapSwiftComponents(pingModel:pingModel, mapModel: mapModel)
     }
 
     public func ready(then:StartThen, fail:MapSwiftProxyProtocolFail) {

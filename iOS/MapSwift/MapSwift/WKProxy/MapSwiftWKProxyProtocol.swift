@@ -127,6 +127,26 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
             dispatch_sync(serialQueue, doStart)
         }
     }
+    func execCommandArgString(componentId:String, selector:String, argString:String, then:MapSwiftProxyProtocolExecCommandArgStringThen, fail:MapSwiftProxyProtocolFail) {
+        dispatch_async(serialQueue, {
+            if !self.isReady {
+                fail(error: MapSwiftError.ProtocolNotInRequiredState(MapSwiftProxyStatus.Ready));
+            } else {
+                let commandJS = "components.\(componentId).\(selector)(\(argString));"
+                print("commandJS:\(commandJS)")
+                self.container.evaluateJavaScript(commandJS) { (result, error) in
+                    if let error = error {
+                        fail(error: error);
+                    } else if let result = result {
+                        then(response: "\(result)")
+                    } else {
+                        then(response: "")
+                    }
+                }
+            }
+        })
+
+    }
     func sendCommand(componentId:String, selector:String, args:[AnyObject], then:MapSwiftProxyProtocolSendCommandThen, fail:MapSwiftProxyProtocolFail) {
         dispatch_async(serialQueue, {
             if !self.isReady {
