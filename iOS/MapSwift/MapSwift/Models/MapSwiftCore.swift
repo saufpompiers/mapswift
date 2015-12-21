@@ -15,6 +15,7 @@ public class MapSwiftCore  {
     private let containerProtocol:MapSwiftProxyProtocol
     private var _components:MapSwiftComponents?
     private let proxyDelegateWrapper:MapSwiftProxyProtocolDelegateWrapper
+
     public init(containerProtocol:MapSwiftProxyProtocol) {
         self.proxyDelegateWrapper = MapSwiftProxyProtocolDelegateWrapper()
         self.containerProtocol = containerProtocol

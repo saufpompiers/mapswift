@@ -41,6 +41,8 @@
 		558055BB1C21C3F90063F39D /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055BA1C21C3F90063F39D /* StringExtensions.swift */; };
 		558055BD1C22F8060063F39D /* StubWKWebViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055BC1C22F8060063F39D /* StubWKWebViewConfiguration.swift */; };
 		558055BF1C246C7C0063F39D /* MapSwiftProxyProtocolDelegateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055BE1C246C7C0063F39D /* MapSwiftProxyProtocolDelegateWrapper.swift */; };
+		558055C11C27F1640063F39D /* MapSwiftPingModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055C01C27F1640063F39D /* MapSwiftPingModelTests.swift */; };
+		558055C31C27F5360063F39D /* StubPingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055C21C27F5360063F39D /* StubPingDelegate.swift */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
@@ -97,6 +99,8 @@
 		558055BA1C21C3F90063F39D /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		558055BC1C22F8060063F39D /* StubWKWebViewConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubWKWebViewConfiguration.swift; sourceTree = "<group>"; };
 		558055BE1C246C7C0063F39D /* MapSwiftProxyProtocolDelegateWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftProxyProtocolDelegateWrapper.swift; sourceTree = "<group>"; };
+		558055C01C27F1640063F39D /* MapSwiftPingModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftPingModelTests.swift; sourceTree = "<group>"; };
+		558055C21C27F5360063F39D /* StubPingDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubPingDelegate.swift; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
@@ -209,6 +213,7 @@
 				556637E51C20183D0010044E /* StubWKUserContentController.swift */,
 				556637E91C2022330010044E /* MapSwiftStubResources.swift */,
 				558055BC1C22F8060063F39D /* StubWKWebViewConfiguration.swift */,
+				558055C21C27F5360063F39D /* StubPingDelegate.swift */,
 			);
 			path = TestDoubles;
 			sourceTree = "<group>";
@@ -239,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				556637DF1C200DED0010044E /* MapSwiftCoreTests.swift */,
+				558055C01C27F1640063F39D /* MapSwiftPingModelTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -447,7 +453,9 @@
 			files = (
 				558055BD1C22F8060063F39D /* StubWKWebViewConfiguration.swift in Sources */,
 				557856191C1B01E1001C5E17 /* NSDateExtensionsTests.swift in Sources */,
+				558055C31C27F5360063F39D /* StubPingDelegate.swift in Sources */,
 				5578561F1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift in Sources */,
+				558055C11C27F1640063F39D /* MapSwiftPingModelTests.swift in Sources */,
 				557856151C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift in Sources */,
 				556637E81C201FFF0010044E /* MapSwiftWKProxyProtocolTests.swift in Sources */,
 				556637E21C200ED30010044E /* MapSwiftStubProxyProtocolDelegate.swift in Sources */,

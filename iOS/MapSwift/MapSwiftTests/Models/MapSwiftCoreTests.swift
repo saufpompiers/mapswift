@@ -13,14 +13,13 @@ class MapSwiftCoreTests: XCTestCase {
     var underTest:MapSwiftCore!
     var stubProtocol:MapSwiftStubProxyProtocol!
     var stubDelegate:MapSwiftStubProxyProtocolDelegate!
-    var failHandler:((error:NSError?) -> ())!
+    func failHandler(error:NSError?)  {
+        if let error = error {
+            XCTFail("unexpected error:\(error.localizedDescription)")
+        }
+    }
     override func setUp() {
         super.setUp()
-        failHandler = {(error:NSError?) -> () in
-            if let error = error {
-                XCTFail("unexpected error:\(error.localizedDescription)")
-            }
-        };
         stubProtocol = MapSwiftStubProxyProtocol()
         stubDelegate = MapSwiftStubProxyProtocolDelegate();
         underTest = MapSwiftCore(containerProtocol: stubProtocol)
@@ -58,7 +57,7 @@ class MapSwiftCoreTests: XCTestCase {
             expectation.fulfill()
         }, fail: failHandler)
 
-        waitForExpectationsWithTimeout(20.0, handler: failHandler)
+        waitForExpectationsWithTimeout(5.0, handler: failHandler)
     }
 
 
