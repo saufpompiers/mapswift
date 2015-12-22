@@ -16,7 +16,7 @@ class bMapSwiftMapModelTests: XCTestCase {
     func failHandler(error:NSError?)  {
         if let error = error {
             XCTFail("unexpected error:\(error.localizedDescription)")
-        }
+        }   
     }
 
     override func setUp() {
@@ -29,7 +29,7 @@ class bMapSwiftMapModelTests: XCTestCase {
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+        super.tearDown()    
     }
 
     func test_should_setIdea() {

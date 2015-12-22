@@ -14870,7 +14870,7 @@ MapSwift.editorMain = function () {
 		mapModel = new MAPJS.MapModel(MAPJS.DOMRender.layoutCalculator, []);
 
 	containerProxy.proxyComponent(pingModel, 'pingModel').withEvents('ping');
-	containerProxy.proxyComponent(mapModel, 'mapModel').withEvents('layoutChangeStarting', 'layoutChangeComplete');
+	containerProxy.proxyComponent(mapModel, 'mapModel').withEvents('layoutChangeStarting', 'layoutChangeComplete', 'nodeCreated');
 	window.components = {
 		containerProxy: containerProxy,
 		pingModel: pingModel,
