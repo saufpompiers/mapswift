@@ -222,15 +222,19 @@ public class MapSwiftMapModel {
     //MARK: - Prvate helpers methods
     private func exec(selector:String, args:[AnyObject], then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
         proxy.sendCommand(COMPONENT_ID, selector: selector, args: args, then:{ (response) -> () in
-            print("exec selector:\(selector) args:\(args)")
+            print("exec selector:\(selector) args:\(args) response:\(response)")
+            then()
         }, fail: fail)
     }
-
     //MARK: - public api
     public func setIdea(content:String, then:(()->()), fail:MapSwiftProxyProtocolFail) {
         proxy.execCommandArgString(COMPONENT_ID, selector: "setIdea", argString: "MAPJS.content(\(content))", then: { (response) -> () in
             print("response:\(response)");
             then()
         }, fail: fail)
+    }
+
+    public func addSubIdea(parentId:String, initialTitle:String, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
+        self.exec("addSubIdea", args: ["iOS", parentId, initialTitle], then: then, fail: fail)
     }
 }

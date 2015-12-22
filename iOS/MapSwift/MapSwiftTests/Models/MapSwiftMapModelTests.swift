@@ -9,8 +9,9 @@
 import XCTest
 import MapSwift
 
-class bMapSwiftMapModelTests: XCTestCase {
+class MapSwiftMapModelTests: XCTestCase {
     var mapSwift:MapSwiftCore!
+    let EMPTY_MAP = "{\"id\": \"1\", \"title\": \"empty map\"}"
     var stubDelegate:StubMapSwiftMapModelDelegate!
 
     func failHandler(error:NSError?)  {
@@ -26,17 +27,12 @@ class bMapSwiftMapModelTests: XCTestCase {
 
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()    
-    }
 
     func test_should_setIdea() {
         let expectation = expectationWithDescription("should set idea");
         mapSwift.ready({ (components) -> () in
             components.mapModel.delegate = self.stubDelegate
-            components.mapModel.setIdea("{\"title\":\"test map\"}", then: { () -> () in
+            components.mapModel.setIdea(self.EMPTY_MAP, then: { () -> () in
                 expectation.fulfill()
             }, fail: self.failHandler)
         }, fail: failHandler)
@@ -44,5 +40,19 @@ class bMapSwiftMapModelTests: XCTestCase {
         waitForExpectationsWithTimeout(5.0, handler: failHandler)
     }
 
+    func test_should_addSubIdea() {
+        let expectation = expectationWithDescription("should add subidea");
+        mapSwift.ready({ (components) -> () in
+            components.mapModel.delegate = self.stubDelegate
+            components.mapModel.setIdea(self.EMPTY_MAP, then: {
+                    components.mapModel.addSubIdea("1", initialTitle: "hello", then: {
+                        expectation.fulfill()
+                    }, fail: self.failHandler)
+                }, fail: self.failHandler)
+            }, fail: failHandler)
+
+        waitForExpectationsWithTimeout(5.0, handler: failHandler)
+
+    }
 
 }
