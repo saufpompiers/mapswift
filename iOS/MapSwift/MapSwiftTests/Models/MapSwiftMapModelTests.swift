@@ -41,18 +41,23 @@ class MapSwiftMapModelTests: XCTestCase {
     }
 
     func test_should_addSubIdea() {
-        let expectation = expectationWithDescription("should add subidea");
+        let expectAddSubIdea = expectationWithDescription("should add subidea");
+        let expectNodeEvent = expectationWithDescription("should send node added event");
         mapSwift.ready({ (components) -> () in
             components.mapModel.delegate = self.stubDelegate
             components.mapModel.setIdea(self.EMPTY_MAP, then: {
-                    components.mapModel.addSubIdea("1", initialTitle: "hello", then: {
-                        expectation.fulfill()
+                self.stubDelegate.mapModelNodeEventListener = { (event: MapSwiftMapModel.NodeEvent, node:MapSwiftNode) in
+                    XCTAssertEqual(event, MapSwiftMapModel.NodeEvent.NodeCreated)
+                    XCTAssertEqual(node.title, "hello")
+                    expectNodeEvent.fulfill()
+                }
+                components.mapModel.addSubIdea("1", initialTitle: "hello", then: {
+                        expectAddSubIdea.fulfill()
                     }, fail: self.failHandler)
                 }, fail: self.failHandler)
             }, fail: failHandler)
 
         waitForExpectationsWithTimeout(5.0, handler: failHandler)
-
     }
 
 }

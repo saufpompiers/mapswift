@@ -14,9 +14,14 @@ class StubMapSwiftMapModelDelegate: MapSwiftMapModelDelegate {
         print("mapModelMapEvent \(event)")
     }
 
-    func mapModelNodeEvent(mapModel: MapSwiftMapModel, event: MapSwiftMapModel.NodeEvent, node: Dictionary<String, AnyObject>) {
+    var mapModelNodeEventListener:((event: MapSwiftMapModel.NodeEvent, node:MapSwiftNode)->())?
+    func mapModelNodeEvent(mapModel: MapSwiftMapModel, event: MapSwiftMapModel.NodeEvent, node:MapSwiftNode) {
         print("mapModelNodeEvent \(event) \(node)")
+        if let listener = mapModelNodeEventListener {
+            listener(event: event, node: node)
+        }
     }
+
     func mapModelConnectorEvent(mapModel: MapSwiftMapModel, event: MapSwiftMapModel.ConnectorEvent, connector: Dictionary<String, AnyObject>) {
         print("mapModelConnectorEvent \(event) \(connector)")
     }

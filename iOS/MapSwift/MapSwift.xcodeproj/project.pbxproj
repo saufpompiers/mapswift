@@ -46,6 +46,8 @@
 		558055C51C2802860063F39D /* MapSwiftMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055C41C2802860063F39D /* MapSwiftMapModel.swift */; };
 		558055C71C280BD60063F39D /* StubMapSwiftMapModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055C61C280BD60063F39D /* StubMapSwiftMapModelDelegate.swift */; };
 		558055C91C280C440063F39D /* MapSwiftMapModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055C81C280C440063F39D /* MapSwiftMapModelTests.swift */; };
+		558055CB1C2AD4790063F39D /* MapSwiftNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055CA1C2AD4790063F39D /* MapSwiftNode.swift */; };
+		558055CD1C2AD9020063F39D /* MapSwiftNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
@@ -107,6 +109,8 @@
 		558055C41C2802860063F39D /* MapSwiftMapModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftMapModel.swift; sourceTree = "<group>"; };
 		558055C61C280BD60063F39D /* StubMapSwiftMapModelDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubMapSwiftMapModelDelegate.swift; sourceTree = "<group>"; };
 		558055C81C280C440063F39D /* MapSwiftMapModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftMapModelTests.swift; sourceTree = "<group>"; };
+		558055CA1C2AD4790063F39D /* MapSwiftNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNode.swift; sourceTree = "<group>"; };
+		558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeTests.swift; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
@@ -232,6 +236,7 @@
 				55610E571C15E6FE0030F416 /* MapSwiftCore.swift */,
 				55610E591C15E9180030F416 /* MapSwiftComponents.swift */,
 				558055C41C2802860063F39D /* MapSwiftMapModel.swift */,
+				558055CA1C2AD4790063F39D /* MapSwiftNode.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -254,6 +259,7 @@
 				556637DF1C200DED0010044E /* MapSwiftCoreTests.swift */,
 				558055C01C27F1640063F39D /* MapSwiftPingModelTests.swift */,
 				558055C81C280C440063F39D /* MapSwiftMapModelTests.swift */,
+				558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -453,6 +459,7 @@
 				558055C51C2802860063F39D /* MapSwiftMapModel.swift in Sources */,
 				558055BB1C21C3F90063F39D /* StringExtensions.swift in Sources */,
 				55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */,
+				558055CB1C2AD4790063F39D /* MapSwiftNode.swift in Sources */,
 				557856231C1B1C76001C5E17 /* MapSwiftProxyProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,6 +479,7 @@
 				556637E21C200ED30010044E /* MapSwiftStubProxyProtocolDelegate.swift in Sources */,
 				5541E8A41C1EB95800318670 /* MapSwiftStubProxyProtocol.swift in Sources */,
 				5578561D1C1B0CFB001C5E17 /* MapSwiftProxyResponseTests.swift in Sources */,
+				558055CD1C2AD9020063F39D /* MapSwiftNodeTests.swift in Sources */,
 				556637E01C200DED0010044E /* MapSwiftCoreTests.swift in Sources */,
 				558055C71C280BD60063F39D /* StubMapSwiftMapModelDelegate.swift in Sources */,
 				556637E41C2015840010044E /* StubWKWebView.swift in Sources */,

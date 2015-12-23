@@ -10,7 +10,7 @@ import UIKit
 
 public protocol MapSwiftMapModelDelegate {
     func mapModelMapEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.MapEvent)
-    func mapModelNodeEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeEvent, node:Dictionary<String, AnyObject>)
+    func mapModelNodeEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode)
     func mapModelLinkEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.LinkEvent, link:Dictionary<String, AnyObject>)
     func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>)
     func mapModelNodeIdEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool)
@@ -60,9 +60,9 @@ public class MapSwiftMapModel {
             }
         }
 
-        func parseArgs(args:[AnyObject]) -> Dictionary<String, AnyObject>? {
+        func parseArgs(args:[AnyObject]) -> MapSwiftNode? {
             if let first = args.first, parsed = first as? Dictionary<String, AnyObject> {
-                return parsed
+                return MapSwiftNode.parseDictionary(parsed)
             }
             return nil
         }
@@ -83,7 +83,7 @@ public class MapSwiftMapModel {
         }
         func parseArgs(args:[AnyObject]) -> Dictionary<String, AnyObject>? {
             if let first = args.first, parsed = first as? Dictionary<String, AnyObject> {
-                return parsed
+                return  parsed
             }
             return nil
         }
