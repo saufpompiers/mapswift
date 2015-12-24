@@ -30,6 +30,9 @@ extension String {
         return String.mapswift_fromAnyObject(object, fallback: nil)
     }
     static func mapswift_fromAnyObject(object:AnyObject?, fallback:String?) -> String? {
+        if object == nil {
+            return nil
+        }
         if let stringVal = object as? String {
             return stringVal
         }
