@@ -24,8 +24,6 @@ class MapSwiftMapModelTests: XCTestCase {
         super.setUp()
         stubDelegate = StubMapSwiftMapModelDelegate()
         mapSwift = MapSwiftCore()
-
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
     func test_should_setIdea() {
@@ -43,6 +41,7 @@ class MapSwiftMapModelTests: XCTestCase {
     func test_should_addSubIdea() {
         let expectAddSubIdea = expectationWithDescription("should add subidea");
         let expectNodeEvent = expectationWithDescription("should send node added event");
+        let expectConnectorEvent = expectationWithDescription("should send connector added event");
         mapSwift.ready({ (components) -> () in
             components.mapModel.delegate = self.stubDelegate
             components.mapModel.setIdea(self.EMPTY_MAP, then: {
@@ -51,13 +50,31 @@ class MapSwiftMapModelTests: XCTestCase {
                     XCTAssertEqual(node.title, "hello")
                     expectNodeEvent.fulfill()
                 }
+                self.stubDelegate.mapModelConnectorEventListener = { (event, connector) in
+                    expectConnectorEvent.fulfill()
+                }
                 components.mapModel.addSubIdea("1", initialTitle: "hello", then: {
-                        expectAddSubIdea.fulfill()
-                    }, fail: self.failHandler)
+                    expectAddSubIdea.fulfill()
                 }, fail: self.failHandler)
-            }, fail: failHandler)
+            }, fail: self.failHandler)
+        }, fail: failHandler)
 
         waitForExpectationsWithTimeout(5.0, handler: failHandler)
     }
 
+    func test_should_getCurrentLayout() {
+        let expectGetCurrentLayout = expectationWithDescription("should add subidea");
+        mapSwift.ready({ (components) -> () in
+            components.mapModel.delegate = self.stubDelegate
+            components.mapModel.setIdea(self.EMPTY_MAP, then: {
+                components.mapModel.addSubIdea("1", initialTitle: "hello", then: { }, fail: self.failHandler)
+                components.mapModel.getCurrentLayout({ (layout) -> () in
+                    expectGetCurrentLayout.fulfill()
+                }, fail: self.failHandler)
+            }, fail: self.failHandler)
+        }, fail: failHandler)
+
+        waitForExpectationsWithTimeout(5.0, handler: failHandler)
+
+    }
 }

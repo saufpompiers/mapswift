@@ -25,6 +25,17 @@ extension String {
             print("Error \(err.localizedDescription) generating args string for \(args)")
         }
         return nil;
-
+    }
+    static func mapswift_fromAnyObject(object:AnyObject?) -> String? {
+        return String.mapswift_fromAnyObject(object, fallback: nil)
+    }
+    static func mapswift_fromAnyObject(object:AnyObject?, fallback:String?) -> String? {
+        if let stringVal = object as? String {
+            return stringVal
+        }
+        if let intVal = object as? Int {
+            return "\(intVal)"
+        }
+        return fallback
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MapSwift
+@testable import MapSwift
 
 class MapSwiftNodeTests: XCTestCase {
     

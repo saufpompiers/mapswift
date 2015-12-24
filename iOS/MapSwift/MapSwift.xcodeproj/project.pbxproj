@@ -48,6 +48,8 @@
 		558055C91C280C440063F39D /* MapSwiftMapModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055C81C280C440063F39D /* MapSwiftMapModelTests.swift */; };
 		558055CB1C2AD4790063F39D /* MapSwiftNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055CA1C2AD4790063F39D /* MapSwiftNode.swift */; };
 		558055CD1C2AD9020063F39D /* MapSwiftNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */; };
+		558055CF1C2BE01A0063F39D /* MapSwiftConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055CE1C2BE01A0063F39D /* MapSwiftConnector.swift */; };
+		558055D11C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055D01C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
@@ -111,6 +113,8 @@
 		558055C81C280C440063F39D /* MapSwiftMapModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftMapModelTests.swift; sourceTree = "<group>"; };
 		558055CA1C2AD4790063F39D /* MapSwiftNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNode.swift; sourceTree = "<group>"; };
 		558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeTests.swift; sourceTree = "<group>"; };
+		558055CE1C2BE01A0063F39D /* MapSwiftConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftConnector.swift; sourceTree = "<group>"; };
+		558055D01C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeConnectorTests.swift; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
@@ -237,6 +241,7 @@
 				55610E591C15E9180030F416 /* MapSwiftComponents.swift */,
 				558055C41C2802860063F39D /* MapSwiftMapModel.swift */,
 				558055CA1C2AD4790063F39D /* MapSwiftNode.swift */,
+				558055CE1C2BE01A0063F39D /* MapSwiftConnector.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				558055C01C27F1640063F39D /* MapSwiftPingModelTests.swift */,
 				558055C81C280C440063F39D /* MapSwiftMapModelTests.swift */,
 				558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */,
+				558055D01C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -450,6 +456,7 @@
 				557856111C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift in Sources */,
 				55610E511C15B7120030F416 /* MapSwiftPingModel.swift in Sources */,
 				557856211C1B1C3E001C5E17 /* MapSwiftWKProxyEventListener.swift in Sources */,
+				558055CF1C2BE01A0063F39D /* MapSwiftConnector.swift in Sources */,
 				55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */,
 				55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */,
 				55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */,
@@ -484,6 +491,7 @@
 				558055C71C280BD60063F39D /* StubMapSwiftMapModelDelegate.swift in Sources */,
 				556637E41C2015840010044E /* StubWKWebView.swift in Sources */,
 				556637E61C20183D0010044E /* StubWKUserContentController.swift in Sources */,
+				558055D11C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift in Sources */,
 				556637EA1C2022330010044E /* MapSwiftStubResources.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

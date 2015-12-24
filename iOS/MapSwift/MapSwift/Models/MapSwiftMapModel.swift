@@ -220,10 +220,10 @@ public class MapSwiftMapModel {
     }
 
     //MARK: - Prvate helpers methods
-    private func exec(selector:String, args:[AnyObject], then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
+    private func exec(selector:String, args:[AnyObject], then:MapSwiftProxyProtocolSendCommandThen, fail:MapSwiftProxyProtocolFail) {
         proxy.sendCommand(COMPONENT_ID, selector: selector, args: args, then:{ (response) -> () in
             print("exec selector:\(selector) args:\(args) response:\(response)")
-            then()
+            then(response: response)
         }, fail: fail)
     }
     //MARK: - public api
@@ -235,6 +235,16 @@ public class MapSwiftMapModel {
     }
 
     public func addSubIdea(parentId:String, initialTitle:String, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
-        self.exec("addSubIdea", args: ["iOS", parentId, initialTitle], then: then, fail: fail)
+        self.exec("addSubIdea", args: ["iOS", parentId, initialTitle], then: { response in then() }, fail: fail)
+    }
+    public typealias MapSwiftLayout = AnyObject
+    public func getCurrentLayout(then:((layout:MapSwiftLayout)->()), fail:MapSwiftProxyProtocolFail) {
+        self.exec("getCurrentLayout", args: [], then: { (response) -> () in
+            if let result = response.result {
+                then(layout:result)
+            } else {
+                fail(error: MapSwiftError.InvalidResponseFromProxy(response))
+            }
+        }, fail: fail)
     }
 }

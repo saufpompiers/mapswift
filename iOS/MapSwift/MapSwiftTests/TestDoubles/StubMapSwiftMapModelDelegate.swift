@@ -22,8 +22,12 @@ class StubMapSwiftMapModelDelegate: MapSwiftMapModelDelegate {
         }
     }
 
+    var mapModelConnectorEventListener:((event: MapSwiftMapModel.ConnectorEvent, connector: Dictionary<String, AnyObject>)->())?
     func mapModelConnectorEvent(mapModel: MapSwiftMapModel, event: MapSwiftMapModel.ConnectorEvent, connector: Dictionary<String, AnyObject>) {
         print("mapModelConnectorEvent \(event) \(connector)")
+        if let listener = mapModelConnectorEventListener {
+            listener(event:event, connector:connector)
+        }
     }
     func mapModelLinkEvent(mapModel: MapSwiftMapModel, event: MapSwiftMapModel.LinkEvent, link: Dictionary<String, AnyObject>) {
         print("mapModelLinkEvent \(event) \(link)")
