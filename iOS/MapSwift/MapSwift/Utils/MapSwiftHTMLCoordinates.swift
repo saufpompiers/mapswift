@@ -8,35 +8,29 @@
 
 import UIKit
 
-class MapSwiftHTMLCoordinates: NSObject {
-    typealias MapBounds = (minX:CGFloat, maxX:CGFloat, minY:CGFloat, maxY:CGFloat)
-    typealias MapChangeFlags = (boundsChanged:Bool, offsetChanged:Bool)
+typealias MapBounds = (minX:CGFloat, maxX:CGFloat, minY:CGFloat, maxY:CGFloat)
+typealias MapChangeFlags = (boundsChanged:Bool, offsetChanged:Bool)
 
-    var mapSize:CGSize {
-        get {
-            return CGSizeMake(_mapBounds.maxX - _mapBounds.minX, _mapBounds.maxY - _mapBounds.minY)
-        }
-    }
+protocol MapSwiftCoordinateSystem {
+    var mapBounds:MapBounds {get}
+    var mapOriginOffset:CGPoint {get}
+    var mapSize:CGSize {get}
+    func addRect(id:String, rect:CGRect) -> MapChangeFlags
+    func removeRect(id:String) -> MapChangeFlags
+}
+
+class MapSwiftHTMLCoordinates: MapSwiftCoordinateSystem {
 
     private var mapRects:[String:CGRect] = [:]
-    var _mapBounds:MapBounds =  (minX:0, maxX:0, minY:0, maxY:0)
-    var mapBounds:MapBounds {
-        get {
-            return _mapBounds
-        }
-    }
-
+    private var _mapBounds:MapBounds =  (minX:0, maxX:0, minY:0, maxY:0)
     private var _mapOriginOffset = CGPointMake(0,0)
-    var mapOriginOffset:CGPoint {
-        get {
-            return _mapOriginOffset
-        }
-    }
 
+//MARK: - private helpers
     private func setMapBounds(bounds:MapBounds) {
         _mapOriginOffset = CGPointMake(bounds.minX * -1, bounds.maxY)
         _mapBounds = bounds
     }
+
     private func setInitialBoundsFromRect(rect:CGRect) {
         var currentBounds = MapBounds(minX:0, maxX:0, minY:0, maxY:0)
         currentBounds.minX = rect.origin.x
@@ -45,6 +39,7 @@ class MapSwiftHTMLCoordinates: NSObject {
         currentBounds.maxY = rect.origin.y + rect.height
         self.setMapBounds(currentBounds)
     }
+
     private func enlargeBoundsToFitRect(rect:CGRect) -> MapChangeFlags {
         var currentBounds = mapBounds
         var flags = MapChangeFlags(boundsChanged:false, offsetChanged:false)
@@ -73,23 +68,7 @@ class MapSwiftHTMLCoordinates: NSObject {
         }
         return flags
     }
-    func addRect(id:String, rect:CGRect) -> MapChangeFlags {
-        var flags:MapChangeFlags!
-        if let existingRect = mapRects[id] {
-            if rect == existingRect {
-                return MapChangeFlags(boundsChanged:false, offsetChanged:false)
-            }
-            removeRect(id)
-        }
-        if mapRects.count == 0 {
-            setInitialBoundsFromRect(rect)
-            flags = MapChangeFlags(boundsChanged:true, offsetChanged:true)
-        } else {
-            flags = enlargeBoundsToFitRect(rect)
-        }
-        mapRects[id] = rect
-        return flags
-    }
+
     private func rectIsWithinBounds(rect:CGRect) -> Bool {
         let bounds = mapBounds
         if bounds.minX < rect.origin.x && bounds.maxX > (rect.origin.x + rect.width) && bounds.minY < rect.origin.y && bounds.maxY > rect.origin.y + rect.height {
@@ -109,6 +88,44 @@ class MapSwiftHTMLCoordinates: NSObject {
             flags.boundsChanged = flags.boundsChanged || thisFlags.boundsChanged
             flags.offsetChanged = flags.offsetChanged || thisFlags.offsetChanged
         }
+        return flags
+    }
+
+//MARK: - public api
+
+    var mapBounds:MapBounds {
+        get {
+            return _mapBounds
+        }
+    }
+
+    var mapOriginOffset:CGPoint {
+        get {
+            return _mapOriginOffset
+        }
+    }
+
+    var mapSize:CGSize {
+        get {
+            return CGSizeMake(_mapBounds.maxX - _mapBounds.minX, _mapBounds.maxY - _mapBounds.minY)
+        }
+    }
+
+    func addRect(id:String, rect:CGRect) -> MapChangeFlags {
+        var flags:MapChangeFlags!
+        if let existingRect = mapRects[id] {
+            if rect == existingRect {
+                return MapChangeFlags(boundsChanged:false, offsetChanged:false)
+            }
+            removeRect(id)
+        }
+        if mapRects.count == 0 {
+            setInitialBoundsFromRect(rect)
+            flags = MapChangeFlags(boundsChanged:true, offsetChanged:true)
+        } else {
+            flags = enlargeBoundsToFitRect(rect)
+        }
+        mapRects[id] = rect
         return flags
     }
 
