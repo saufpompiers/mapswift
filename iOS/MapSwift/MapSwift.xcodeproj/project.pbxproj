@@ -50,6 +50,10 @@
 		558055CD1C2AD9020063F39D /* MapSwiftNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */; };
 		558055CF1C2BE01A0063F39D /* MapSwiftConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055CE1C2BE01A0063F39D /* MapSwiftConnector.swift */; };
 		558055D11C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055D01C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift */; };
+		558055D51C2C044A0063F39D /* MapSwiftViewCoordiates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055D41C2C044A0063F39D /* MapSwiftViewCoordiates.swift */; };
+		558055DD1C2C5C820063F39D /* MapSwiftViewCoordiatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055DC1C2C5C820063F39D /* MapSwiftViewCoordiatesTests.swift */; };
+		558055DF1C314E480063F39D /* MapSwiftHTMLCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055DE1C314E480063F39D /* MapSwiftHTMLCoordinates.swift */; };
+		558055E11C314E6B0063F39D /* MapSwiftHTMLCoordinatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055E01C314E6B0063F39D /* MapSwiftHTMLCoordinatesTests.swift */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
@@ -115,6 +119,10 @@
 		558055CC1C2AD9020063F39D /* MapSwiftNodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeTests.swift; sourceTree = "<group>"; };
 		558055CE1C2BE01A0063F39D /* MapSwiftConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftConnector.swift; sourceTree = "<group>"; };
 		558055D01C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeConnectorTests.swift; sourceTree = "<group>"; };
+		558055D41C2C044A0063F39D /* MapSwiftViewCoordiates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftViewCoordiates.swift; sourceTree = "<group>"; };
+		558055DC1C2C5C820063F39D /* MapSwiftViewCoordiatesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftViewCoordiatesTests.swift; sourceTree = "<group>"; };
+		558055DE1C314E480063F39D /* MapSwiftHTMLCoordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftHTMLCoordinates.swift; sourceTree = "<group>"; };
+		558055E01C314E6B0063F39D /* MapSwiftHTMLCoordinatesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftHTMLCoordinatesTests.swift; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
@@ -172,12 +180,12 @@
 		5523D2451C0F35EF00069905 /* MapSwift */ = {
 			isa = PBXGroup;
 			children = (
-				55610E541C15D8EB0030F416 /* Utils */,
-				55610E4F1C15B6E60030F416 /* Models */,
-				55F3FE811C13203F007333CE /* WKProxy */,
-				5523D2741C104D7200069905 /* Resources */,
-				5523D2461C0F35EF00069905 /* MapSwift.h */,
 				5523D2481C0F35EF00069905 /* Info.plist */,
+				5523D2461C0F35EF00069905 /* MapSwift.h */,
+				55610E4F1C15B6E60030F416 /* Models */,
+				5523D2741C104D7200069905 /* Resources */,
+				55610E541C15D8EB0030F416 /* Utils */,
+				55F3FE811C13203F007333CE /* WKProxy */,
 			);
 			path = MapSwift;
 			sourceTree = "<group>";
@@ -185,11 +193,11 @@
 		5523D2511C0F35EF00069905 /* MapSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				5523D2541C0F35EF00069905 /* Info.plist */,
 				556637DE1C200DC70010044E /* Models */,
 				5541E8A21C1EB90C00318670 /* TestDoubles */,
 				557856121C1AF705001C5E17 /* Utils */,
 				55F3FE841C1320DA007333CE /* WKProxy */,
-				5523D2541C0F35EF00069905 /* Info.plist */,
 			);
 			path = MapSwiftTests;
 			sourceTree = "<group>";
@@ -254,6 +262,8 @@
 				557856101C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift */,
 				557856161C1B010D001C5E17 /* NSDateExtensions.swift */,
 				558055BA1C21C3F90063F39D /* StringExtensions.swift */,
+				558055D41C2C044A0063F39D /* MapSwiftViewCoordiates.swift */,
+				558055DE1C314E480063F39D /* MapSwiftHTMLCoordinates.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -276,6 +286,8 @@
 				557856131C1AF738001C5E17 /* MapSwiftTests-Bridging-Header.h */,
 				557856141C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift */,
 				557856181C1B01E1001C5E17 /* NSDateExtensionsTests.swift */,
+				558055DC1C2C5C820063F39D /* MapSwiftViewCoordiatesTests.swift */,
+				558055E01C314E6B0063F39D /* MapSwiftHTMLCoordinatesTests.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -459,6 +471,8 @@
 				558055CF1C2BE01A0063F39D /* MapSwiftConnector.swift in Sources */,
 				55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */,
 				55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */,
+				558055DF1C314E480063F39D /* MapSwiftHTMLCoordinates.swift in Sources */,
+				558055D51C2C044A0063F39D /* MapSwiftViewCoordiates.swift in Sources */,
 				55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */,
 				55610E531C15CF340030F416 /* MapSwiftResources.swift in Sources */,
 				5578561B1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift in Sources */,
@@ -478,6 +492,7 @@
 				558055BD1C22F8060063F39D /* StubWKWebViewConfiguration.swift in Sources */,
 				557856191C1B01E1001C5E17 /* NSDateExtensionsTests.swift in Sources */,
 				558055C31C27F5360063F39D /* StubPingDelegate.swift in Sources */,
+				558055E11C314E6B0063F39D /* MapSwiftHTMLCoordinatesTests.swift in Sources */,
 				5578561F1C1B12B7001C5E17 /* MapSwiftProxyEchoResponseTests.swift in Sources */,
 				558055C11C27F1640063F39D /* MapSwiftPingModelTests.swift in Sources */,
 				557856151C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift in Sources */,
@@ -492,6 +507,7 @@
 				556637E41C2015840010044E /* StubWKWebView.swift in Sources */,
 				556637E61C20183D0010044E /* StubWKUserContentController.swift in Sources */,
 				558055D11C2BE32E0063F39D /* MapSwiftNodeConnectorTests.swift in Sources */,
+				558055DD1C2C5C820063F39D /* MapSwiftViewCoordiatesTests.swift in Sources */,
 				556637EA1C2022330010044E /* MapSwiftStubResources.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
