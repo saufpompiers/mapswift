@@ -18,6 +18,11 @@ class MapSwiftNodeView: UIView {
             _node = n
             if let label = self.label, node = _node {
                 label.text = node.title
+                if node.level == 1 {
+                    self.backgroundColor = UIColor(hexString: "#22AAE0")
+                } else {
+                    self.backgroundColor = UIColor(hexString: "#E0E0E0")
+                }
             }
             self.setNeedsLayout()
         }
@@ -26,7 +31,7 @@ class MapSwiftNodeView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         let label = UILabel(frame:CGRectMake(0,0, frame.width, frame.height))
-        label.textColor = UIColor.grayColor()
+        label.textColor = UIColor(hexString: "#4F4F4F")
         label.numberOfLines = 0
         label.textAlignment = NSTextAlignment.Center
         label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
@@ -35,6 +40,7 @@ class MapSwiftNodeView: UIView {
         self.label = label
         self.addSubview(label)
         self.defaultColors()
+
     }
     override func layoutSubviews() {
         if let label = self.label {
@@ -48,13 +54,13 @@ class MapSwiftNodeView: UIView {
 
     private func defaultColors() {
         self.backgroundColor = UIColor.lightTextColor();
-        self.layer.borderColor = UIColor.grayColor().CGColor;
+        self.layer.borderColor = UIColor(hexString: "#707070").CGColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 10
-        self.layer.shadowColor = UIColor.lightGrayColor().CGColor;
+        self.layer.shadowColor = UIColor(hexString: "#070707").CGColor;
         self.layer.shadowOffset = CGSizeMake(1,1)
-        self.layer.shadowOpacity = 0.8
-        self.layer.shadowRadius = 1
+        self.layer.shadowOpacity = 0.4
+        self.layer.shadowRadius = 2
     }
     /*
     // Only override drawRect: if you perform custom drawing.
