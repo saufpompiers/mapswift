@@ -14,6 +14,20 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
     var pingCount = 0
     var components:MapSwiftComponents?
 
+    func loadMapContent() -> String? {
+        let bundle = NSBundle(forClass: ViewController.self)
+        let url = bundle.URLForResource("MapSwiftTestMap", withExtension: "mup")!
+        if let content = url.mapswift_fileContent {
+            return content
+        }
+        return nil
+    }
+
+    var mapView:MapSwiftMapView? {
+        get {
+            return self.view as? MapSwiftMapView
+        }
+    }
     let errorPrinter = { (error:NSError) in
         print("error:\(error)")
     }
@@ -30,6 +44,10 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         mapSwift.ready({ (components) -> () in
             self.components = components
             components.pingModel.delegate = self;
+            if let mapView = self.view as? MapSwiftMapView, content = self.loadMapContent() {
+                components.mapModel.delegate = mapView
+                components.mapModel.setIdea(content, then: {}, fail: { error in })
+            }
             self.sendEcho()
         }, fail: errorPrinter)
 
@@ -44,7 +62,7 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         if let components = components {
             components.pingModel.echo("echo", then: { response  in
                 print("\(response.description)")
-                components.pingModel.start("pingTest", interval:5, then:self.donePrinter("pingModel.start"), fail:self.errorPrinter)
+                components.pingModel.start("ping", interval:5, then:self.donePrinter("pingModel.start"), fail:self.errorPrinter)
             }, fail: errorPrinter)
         }
     }

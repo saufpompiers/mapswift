@@ -51,6 +51,7 @@ class MapSwiftHTMLCoordinates: MapSwiftCoordinateSystem {
         }
         let rectMaxX = rect.origin.x + rect.width
         if rectMaxX > currentBounds.maxX {
+            flags.boundsChanged = true
             currentBounds.maxX = rectMaxX
         }
         if currentBounds.minY > rect.origin.y {

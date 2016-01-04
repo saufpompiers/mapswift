@@ -1,12 +1,12 @@
 /*global window, console, MapSwift*/
-window.onload = function () {
+window.addEventListener('load', function () {
 	'use strict';
 	try {
 		MapSwift.proxyMessageSender.postStatusMessage('map-swift-page-loaded');
 	} catch (e) {
 		console.log(e);
 	}
-};
+});
 window.onerror = function (msg, url, line, col, error) {
 	'use strict';
 	try {

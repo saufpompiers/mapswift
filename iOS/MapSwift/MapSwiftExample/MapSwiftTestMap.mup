@@ -1,0 +1,50 @@
+{
+  "title": "MapSwift test map",
+  "id": 1,
+  "formatVersion": 2,
+  "ideas": {
+    "1": {
+      "title": "right one",
+      "id": 2,
+      "ideas": {
+        "1": {
+          "title": "right one child one",
+          "id": 7,
+          "ideas": {
+            "1": {
+              "title": "multiline\ntext\nexample",
+              "id": 10,
+              "attr": {
+                "style": {}
+              }
+            }
+          }
+        },
+        "2": {
+          "title": "right one child two",
+          "id": 8
+        }
+      }
+    },
+    "-1": {
+      "title": "left one",
+      "id": 4,
+      "ideas": {
+        "1": {
+          "title": "left one child one",
+          "id": 5,
+          "ideas": {
+            "1": {
+              "title": "Long Text example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+              "id": 11
+            }
+          }
+        },
+        "2": {
+          "title": "left one child two",
+          "id": 6
+        }
+      }
+    }
+  }
+}
