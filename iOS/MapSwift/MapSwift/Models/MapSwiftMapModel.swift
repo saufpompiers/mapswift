@@ -10,6 +10,7 @@ import UIKit
 
 public protocol MapSwiftMapModelDelegate {
     func mapModelMapEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.MapEvent)
+    func mapModelNodeSelectionChangedEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeSelectionEvent)
     func mapModelNodeEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode)
     func mapModelLinkEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.LinkEvent, link:Dictionary<String, AnyObject>)
     func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>)
@@ -19,6 +20,7 @@ public protocol MapSwiftMapModelDelegate {
     func mapModelMapScaleChanged(mapModel:MapSwiftMapModel, scale:Double)
     func mapModelNodeEditRequested(mapModel:MapSwiftMapModel, nodeId:String, shouldSelectAll:Bool, editingNew:Bool)
     func mapModelActivatedNodesChanged(mapModel:MapSwiftMapModel, activatedNodes:AnyObject, deactivatedNodes:AnyObject)
+
 }
 
 
@@ -37,6 +39,19 @@ public class MapSwiftMapModel {
                 default:
                     return nil
             }
+        }
+    }
+    public struct NodeSelectionEvent {
+        let nodeId:String
+        let selected:Bool
+        static func parseArgs(eventName:String, args:[AnyObject]) -> NodeSelectionEvent? {
+            if eventName != "nodeSelectionChanged" || args.count < 2 {
+                return nil
+            }
+            if let nodeId = String.mapswift_fromAnyObject(args[0]), selected = args[1] as? Bool {
+                return NodeSelectionEvent(nodeId: nodeId, selected: selected)
+            }
+            return nil
         }
     }
     public enum NodeEvent:String {
@@ -212,6 +227,8 @@ public class MapSwiftMapModel {
                     delegate.mapModelActivatedNodesChanged(self, activatedNodes: eventArgs.activatedNodes, deactivatedNodes: eventArgs.deactivatedNodes)
                 } else if let eventArgs = MapScaleChangedEvent.parse(eventName, args: args) {
                     delegate.mapModelMapScaleChanged(self, scale: eventArgs.scaleMultiplier)
+                } else if let event = MapSwiftMapModel.NodeSelectionEvent.parseArgs(eventName, args:args) {
+                    delegate.mapModelNodeSelectionChangedEvent(self, event: event)
                 } else {
                     print("unhandled \(eventName) args:\(args)")
                 }

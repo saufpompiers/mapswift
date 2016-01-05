@@ -10,6 +10,7 @@ import UIKit
 
 public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate {
     typealias NodeEventArgs = (event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode)
+    private var selectedNodeId:String?
 
     private var nodeViews:[String:MapSwiftNodeView] = [:]
     private var layoutChanging = false
@@ -19,7 +20,6 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     private let mapContentView = UIView(frame: CGRectMake(0,0,10, 10))
     private let nodeLayerView = UIView(frame: CGRectMake(0,0,10, 10))
     private let connectorLayerView = MapSwiftConnectorsView(frame: CGRectMake(0,0,10, 10))
-
     public override init(frame: CGRect) {
         self.scrollView = UIScrollView(frame: CGRectMake(0,0,frame.width, frame.height))
         super.init(frame: frame)
@@ -42,6 +42,8 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         self.mapContentView.addSubview(connectorLayerView)
         self.mapContentView.insertSubview(nodeLayerView, aboveSubview: connectorLayerView)
         self.scrollView.scrollEnabled = true
+        self.scrollView.alwaysBounceHorizontal = true
+        self.scrollView.alwaysBounceVertical = true
         self.scrollView.bounces = true
         self.coordinateSystem.delegate = self
     }
@@ -55,6 +57,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         let vinset:CGFloat = max(0, voffset)
         let insets = UIEdgeInsetsMake(vinset, hinset, vinset, hinset)
         self.scrollView.contentInset = insets
+        self.centerOnSelectedNode();
     }
 
     private func queueViewTask(block:(() -> ())) {
@@ -81,6 +84,10 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         let nodeFrame = MapSwiftNodeView.NodeRect(frame)
         if nodeView == nil {
             nodeView = MapSwiftNodeView(frame:nodeFrame)
+            if let selectedNodeId = self.selectedNodeId where selectedNodeId == node.id {
+                nodeView.isSelected = true
+            }
+
             self.nodeLayerView.addSubview(nodeView)
             nodeViews[node.id] = nodeView
         }
@@ -93,7 +100,13 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
 
     private func resetScrollView() {
-
+    }
+    private func centerOnSelectedNode() {
+        if let selectedNodeId = self.selectedNodeId {
+            if let nodeView = self.nodeViews[selectedNodeId] {
+                self.scrollView.scrollRectToVisible(nodeView.frame, animated: true)
+            }
+        }
     }
 
 //Mark: - MapSwiftMapModelDelegate
@@ -129,7 +142,6 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
     public func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>) {
         queueViewTask({
-//            print("mapModelConnectorEvent event:\(event) connector:\(connector)")
             if let connector = MapSwiftNodeConnector.parseDictionary(connector) {
                 switch event {
                 case .ConnectorCreated:
@@ -159,6 +171,22 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     public func mapModelActivatedNodesChanged(mapModel:MapSwiftMapModel, activatedNodes:AnyObject, deactivatedNodes:AnyObject) {
 
     }
+    public func mapModelNodeSelectionChangedEvent(mapModel: MapSwiftMapModel, event: MapSwiftMapModel.NodeSelectionEvent) {
+        if event.selected {
+            selectedNodeId = event.nodeId
+
+        } else {
+            selectedNodeId = nil
+            return
+        }
+        if let nodeView = self.nodeViews[event.nodeId] {
+            nodeView.isSelected = event.selected
+        }
+
+        queueViewTask({
+            self.centerOnSelectedNode();
+        })
+    }
 //MARK: - MapSwiftViewCoordinatesDelegate
     func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
         for (_, nodeView) in nodeViews {
@@ -174,6 +202,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         self.mapContentView.frame = CGRectMake(0, 0, mapSize.width, mapSize.height)
         self.nodeLayerView.frame = self.mapContentView.bounds
         self.connectorLayerView.frame = self.mapContentView.bounds
+        self.centerOnSelectedNode();
         self.setNeedsLayout()
     }
 

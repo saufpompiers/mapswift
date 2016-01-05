@@ -15,7 +15,7 @@ class MapSwiftNodeView: UIView {
         let outset = -1 * MapSwiftNodeView.BackgroundInset
         return CGRectInset(rect, outset , outset)
     }
-    var _node:MapSwiftNode?
+    private var _node:MapSwiftNode?
     var node:MapSwiftNode? {
         get {
             return _node
@@ -34,15 +34,39 @@ class MapSwiftNodeView: UIView {
             self.setNeedsLayout()
         }
     }
-    var label:UILabel?
+
+    private var _isSelected = false
+    var isSelected:Bool {
+        get {
+            return _isSelected
+        }
+        set (s) {
+            _isSelected = s
+            if let nodeBackgroundView = self.nodeBackgroundView {
+                if _isSelected {
+                    nodeBackgroundView.layer.shadowColor = UIColor.blackColor().CGColor;
+                    nodeBackgroundView.layer.shadowOffset = CGSizeMake(2,2)
+                    nodeBackgroundView.layer.shadowOpacity = 0.9
+                    nodeBackgroundView.layer.shadowRadius = 2
+                } else {
+                    nodeBackgroundView.layer.shadowColor = UIColor(hexString: "#070707").CGColor;
+                    nodeBackgroundView.layer.shadowOffset = CGSizeMake(1,1)
+                    nodeBackgroundView.layer.shadowOpacity = 0.4
+                    nodeBackgroundView.layer.shadowRadius = 2
+                }
+            }
+
+        }
+    }
+    private var label:UILabel?
     var nodeBackgroundView:UIView?
 
-    var backgroundFrame:CGRect {
+    private var backgroundFrame:CGRect {
         get {
             return CGRectInset(self.bounds, MapSwiftNodeView.BackgroundInset, MapSwiftNodeView.BackgroundInset)
         }
     }
-    var labelFrame:CGRect {
+    private var labelFrame:CGRect {
         get {
             return CGRectInset(self.bounds, MapSwiftNodeView.LabelInset, MapSwiftNodeView.LabelInset)
         }
