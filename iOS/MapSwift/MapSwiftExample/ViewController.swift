@@ -23,11 +23,8 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         return nil
     }
 
-    var mapView:MapSwiftMapView? {
-        get {
-            return self.view as? MapSwiftMapView
-        }
-    }
+    @IBOutlet var mapView:MapSwiftMapView?
+
     let errorPrinter = { (error:NSError) in
         print("error:\(error)")
     }
@@ -44,7 +41,7 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         mapSwift.ready({ (components) -> () in
             self.components = components
             components.pingModel.delegate = self;
-            if let mapView = self.view as? MapSwiftMapView, content = self.loadMapContent() {
+            if let mapView = self.mapView, content = self.loadMapContent() {
                 components.mapModel.delegate = mapView
                 components.mapModel.setIdea(content, then: {}, fail: { error in })
             }

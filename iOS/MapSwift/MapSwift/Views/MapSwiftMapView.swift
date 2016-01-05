@@ -17,6 +17,8 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     private var coordinateSystem = MapSwiftViewCoordinates()
     private let scrollView:UIScrollView
     private let mapContentView = UIView(frame: CGRectMake(0,0,10, 10))
+    private let nodeLayerView = UIView(frame: CGRectMake(0,0,10, 10))
+    private let connectorLayerView = MapSwiftConnectorsView(frame: CGRectMake(0,0,10, 10))
 
     public override init(frame: CGRect) {
         self.scrollView = UIScrollView(frame: CGRectMake(0,0,frame.width, frame.height))
@@ -31,10 +33,14 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
 
     func firstLayout() {
-        scrollView.backgroundColor = UIColor.lightGrayColor()
-        mapContentView.backgroundColor = UIColor.whiteColor()
+        scrollView.backgroundColor = UIColor.clearColor()
+        mapContentView.backgroundColor = UIColor.clearColor()
         self.addSubview(scrollView)
         self.scrollView.addSubview(mapContentView)
+        connectorLayerView.backgroundColor = UIColor.clearColor()
+        nodeLayerView.backgroundColor = UIColor.clearColor()
+        self.mapContentView.addSubview(connectorLayerView)
+        self.mapContentView.insertSubview(nodeLayerView, aboveSubview: connectorLayerView)
         self.scrollView.scrollEnabled = true
         self.scrollView.bounces = true
         self.coordinateSystem.delegate = self
@@ -71,18 +77,16 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             }
         }
         let frame = coordinateSystem.nodeAdded(node)
-        print("node:\(node.title) frame:\(frame) nodeRect:\(node.rect)")
         var nodeView:MapSwiftNodeView! = nodeViews[node.id]
+        let nodeFrame = MapSwiftNodeView.NodeRect(frame)
         if nodeView == nil {
-            nodeView = MapSwiftNodeView(frame:frame)
-            self.mapContentView.addSubview(nodeView)
+            nodeView = MapSwiftNodeView(frame:nodeFrame)
+            self.nodeLayerView.addSubview(nodeView)
             nodeViews[node.id] = nodeView
-        } else {
-            nodeView.frame = frame
         }
         nodeView.node = node
         UIView.animateWithDuration(0.2, animations: {
-            nodeView.frame = frame
+            nodeView.frame = nodeFrame
         })
         self.setNeedsLayout()
     }
@@ -122,8 +126,19 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     public func mapModelLinkEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.LinkEvent, link:Dictionary<String, AnyObject>) {
 
     }
+    private func nodesForConnector(connector:Dictionary<String, AnyObject>) -> (from:MapSwiftNode, to:MapSwiftNode)? {
+        return nil
+    }
     public func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>) {
-
+        print("mapModelConnectorEvent event:\(event) connector:\(connector)")
+        if let nodes = self.nodesForConnector(connector) {
+            switch event {
+            case .ConnectorCreated:
+                self.connectorLayerView.showConnector(nodes.from, to:nodes.to)
+            case .ConnectorRemoved:
+                self.connectorLayerView.removeConnector(nodes.from, to:nodes.to)
+            }
+        }
     }
     public func mapModelNodeIdEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool) {
 
@@ -147,12 +162,15 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
         for (_, nodeView) in nodeViews {
             if let node = nodeView.node {
-                nodeView.frame = rectConverter(rect: node.rect)
+                nodeView.frame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))
+                nodeView.setNeedsLayout()
             }
         }
     }
     func mapSwiftViewSizeChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, mapSize:CGSize) {
         self.mapContentView.frame = CGRectMake(0, 0, mapSize.width, mapSize.height)
+        self.nodeLayerView.frame = self.mapContentView.bounds
+        self.connectorLayerView.frame = self.mapContentView.bounds
         self.setNeedsLayout()
     }
 

@@ -9,6 +9,12 @@
 import UIKit
 
 class MapSwiftNodeView: UIView {
+    static let BackgroundInset:CGFloat = 10
+    static let LabelInset:CGFloat = 15
+    class func NodeRect(rect:CGRect) -> CGRect {
+        let outset = -1 * MapSwiftNodeView.BackgroundInset
+        return CGRectInset(rect, outset , outset)
+    }
     var _node:MapSwiftNode?
     var node:MapSwiftNode? {
         get {
@@ -18,19 +24,38 @@ class MapSwiftNodeView: UIView {
             _node = n
             if let label = self.label, node = _node {
                 label.text = node.title
+
                 if node.level == 1 {
-                    self.backgroundColor = UIColor(hexString: "#22AAE0")
+                    self.nodeBackgroundView?.backgroundColor = UIColor(hexString: "#22AAE0")
                 } else {
-                    self.backgroundColor = UIColor(hexString: "#E0E0E0")
+                    self.nodeBackgroundView?.backgroundColor = UIColor(hexString: "#E0E0E0")
                 }
             }
             self.setNeedsLayout()
         }
     }
     var label:UILabel?
+    var nodeBackgroundView:UIView?
+
+    var backgroundFrame:CGRect {
+        get {
+            return CGRectInset(self.bounds, MapSwiftNodeView.BackgroundInset, MapSwiftNodeView.BackgroundInset)
+        }
+    }
+    var labelFrame:CGRect {
+        get {
+            return CGRectInset(self.bounds, MapSwiftNodeView.LabelInset, MapSwiftNodeView.LabelInset)
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        let label = UILabel(frame:CGRectMake(0,0, frame.width, frame.height))
+        let nodeBackgroundView = UIView(frame: self.backgroundFrame)
+
+        self.addSubview(nodeBackgroundView)
+        self.nodeBackgroundView = nodeBackgroundView
+
+        let label = UILabel(frame:self.labelFrame)
         label.textColor = UIColor(hexString: "#4F4F4F")
         label.numberOfLines = 0
         label.textAlignment = NSTextAlignment.Center
@@ -38,13 +63,17 @@ class MapSwiftNodeView: UIView {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.2
         self.label = label
-        self.addSubview(label)
+        self.insertSubview(label, aboveSubview: nodeBackgroundView)
+
         self.defaultColors()
 
     }
     override func layoutSubviews() {
         if let label = self.label {
-            label.frame = CGRectInset(self.bounds, 5, 5)
+            label.frame = self.labelFrame
+        }
+        if let nodeBackgroundView = self.nodeBackgroundView {
+            nodeBackgroundView.frame = self.backgroundFrame
         }
     }
     required init?(coder aDecoder: NSCoder) {
@@ -53,14 +82,17 @@ class MapSwiftNodeView: UIView {
     }
 
     private func defaultColors() {
-        self.backgroundColor = UIColor.lightTextColor();
-        self.layer.borderColor = UIColor(hexString: "#707070").CGColor
-        self.layer.borderWidth = 1
-        self.layer.cornerRadius = 10
-        self.layer.shadowColor = UIColor(hexString: "#070707").CGColor;
-        self.layer.shadowOffset = CGSizeMake(1,1)
-        self.layer.shadowOpacity = 0.4
-        self.layer.shadowRadius = 2
+        self.backgroundColor = UIColor.clearColor()
+        if let nodeBackgroundView = self.nodeBackgroundView {
+            nodeBackgroundView.backgroundColor = UIColor(hexString: "#E0E0E0")
+            nodeBackgroundView.layer.borderColor = UIColor(hexString: "#707070").CGColor
+            nodeBackgroundView.layer.borderWidth = 1
+            nodeBackgroundView.layer.cornerRadius = 10
+            nodeBackgroundView.layer.shadowColor = UIColor(hexString: "#070707").CGColor;
+            nodeBackgroundView.layer.shadowOffset = CGSizeMake(1,1)
+            nodeBackgroundView.layer.shadowOpacity = 0.4
+            nodeBackgroundView.layer.shadowRadius = 2
+        }
     }
     /*
     // Only override drawRect: if you perform custom drawing.

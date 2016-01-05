@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5502B49A1C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5502B4991C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift */; };
 		5523D2471C0F35EF00069905 /* MapSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 5523D2461C0F35EF00069905 /* MapSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5523D24E1C0F35EF00069905 /* MapSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5523D2431C0F35EF00069905 /* MapSwift.framework */; };
 		5523D2641C0F366600069905 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5523D2631C0F366600069905 /* AppDelegate.swift */; };
@@ -97,6 +98,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5502B4991C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftConnectorsView.swift; sourceTree = "<group>"; };
 		5523D2431C0F35EF00069905 /* MapSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5523D2461C0F35EF00069905 /* MapSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapSwift.h; sourceTree = "<group>"; };
 		5523D2481C0F35EF00069905 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 			children = (
 				558055E31C33BCC10063F39D /* MapSwiftMapView.swift */,
 				558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */,
+				5502B4991C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -522,6 +525,7 @@
 				558055D51C2C044A0063F39D /* MapSwiftViewCoordinates.swift in Sources */,
 				55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */,
 				556764E31C3AD640001574F1 /* UIColorExtensions.swift in Sources */,
+				5502B49A1C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift in Sources */,
 				55610E531C15CF340030F416 /* MapSwiftResources.swift in Sources */,
 				5578561B1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift in Sources */,
 				55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */,
