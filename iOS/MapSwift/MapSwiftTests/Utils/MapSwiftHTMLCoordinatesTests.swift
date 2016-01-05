@@ -61,7 +61,7 @@ class MapSwiftHTMLCoordinatesTests: XCTestCase {
     func test_adding_subsequent_off_centered_rect_should_set_offset_to_bottom_left_of_the_rect() {
         underTest.addRect("1", rect:CGRectMake(-35.5, -10, 71, 20))
         let result = underTest.addRect("2", rect:CGRectMake(30, -30, 70, 20))
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(35.5, 10))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(35.5, 30))
         XCTAssertTrue(result.boundsChanged)
         XCTAssertFalse(result.offsetChanged)
     }
@@ -77,24 +77,24 @@ class MapSwiftHTMLCoordinatesTests: XCTestCase {
     func test_adding_subsequent_off_centered_rect_to_bottom_should_set_offset_to_bottom_left_of_the_rect() {
         underTest.addRect("1", rect:CGRectMake(-35.5, -10, 71, 20))
         let result = underTest.addRect("2", rect:CGRectMake(-100, 150, 70, 20))
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(100, 170))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(100, 10))
         XCTAssertTrue(result.boundsChanged)
         XCTAssertTrue(result.offsetChanged)
     }
 
     func test_the_origin_offset_can_be_negative() {
         underTest.addRect("1", rect:CGRectMake(30, -30, 70, 20))
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(-30, -10))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(-30, 30))
     }
 
     func test_the_origin_offset_can_be_positive() {
         underTest.addRect("1", rect:CGRectMake(-40, 10, 70, 20))
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(40, 30))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(40, -10))
     }
 
     func test_the_origin_offset_can_be_mixed() {
         underTest.addRect("1", rect:CGRectMake(30, 10, 70, 20))
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(-30, 30))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(-30, -10))
     }
 
     func test_adding_the_rect_twice_is_ignored() {
@@ -108,7 +108,7 @@ class MapSwiftHTMLCoordinatesTests: XCTestCase {
         underTest.addRect("1", rect:CGRectMake(-40, 10, 70, 20))
         let result = underTest.addRect("1", rect:CGRectMake(30, 10, 70, 20))
         XCTAssertTrue(result.offsetChanged)
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(-30, 30))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(-30, -10))
     }
 
     func test_moving_rect_changes_bounds() {
@@ -157,7 +157,7 @@ class MapSwiftHTMLCoordinatesTests: XCTestCase {
         underTest.addRect("3", rect:CGRectMake(100, 200, 70, 30))
         let result = underTest.removeRect("1")
         XCTAssertFalse(result.offsetChanged)
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(100, 230))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(100, 200))
     }
 
     func test_should_set_offset_to_remaining_rects_when_rect_removed() {
@@ -166,7 +166,7 @@ class MapSwiftHTMLCoordinatesTests: XCTestCase {
         underTest.addRect("3", rect:CGRectMake(100, 200, 70, 30))
         let result = underTest.removeRect("3")
         XCTAssertTrue(result.offsetChanged)
-        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(100, 100))
+        XCTAssertEqual(underTest.mapOriginOffset, CGPointMake(100, 200))
     }
 
 }

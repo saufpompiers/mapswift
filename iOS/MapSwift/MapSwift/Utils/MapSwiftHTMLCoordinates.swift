@@ -27,7 +27,7 @@ class MapSwiftHTMLCoordinates: MapSwiftCoordinateSystem {
 
 //MARK: - private helpers
     private func setMapBounds(bounds:MapBounds) {
-        _mapOriginOffset = CGPointMake(bounds.minX * -1, bounds.maxY)
+        _mapOriginOffset = CGPointMake(bounds.minX * -1, bounds.minY * -1)
         _mapBounds = bounds
     }
 

@@ -40,7 +40,7 @@ class MapSwiftViewCoordinates {
     private func convertRectFromHtmlCoordinateSystem(rect:CGRect) -> CGRect {
         let offset = coordinateSystem.mapOriginOffset
         let x = rect.origin.x + offset.x + margin
-        let y = (-1 * rect.origin.y) - rect.height + offset.y + margin
+        let y = rect.origin.y + offset.y + margin
         return CGRectMake(x, y, rect.width, rect.height)
     }
 

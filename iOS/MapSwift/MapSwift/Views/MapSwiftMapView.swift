@@ -66,13 +66,13 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             self.applyNodeEvent(nodeEvent.event, node: nodeEvent.node)
         }
     }
-
     private func applyNodeEvent(event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode) {
         if event == MapSwiftMapModel.NodeEvent.NodeRemoved {
             if let nodeView = nodeViews[node.id] {
                 nodeView.removeFromSuperview()
                 nodeViews.removeValueForKey(node.id)
                 coordinateSystem.nodeRemoved(node)
+                connectorLayerView.nodeRect(node.id, nodeRect:nil)
                 return
             }
         }
@@ -85,6 +85,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             nodeViews[node.id] = nodeView
         }
         nodeView.node = node
+        connectorLayerView.nodeRect(node.id, nodeRect: nodeFrame)
         UIView.animateWithDuration(0.2, animations: {
             nodeView.frame = nodeFrame
         })
@@ -126,19 +127,19 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     public func mapModelLinkEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.LinkEvent, link:Dictionary<String, AnyObject>) {
 
     }
-    private func nodesForConnector(connector:Dictionary<String, AnyObject>) -> (from:MapSwiftNode, to:MapSwiftNode)? {
-        return nil
-    }
     public func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>) {
-        print("mapModelConnectorEvent event:\(event) connector:\(connector)")
-        if let nodes = self.nodesForConnector(connector) {
-            switch event {
-            case .ConnectorCreated:
-                self.connectorLayerView.showConnector(nodes.from, to:nodes.to)
-            case .ConnectorRemoved:
-                self.connectorLayerView.removeConnector(nodes.from, to:nodes.to)
+        queueViewTask({
+            print("mapModelConnectorEvent event:\(event) connector:\(connector)")
+            if let connector = MapSwiftNodeConnector.parseDictionary(connector) {
+                switch event {
+                case .ConnectorCreated:
+                    self.connectorLayerView.addConnector(connector)
+                case .ConnectorRemoved:
+                    self.connectorLayerView.removeConnector(connector)
+                }
             }
-        }
+        })
+
     }
     public func mapModelNodeIdEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool) {
 
@@ -162,7 +163,9 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
         for (_, nodeView) in nodeViews {
             if let node = nodeView.node {
-                nodeView.frame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))
+                let nodeFrame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))
+                nodeView.frame = nodeFrame
+                connectorLayerView.nodeRect(node.id, nodeRect: nodeFrame)
                 nodeView.setNeedsLayout()
             }
         }
