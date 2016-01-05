@@ -133,7 +133,7 @@ class MapSwiftWKProxyProtocol:NSObject, MapSwiftProxyProtocol {
                 fail(error: MapSwiftError.ProtocolNotInRequiredState(MapSwiftProxyStatus.Ready));
             } else {
                 let commandJS = "components.\(componentId).\(selector)(\(argString));"
-                print("commandJS:\(commandJS)")
+//                print("commandJS:\(commandJS)")
                 self.container.evaluateJavaScript(commandJS) { (result, error) in
                     if let error = error {
                         fail(error: error);

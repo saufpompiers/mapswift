@@ -129,7 +129,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
     public func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>) {
         queueViewTask({
-            print("mapModelConnectorEvent event:\(event) connector:\(connector)")
+//            print("mapModelConnectorEvent event:\(event) connector:\(connector)")
             if let connector = MapSwiftNodeConnector.parseDictionary(connector) {
                 switch event {
                 case .ConnectorCreated:
