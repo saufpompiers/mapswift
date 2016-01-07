@@ -12,8 +12,7 @@ import MapSwift
 class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftPingModelDelegate {
     var mapSwift:MapSwiftCore?
     var pingCount = 0
-    var components:MapSwiftComponents?
-
+    var mapViewListener:MapSwiftMapViewListener?
     func loadMapContent() -> String? {
         let bundle = NSBundle(forClass: ViewController.self)
         let url = bundle.URLForResource("MapSwiftTestMap", withExtension: "mup")!
@@ -39,9 +38,11 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         mapSwift.delegate = self
         self.mapSwift = mapSwift
         mapSwift.ready({ (components) -> () in
-            self.components = components
+            let listener = MapSwiftMapViewListener(components:components)
+            self.mapViewListener = listener
             components.pingModel.delegate = self;
             if let mapView = self.mapView, content = self.loadMapContent() {
+                mapView.delegate = listener
                 components.mapModel.delegate = mapView
                 components.mapModel.setIdea(content, then: {}, fail: { error in })
             }
@@ -56,10 +57,10 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
     }
 
     private func sendEcho() {
-        if let components = components {
-            components.pingModel.echo("echo", then: { response  in
+        if let listener = self.mapViewListener {
+            listener.components.pingModel.echo("echo", then: { response  in
                 print("\(response.description)")
-                components.pingModel.start("ping", interval:5, then:self.donePrinter("pingModel.start"), fail:self.errorPrinter)
+                listener.components.pingModel.start("ping", interval:5, then:self.donePrinter("pingModel.start"), fail:self.errorPrinter)
             }, fail: errorPrinter)
         }
     }
@@ -83,8 +84,8 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
         print("\(identifier) latency:\(latency)ms");
         pingCount++
         if pingCount > 4 {
-            if let components = components {
-                components.pingModel.stop(self.donePrinter("pingModel.stop"), fail: self.errorPrinter);
+            if let listener = self.mapViewListener {
+                listener.components.pingModel.stop(self.donePrinter("pingModel.stop"), fail: self.errorPrinter);
             }
         }
     }

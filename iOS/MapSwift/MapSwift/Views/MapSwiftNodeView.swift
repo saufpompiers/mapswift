@@ -8,6 +8,9 @@
 
 import UIKit
 
+protocol MapSwiftNodeViewDelegate:class {
+    func nodeViewWasTapped(nodeView:MapSwiftNodeView)
+}
 class MapSwiftNodeView: UIView {
     static let BackgroundInset:CGFloat = 10
     static let LabelInset:CGFloat = 15
@@ -15,6 +18,9 @@ class MapSwiftNodeView: UIView {
         let outset = -1 * MapSwiftNodeView.BackgroundInset
         return CGRectInset(rect, outset , outset)
     }
+
+    weak var delegate:MapSwiftNodeViewDelegate?
+
     private var _node:MapSwiftNode?
     var node:MapSwiftNode? {
         get {
@@ -88,7 +94,8 @@ class MapSwiftNodeView: UIView {
         label.minimumScaleFactor = 0.2
         self.label = label
         self.insertSubview(label, aboveSubview: nodeBackgroundView)
-
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "onTapGesture"))
+        label.userInteractionEnabled = true
         self.defaultColors()
 
     }
@@ -104,7 +111,11 @@ class MapSwiftNodeView: UIView {
         super.init(coder: aDecoder)
         self.defaultColors()
     }
-
+    func onTapGesture() {
+        if let delegate = self.delegate {
+            delegate.nodeViewWasTapped(self)
+        }
+    }
     private func defaultColors() {
         self.backgroundColor = UIColor.clearColor()
         if let nodeBackgroundView = self.nodeBackgroundView {

@@ -7,9 +7,13 @@
 //
 
 import UIKit
-
-public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate {
+public protocol MapSwiftMapViewDelegate : class {
+    func mapViewDidSelectNode(mapView:MapSwiftMapView, nodeSelected:MapSwiftNode)
+}
+public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate, MapSwiftNodeViewDelegate {
     typealias NodeEventArgs = (event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode)
+    weak public var delegate:MapSwiftMapViewDelegate?
+
     private var selectedNodeId:String?
 
     private var nodeViews:[String:MapSwiftNodeView] = [:]
@@ -84,6 +88,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         let nodeFrame = MapSwiftNodeView.NodeRect(frame)
         if nodeView == nil {
             nodeView = MapSwiftNodeView(frame:nodeFrame)
+            nodeView.delegate = self
             if let selectedNodeId = self.selectedNodeId where selectedNodeId == node.id {
                 nodeView.isSelected = true
             }
@@ -154,7 +159,22 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
 
     }
     public func mapModelNodeIdEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool) {
+        if event == MapSwiftMapModel.NodeRequestEvent.NodeSelectionChanged {
+            if toggle {
+                selectedNodeId = nodeId
+            } else {
+                selectedNodeId = nil
+            }
+            if let nodeView = self.nodeViews[nodeId] {
+                nodeView.isSelected = toggle
+            }
+            if toggle {
+                queueViewTask({
+                    self.centerOnSelectedNode();
+                })
+            }
 
+        }
     }
     public func mapModelToggleEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ToggleRequestEvent, toggle:Bool) {
 
@@ -170,22 +190,6 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
 
     public func mapModelActivatedNodesChanged(mapModel:MapSwiftMapModel, activatedNodes:AnyObject, deactivatedNodes:AnyObject) {
 
-    }
-    public func mapModelNodeSelectionChangedEvent(mapModel: MapSwiftMapModel, event: MapSwiftMapModel.NodeSelectionEvent) {
-        if event.selected {
-            selectedNodeId = event.nodeId
-
-        } else {
-            selectedNodeId = nil
-            return
-        }
-        if let nodeView = self.nodeViews[event.nodeId] {
-            nodeView.isSelected = event.selected
-        }
-
-        queueViewTask({
-            self.centerOnSelectedNode();
-        })
     }
 //MARK: - MapSwiftViewCoordinatesDelegate
     func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
@@ -205,5 +209,10 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         self.centerOnSelectedNode();
         self.setNeedsLayout()
     }
-
+//MARK: - MapSwiftNodeViewDelegate 
+    func nodeViewWasTapped(nodeView: MapSwiftNodeView) {
+        if let node = nodeView.node, delegate = self.delegate {
+            delegate.mapViewDidSelectNode(self, nodeSelected: node)
+        }
+    }
 }

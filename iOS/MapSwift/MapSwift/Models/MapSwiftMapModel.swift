@@ -10,7 +10,6 @@ import UIKit
 
 public protocol MapSwiftMapModelDelegate {
     func mapModelMapEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.MapEvent)
-    func mapModelNodeSelectionChangedEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeSelectionEvent)
     func mapModelNodeEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode)
     func mapModelLinkEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.LinkEvent, link:Dictionary<String, AnyObject>)
     func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>)
@@ -39,19 +38,6 @@ public class MapSwiftMapModel {
                 default:
                     return nil
             }
-        }
-    }
-    public struct NodeSelectionEvent {
-        let nodeId:String
-        let selected:Bool
-        static func parseArgs(eventName:String, args:[AnyObject]) -> NodeSelectionEvent? {
-            if eventName != "nodeSelectionChanged" || args.count < 2 {
-                return nil
-            }
-            if let nodeId = String.mapswift_fromAnyObject(args[0]), selected = args[1] as? Bool {
-                return NodeSelectionEvent(nodeId: nodeId, selected: selected)
-            }
-            return nil
         }
     }
     public enum NodeEvent:String {
@@ -138,7 +124,7 @@ public class MapSwiftMapModel {
             }
         }
         func parseArgs(args:[AnyObject]) -> (nodeId:String, toggle:Bool)? {
-            if let nodeId = args[0] as? String {
+            if let nodeId = String.mapswift_fromAnyObject(args[0]) {
                 var toggle = false
                 if args.count > 1 {
                     if let toggleArg  = args[1] as? Bool {
@@ -209,6 +195,7 @@ public class MapSwiftMapModel {
         self.proxy = proxy
         try self.proxy.addProxyListener(COMPONENT_ID) { (eventName, args) -> () in
             if let delegate = self.delegate {
+//                print("\(eventName), \(args)")
                 if let mapEvent = MapEvent.parse(eventName) {
                     delegate.mapModelMapEvent(self, event: mapEvent)
                 } else if let nodeEvent = NodeEvent.parse(eventName), node = nodeEvent.parseArgs(args) {
@@ -227,8 +214,6 @@ public class MapSwiftMapModel {
                     delegate.mapModelActivatedNodesChanged(self, activatedNodes: eventArgs.activatedNodes, deactivatedNodes: eventArgs.deactivatedNodes)
                 } else if let eventArgs = MapScaleChangedEvent.parse(eventName, args: args) {
                     delegate.mapModelMapScaleChanged(self, scale: eventArgs.scaleMultiplier)
-                } else if let event = MapSwiftMapModel.NodeSelectionEvent.parseArgs(eventName, args:args) {
-                    delegate.mapModelNodeSelectionChangedEvent(self, event: event)
                 } else {
                     print("unhandled \(eventName) args:\(args)")
                 }
@@ -253,6 +238,9 @@ public class MapSwiftMapModel {
 
     public func addSubIdea(parentId:String, initialTitle:String, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
         self.exec("addSubIdea", args: ["iOS", parentId, initialTitle], then: { response in then() }, fail: fail)
+    }
+    public func selectNode(id:String, force:Bool, appendToActive:Bool, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
+        self.exec("selectNode", args: [id, force, appendToActive], then: { response in then() }, fail: fail)
     }
     public typealias MapSwiftLayout = AnyObject
     public func getCurrentLayout(then:((layout:MapSwiftLayout)->()), fail:MapSwiftProxyProtocolFail) {
