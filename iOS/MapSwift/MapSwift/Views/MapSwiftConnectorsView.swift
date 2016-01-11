@@ -15,8 +15,10 @@ class MapSwiftConnectorsView : UIView {
     private func keyForConnector(connector:MapSwiftNodeConnector) -> String {
         return "\(connector.from)->\(connector.to)"
     }
+
     private func drawPathForConnector(from:MapSwiftNode, to:MapSwiftNode)  {
     }
+
     private func horizontalConnector(from:CGRect, to: CGRect) -> ConnectorPath {
         let inset = MapSwiftNodeView.BackgroundInset + MapSwiftNodeView.LabelInset
         var pointFrom = CGPointMake(from.maxX - inset, from.midY)
@@ -52,7 +54,9 @@ class MapSwiftConnectorsView : UIView {
         }
         self.setNeedsDisplay()
     }
-
+    func animateNodeRectWithDuration(duration:NSTimeInterval, nodeId:String, nodeRect:CGRect) {
+        self.nodeRect(nodeId, nodeRect: nodeRect)
+    }
     func addConnector(connector:MapSwiftNodeConnector) {
         self.connectors[keyForConnector(connector)] = connector
         self.setNeedsDisplay()
@@ -62,8 +66,8 @@ class MapSwiftConnectorsView : UIView {
         self.connectors.removeValueForKey(keyForConnector(connector))
         self.setNeedsDisplay()
     }
-
     override func drawRect(rect: CGRect) {
+        self.clipsToBounds = false
         let ctx = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(ctx,UIColor(hexString: "#4F4F4F").CGColor)
         CGContextSetLineWidth(ctx, 1.0)

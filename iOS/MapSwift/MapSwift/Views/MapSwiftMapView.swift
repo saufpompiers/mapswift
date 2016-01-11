@@ -24,6 +24,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     private let mapContentView = UIView(frame: CGRectMake(0,0,10, 10))
     private let nodeLayerView = UIView(frame: CGRectMake(0,0,10, 10))
     private let connectorLayerView = MapSwiftConnectorsView(frame: CGRectMake(0,0,10, 10))
+    private var draggedNode:MapSwiftNodeView?
     public override init(frame: CGRect) {
         self.scrollView = UIScrollView(frame: CGRectMake(0,0,frame.width, frame.height))
         super.init(frame: frame)
@@ -45,6 +46,10 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         nodeLayerView.backgroundColor = UIColor.clearColor()
         self.mapContentView.addSubview(connectorLayerView)
         self.mapContentView.insertSubview(nodeLayerView, aboveSubview: connectorLayerView)
+        let panGestureRecogniser = UIPanGestureRecognizer(target: self, action: "onContentPanGesture:")
+        panGestureRecogniser.requireGestureRecognizerToFail(self.scrollView.panGestureRecognizer)
+        panGestureRecogniser.cancelsTouchesInView = false
+        mapContentView.addGestureRecognizer(panGestureRecogniser)
         self.scrollView.scrollEnabled = true
         self.scrollView.alwaysBounceHorizontal = true
         self.scrollView.alwaysBounceVertical = true
@@ -63,7 +68,27 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         self.scrollView.contentInset = insets
         self.centerOnSelectedNode();
     }
-
+    func onContentPanGesture(pan:UIPanGestureRecognizer) {
+        if let draggedNode = draggedNode, node = draggedNode.node {
+            let translation = pan.translationInView(mapContentView)
+            if pan.state == UIGestureRecognizerState.Began || pan.state == UIGestureRecognizerState.Changed {
+                let frame = coordinateSystem.nodeAdded(node)
+                var nodeFrame = MapSwiftNodeView.NodeRect(frame)
+                nodeFrame = CGRectMake(nodeFrame.origin.x + translation.x, nodeFrame.origin.y + translation.y, nodeFrame.width, nodeFrame.height)
+                draggedNode.frame = nodeFrame
+                connectorLayerView.nodeRect(node.id, nodeRect: nodeFrame)
+            } else {
+                endDragging()
+                let frame = coordinateSystem.nodeAdded(node)
+                let nodeFrame = MapSwiftNodeView.NodeRect(frame)
+                let returnNode = draggedNode
+                self.connectorLayerView.animateNodeRectWithDuration(0.5, nodeId: node.id, nodeRect: nodeFrame)
+                UIView.animateWithDuration(0.2, animations: {
+                    returnNode.frame = nodeFrame
+                })
+            }
+        }
+    }
     private func queueViewTask(block:(() -> ())) {
         dispatch_async(dispatch_get_main_queue(), block)
     }
@@ -214,5 +239,24 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         if let node = nodeView.node, delegate = self.delegate {
             delegate.mapViewDidSelectNode(self, nodeSelected: node)
         }
+    }
+    func nodeViewWasTouched(nodeView: MapSwiftNodeView) {
+        if let node = nodeView.node where node.level > 1 {
+            print("dragging start")
+            draggedNode = nodeView
+            nodeLayerView.bringSubviewToFront(nodeView)
+            self.scrollView.scrollEnabled = false
+        }
+    }
+    func endDragging() {
+        if let _ = self.delegate {
+            print("dragging end")
+            draggedNode = nil
+            self.scrollView.scrollEnabled = true
+        }
+
+    }
+    func nodeViewTouchEnded(nodeView: MapSwiftNodeView) {
+        endDragging()
     }
 }

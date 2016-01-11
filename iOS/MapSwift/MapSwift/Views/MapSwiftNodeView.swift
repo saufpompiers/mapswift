@@ -10,6 +10,8 @@ import UIKit
 
 protocol MapSwiftNodeViewDelegate:class {
     func nodeViewWasTapped(nodeView:MapSwiftNodeView)
+    func nodeViewWasTouched(nodeView:MapSwiftNodeView)
+    func nodeViewTouchEnded(nodeView:MapSwiftNodeView)
 }
 class MapSwiftNodeView: UIView {
     static let BackgroundInset:CGFloat = 10
@@ -81,10 +83,10 @@ class MapSwiftNodeView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         let nodeBackgroundView = UIView(frame: self.backgroundFrame)
-
+        nodeBackgroundView.userInteractionEnabled = true
         self.addSubview(nodeBackgroundView)
         self.nodeBackgroundView = nodeBackgroundView
-
+        self.userInteractionEnabled = true
         let label = UILabel(frame:self.labelFrame)
         label.textColor = UIColor(hexString: "#4F4F4F")
         label.numberOfLines = 0
@@ -97,6 +99,18 @@ class MapSwiftNodeView: UIView {
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "onTapGesture"))
         label.userInteractionEnabled = true
         self.defaultColors()
+
+    }
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let delegate = self.delegate {
+            delegate.nodeViewWasTouched(self)
+        }
+    }
+
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let delegate = self.delegate {
+            delegate.nodeViewTouchEnded(self)
+        }
 
     }
     override func layoutSubviews() {
