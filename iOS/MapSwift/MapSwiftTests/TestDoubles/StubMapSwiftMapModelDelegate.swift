@@ -60,7 +60,7 @@ class StubMapSwiftMapModelDelegate: MapSwiftMapModelDelegate {
         eventOccurred(event.rawValue)
     }
 
-    func mapModelActivatedNodesChanged(mapModel: MapSwiftMapModel, activatedNodes: AnyObject, deactivatedNodes: AnyObject) {
+    func mapModelActivatedNodesChanged(mapModel: MapSwiftMapModel, activatedNodes: [AnyObject], deactivatedNodes: [AnyObject]) {
         print("mapModelActivatedNodesChanged activatedNodes:\(activatedNodes) deactivatedNodes:\(deactivatedNodes)")
         eventOccurred("mapModelActivatedNodesChanged")
     }

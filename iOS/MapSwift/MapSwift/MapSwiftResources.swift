@@ -36,4 +36,10 @@ public class MapSwiftResources {
             return nil
         }
     }
+
+    public var defaultThemeURL:NSURL {
+        let url = bundle.URLForResource("default-theme", withExtension: "json")!
+        return url
+
+    }
 }

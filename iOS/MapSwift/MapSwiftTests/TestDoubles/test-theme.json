@@ -1,5 +1,5 @@
 {
-    "name": "MindMup Default",
+    "name": "MindMup Test Theme",
     "node": {
         "default": {
             "cornerRadius": 10.0,
@@ -40,5 +40,9 @@
                 "height": 1.5
             }
         }
+    },
+    "test": {
+        "one": 1,
+        "two": 2
     }
 }

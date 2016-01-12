@@ -28,4 +28,11 @@ public class MapSwiftError {
 
     }
 
+
+    public class func InvalidThemeFile(fileURL:NSURL) -> NSError {
+        return NSError(domain: "com.saufpompiers", code: 5, userInfo: [NSLocalizedDescriptionKey: "Supplied Theme was invalid",
+            NSLocalizedFailureReasonErrorKey: "\(fileURL)"])
+
+    }
+
 }
