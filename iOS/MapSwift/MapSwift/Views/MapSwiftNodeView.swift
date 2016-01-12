@@ -30,48 +30,47 @@ class MapSwiftNodeView: UIView {
         }
         set (n) {
             _node = n
-            if let label = self.label, node = _node {
-                label.text = node.title
-
+            if let node = _node {
+                self.nodeTextlabel.text = node.title
+                self.nodeTextlabel.textColor = UIColor(hexString: "#4F4F4F")
                 if node.level == 1 {
-                    self.nodeBackgroundView?.backgroundColor = UIColor(hexString: "#22AAE0")
+                    self.nodeBackgroundView.backgroundColor = UIColor(hexString: "#22AAE0")
+                    self.nodeDecorationView.activatedColor = UIColor(hexString: "#E0E0E0")
                 } else {
-                    self.nodeBackgroundView?.backgroundColor = UIColor(hexString: "#E0E0E0")
+                    self.nodeBackgroundView.backgroundColor = UIColor(hexString: "#E0E0E0")
+                    self.nodeDecorationView.activatedColor = UIColor(hexString: "#22AAE0")
                 }
             }
             self.setNeedsLayout()
         }
     }
 
-    private var _isSelected = false
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.defaultColors()
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.userInteractionEnabled = true
+        self.defaultColors()
+
+    }
+
     var isSelected:Bool {
         get {
-            return _isSelected
+            return nodeBackgroundView.selected
         }
         set (s) {
-            _isSelected = s
-            if let nodeBackgroundView = self.nodeBackgroundView {
-                if _isSelected {
-                    nodeBackgroundView.layer.shadowColor = UIColor.blackColor().CGColor;
-                    nodeBackgroundView.layer.shadowOffset = CGSizeMake(2,2)
-                    nodeBackgroundView.layer.shadowOpacity = 0.9
-                    nodeBackgroundView.layer.shadowRadius = 2
-                } else {
-                    nodeBackgroundView.layer.shadowColor = UIColor(hexString: "#070707").CGColor;
-                    nodeBackgroundView.layer.shadowOffset = CGSizeMake(1,1)
-                    nodeBackgroundView.layer.shadowOpacity = 0.4
-                    nodeBackgroundView.layer.shadowRadius = 2
-                }
-            }
-
+            nodeBackgroundView.selected = s
         }
     }
-    private var label:UILabel?
-    var nodeBackgroundView:UIView?
-
-    private var backgroundFrame:CGRect {
+    var isActivated:Bool {
         get {
-            return CGRectInset(self.bounds, MapSwiftNodeView.BackgroundInset, MapSwiftNodeView.BackgroundInset)
+            return nodeDecorationView.activated
+        }
+        set (val) {
+            nodeDecorationView.activated = val
         }
     }
     private var labelFrame:CGRect {
@@ -79,28 +78,59 @@ class MapSwiftNodeView: UIView {
             return CGRectInset(self.bounds, MapSwiftNodeView.LabelInset, MapSwiftNodeView.LabelInset)
         }
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        let nodeBackgroundView = UIView(frame: self.backgroundFrame)
-        nodeBackgroundView.userInteractionEnabled = true
-        self.addSubview(nodeBackgroundView)
-        self.nodeBackgroundView = nodeBackgroundView
-        self.userInteractionEnabled = true
-        let label = UILabel(frame:self.labelFrame)
-        label.textColor = UIColor(hexString: "#4F4F4F")
-        label.numberOfLines = 0
-        label.textAlignment = NSTextAlignment.Center
-        label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.2
-        self.label = label
-        self.insertSubview(label, aboveSubview: nodeBackgroundView)
-        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "onTapGesture"))
-        label.userInteractionEnabled = true
-        self.defaultColors()
 
+    private var _label:UILabel?
+    private var nodeTextlabel:UILabel {
+        get {
+            if let label = _label {
+                return label
+            }
+            let label = UILabel(frame:self.labelFrame)
+            self._label = label
+            label.numberOfLines = 0
+            label.textAlignment = NSTextAlignment.Center
+            label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
+            label.adjustsFontSizeToFitWidth = true
+            label.minimumScaleFactor = 0.2
+            self.insertSubview(label, aboveSubview: nodeDecorationView)
+            label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "onTapGesture"))
+            label.userInteractionEnabled = true
+            return label
+        }
     }
+
+    private var backgroundFrame:CGRect {
+        get {
+            return CGRectInset(self.bounds, MapSwiftNodeView.BackgroundInset, MapSwiftNodeView.BackgroundInset)
+        }
+    }
+
+    private var _nodeBackgroundView:MapSwiftNodeBackgroundView?
+    var nodeBackgroundView:MapSwiftNodeBackgroundView {
+        get {
+            if let bg = _nodeBackgroundView {
+                return bg
+            }
+            let bg = MapSwiftNodeBackgroundView(frame: self.backgroundFrame)
+            _nodeBackgroundView = bg
+            self.addSubview(bg)
+            return bg
+        }
+    }
+
+    private var _nodeDecorationView:MapSwiftNodeDecorationView?
+    var nodeDecorationView:MapSwiftNodeDecorationView {
+        get {
+            if let ndec = _nodeDecorationView {
+                return ndec
+            }
+            let ndec = MapSwiftNodeDecorationView(frame:self.bounds)
+            _nodeDecorationView = ndec
+            self.insertSubview(ndec, aboveSubview: nodeBackgroundView)
+            return ndec
+        }
+    }
+
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if let delegate = self.delegate {
             delegate.nodeViewWasTouched(self)
@@ -114,17 +144,10 @@ class MapSwiftNodeView: UIView {
 
     }
     override func layoutSubviews() {
-        if let label = self.label {
-            label.frame = self.labelFrame
-        }
-        if let nodeBackgroundView = self.nodeBackgroundView {
-            nodeBackgroundView.frame = self.backgroundFrame
-        }
+        nodeTextlabel.frame = self.labelFrame
+        nodeBackgroundView.frame = self.backgroundFrame
     }
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.defaultColors()
-    }
+
     func onTapGesture() {
         if let delegate = self.delegate {
             delegate.nodeViewWasTapped(self)
@@ -132,23 +155,6 @@ class MapSwiftNodeView: UIView {
     }
     private func defaultColors() {
         self.backgroundColor = UIColor.clearColor()
-        if let nodeBackgroundView = self.nodeBackgroundView {
-            nodeBackgroundView.backgroundColor = UIColor(hexString: "#E0E0E0")
-            nodeBackgroundView.layer.borderColor = UIColor(hexString: "#707070").CGColor
-            nodeBackgroundView.layer.borderWidth = 1
-            nodeBackgroundView.layer.cornerRadius = 10
-            nodeBackgroundView.layer.shadowColor = UIColor(hexString: "#070707").CGColor;
-            nodeBackgroundView.layer.shadowOffset = CGSizeMake(1,1)
-            nodeBackgroundView.layer.shadowOpacity = 0.4
-            nodeBackgroundView.layer.shadowRadius = 2
-        }
     }
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }

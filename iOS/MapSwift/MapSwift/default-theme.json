@@ -1,0 +1,46 @@
+{
+    "name": "MindMup Default",
+    "node": {
+        "default": {
+            "cornerRadius": 10.0,
+            "backgroundColor": "#E0E0E0"
+            "activatedColor": "#22AAE0"
+            "border": {
+                "color": "#707070",
+                "width": 1.0
+            },
+            "shadow": {
+                "color": "#070707",
+                "opacity": "0.4",
+                "offset": {
+                    "width": 2,
+                    "height": 2
+                },
+                "radius" 2
+            }
+
+        },
+        "center": {
+            "backgroundColor": "#22AAE0",
+            "activatedColor": "#E0E0E0"
+        },
+        "selected": {
+            "shadow": {
+                "color": "#000000",
+                "opacity": "0.9",
+            }
+
+        }
+    },
+    "connector" {
+        "default": {
+            "color": "#707070",
+            "width": 1.0,
+            "controlPoint": {
+                "width": 0.75,
+                "height": 1.5
+            }
+        }
+    }
+
+}

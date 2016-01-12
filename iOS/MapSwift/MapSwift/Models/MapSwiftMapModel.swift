@@ -18,7 +18,7 @@ public protocol MapSwiftMapModelDelegate {
 
     func mapModelMapScaleChanged(mapModel:MapSwiftMapModel, scale:Double)
     func mapModelNodeEditRequested(mapModel:MapSwiftMapModel, nodeId:String, shouldSelectAll:Bool, editingNew:Bool)
-    func mapModelActivatedNodesChanged(mapModel:MapSwiftMapModel, activatedNodes:AnyObject, deactivatedNodes:AnyObject)
+    func mapModelActivatedNodesChanged(mapModel:MapSwiftMapModel, activatedNodes:[AnyObject], deactivatedNodes:[AnyObject])
 
 }
 
@@ -167,11 +167,13 @@ public class MapSwiftMapModel {
         }
     }
     public struct ActivatedNodesChangedEvent {
-        let activatedNodes:AnyObject
-        let deactivatedNodes:AnyObject
+        let activatedNodes:[AnyObject]
+        let deactivatedNodes:[AnyObject]
         public static func parse(event:String, args:[AnyObject]) -> ActivatedNodesChangedEvent? {
-            if (event == "activatedNodesChanged" && args.count > 1) {
-                return ActivatedNodesChangedEvent(activatedNodes: args[0], deactivatedNodes: args[1])
+            if event == "activatedNodesChanged" && args.count > 1 {
+                if let activatedNodes = args[0] as? [AnyObject], deactivatedNodes = args[1] as? [AnyObject] {
+                    return ActivatedNodesChangedEvent(activatedNodes: activatedNodes, deactivatedNodes: deactivatedNodes)
+                }
             }
             return nil
         }

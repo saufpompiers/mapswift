@@ -70,11 +70,10 @@ class MapSwiftConnectorsView : UIView {
         self.clipsToBounds = false
         let ctx = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(ctx,UIColor(hexString: "#4F4F4F").CGColor)
-        CGContextSetLineWidth(ctx, 1.0)
+        CGContextSetLineWidth(ctx, MapSwiftNodeBackgroundView.BorderWidth)
         for (_, connector) in self.connectors {
                 if let fromRect = nodeRects[connector.from], toRect = nodeRects[connector.to] {
                     let connectorPath = calculateConnector(fromRect, to: toRect)
-
 //                    print("from:\(connector.from) rect:\(fromRect) to:\(connector.to) rect:\(toRect)")
                     CGContextMoveToPoint(ctx, connectorPath.from.x, connectorPath.from.y)
                     CGContextAddQuadCurveToPoint(ctx, connectorPath.controlPoint.x, connectorPath.controlPoint.y, connectorPath.to.x, connectorPath.to.y)

@@ -18,6 +18,8 @@
 		5523D2781C104DF500069905 /* mapswift-ios.html in Resources */ = {isa = PBXBuildFile; fileRef = 5523D2761C104DF500069905 /* mapswift-ios.html */; };
 		5541E8A41C1EB95800318670 /* MapSwiftStubProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5541E8A31C1EB95800318670 /* MapSwiftStubProxyProtocol.swift */; };
 		554AA97A1C3EB7D1006DF4E1 /* MapSwiftMapViewListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554AA9791C3EB7D1006DF4E1 /* MapSwiftMapViewListener.swift */; };
+		554AA97C1C43F6DA006DF4E1 /* MapSwiftNodeBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554AA97B1C43F6D9006DF4E1 /* MapSwiftNodeBackgroundView.swift */; };
+		554AA97E1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554AA97D1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift */; };
 		55610E511C15B7120030F416 /* MapSwiftPingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E501C15B7120030F416 /* MapSwiftPingModel.swift */; };
 		55610E531C15CF340030F416 /* MapSwiftResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E521C15CF340030F416 /* MapSwiftResources.swift */; };
 		55610E561C15D9280030F416 /* NSURLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55610E551C15D9280030F416 /* NSURLExtensions.swift */; };
@@ -65,6 +67,9 @@
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
 		55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */; };
+		55F625191C45245000E9421C /* MapSwiftTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F625181C45245000E9421C /* MapSwiftTheme.swift */; };
+		55F6251B1C4524CB00E9421C /* default-theme.json in Resources */ = {isa = PBXBuildFile; fileRef = 55F6251A1C4524CB00E9421C /* default-theme.json */; };
+		55F6251D1C45309100E9421C /* MapSwiftJSONFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6251C1C45309100E9421C /* MapSwiftJSONFile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +120,8 @@
 		5523D2761C104DF500069905 /* mapswift-ios.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "mapswift-ios.html"; path = "Resources/mapswift-ios.html"; sourceTree = "<group>"; };
 		5541E8A31C1EB95800318670 /* MapSwiftStubProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftStubProxyProtocol.swift; sourceTree = "<group>"; };
 		554AA9791C3EB7D1006DF4E1 /* MapSwiftMapViewListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftMapViewListener.swift; sourceTree = "<group>"; };
+		554AA97B1C43F6D9006DF4E1 /* MapSwiftNodeBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeBackgroundView.swift; sourceTree = "<group>"; };
+		554AA97D1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeDecorationView.swift; sourceTree = "<group>"; };
 		55610E501C15B7120030F416 /* MapSwiftPingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftPingModel.swift; sourceTree = "<group>"; };
 		55610E521C15CF340030F416 /* MapSwiftResources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftResources.swift; sourceTree = "<group>"; };
 		55610E551C15D9280030F416 /* NSURLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensions.swift; sourceTree = "<group>"; };
@@ -162,6 +169,9 @@
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
 		55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyProtocol.swift; sourceTree = "<group>"; };
 		55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftProxyResponse.swift; sourceTree = "<group>"; };
+		55F625181C45245000E9421C /* MapSwiftTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftTheme.swift; sourceTree = "<group>"; };
+		55F6251A1C4524CB00E9421C /* default-theme.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "default-theme.json"; sourceTree = "<group>"; };
+		55F6251C1C45309100E9421C /* MapSwiftJSONFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftJSONFile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,6 +268,7 @@
 				55610E5B1C15FA840030F416 /* map-swift-editor.js */,
 				5523D2761C104DF500069905 /* mapswift-ios.html */,
 				55610E521C15CF340030F416 /* MapSwiftResources.swift */,
+				55F6251A1C4524CB00E9421C /* default-theme.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -302,6 +313,7 @@
 				558055D41C2C044A0063F39D /* MapSwiftViewCoordinates.swift */,
 				558055DE1C314E480063F39D /* MapSwiftHTMLCoordinates.swift */,
 				556764E21C3AD640001574F1 /* UIColorExtensions.swift */,
+				55F6251C1C45309100E9421C /* MapSwiftJSONFile.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -333,9 +345,12 @@
 		558055E21C33BC7E0063F39D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				558055E31C33BCC10063F39D /* MapSwiftMapView.swift */,
-				558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */,
 				5502B4991C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift */,
+				558055E31C33BCC10063F39D /* MapSwiftMapView.swift */,
+				554AA97B1C43F6D9006DF4E1 /* MapSwiftNodeBackgroundView.swift */,
+				554AA97D1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift */,
+				558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */,
+				55F625181C45245000E9421C /* MapSwiftTheme.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -482,6 +497,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55F6251B1C4524CB00E9421C /* default-theme.json in Resources */,
 				55610E5C1C15FA840030F416 /* map-swift-editor.js in Resources */,
 				5523D2781C104DF500069905 /* mapswift-ios.html in Resources */,
 			);
@@ -522,10 +538,13 @@
 				557856211C1B1C3E001C5E17 /* MapSwiftWKProxyEventListener.swift in Sources */,
 				558055CF1C2BE01A0063F39D /* MapSwiftConnector.swift in Sources */,
 				55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */,
+				55F625191C45245000E9421C /* MapSwiftTheme.swift in Sources */,
 				55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */,
 				558055E61C33BD6F0063F39D /* MapSwiftNodeView.swift in Sources */,
 				558055DF1C314E480063F39D /* MapSwiftHTMLCoordinates.swift in Sources */,
+				554AA97C1C43F6DA006DF4E1 /* MapSwiftNodeBackgroundView.swift in Sources */,
 				558055D51C2C044A0063F39D /* MapSwiftViewCoordinates.swift in Sources */,
+				55F6251D1C45309100E9421C /* MapSwiftJSONFile.swift in Sources */,
 				554AA97A1C3EB7D1006DF4E1 /* MapSwiftMapViewListener.swift in Sources */,
 				55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */,
 				556764E31C3AD640001574F1 /* UIColorExtensions.swift in Sources */,
@@ -535,6 +554,7 @@
 				55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */,
 				558055C51C2802860063F39D /* MapSwiftMapModel.swift in Sources */,
 				558055BB1C21C3F90063F39D /* StringExtensions.swift in Sources */,
+				554AA97E1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift in Sources */,
 				55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */,
 				558055CB1C2AD4790063F39D /* MapSwiftNode.swift in Sources */,
 				557856231C1B1C76001C5E17 /* MapSwiftProxyProtocol.swift in Sources */,

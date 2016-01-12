@@ -213,8 +213,22 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
 
     }
 
-    public func mapModelActivatedNodesChanged(mapModel:MapSwiftMapModel, activatedNodes:AnyObject, deactivatedNodes:AnyObject) {
+    public func mapModelActivatedNodesChanged(mapModel:MapSwiftMapModel, activatedNodes:[AnyObject], deactivatedNodes:[AnyObject]) {
+        queueViewTask({
+            for activated in activatedNodes {
+                if let activatedNodeId = String.mapswift_fromAnyObject(activated), activatedNodeView = self.nodeViews[activatedNodeId] {
+                    activatedNodeView.isActivated = true
 
+                }
+            }
+            for deactivated in deactivatedNodes {
+                if let deactivatedNodeId = String.mapswift_fromAnyObject(deactivated),
+                    deactivatedNodeView = self.nodeViews[deactivatedNodeId] {
+                    deactivatedNodeView.isActivated = false
+
+                }
+            }
+        })
     }
 //MARK: - MapSwiftViewCoordinatesDelegate
     func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
