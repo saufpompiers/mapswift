@@ -37,9 +37,41 @@ class MapSwiftThemeTests: XCTestCase {
 
     //MARK: - nodeAttribute<T>
 
-    func test_should_return_node_attribute_with_type() {
+    func test_should_return_node_attribute_with_no_style() {
         let result = underTest.nodeAttribute(.BackgroundColor, style: nil, fallback:"wrong")
         XCTAssertEqual(result, "#E0E0E0")
     }
+    func test_should_return_node_attribute_with_style() {
+        let result = underTest.nodeAttribute(.BackgroundColor, style: "center", fallback:"wrong")
+        XCTAssertEqual(result, "#22AAE0")
+    }
 
+    //MARK: - nodeBorderStyle
+    func test_should_return_node_border_style_with_name() {
+        let result = underTest.nodeBorderStyle("center")
+        XCTAssertEqual(result.width, 2.0)
+        XCTAssertEqual(result.color, UIColor(hexString: "#707070"))
+    }
+
+    func test_should_return_node_border_style_with_no_name() {
+        let result = underTest.nodeBorderStyle(nil)
+        XCTAssertEqual(result.width, 1.0)
+        XCTAssertEqual(result.color, UIColor(hexString: "#707070"))
+    }
+    //MARK: - nodeShadowStyle
+    func test_should_return_node_shadow_style_with_name() {
+        let result = underTest.nodeShadowStyle("center")
+        XCTAssertEqual(result.color, UIColor(hexString: "#070707"))
+        XCTAssertEqual(result.offset, CGSizeMake(2, 4))
+        XCTAssertEqual(result.opacity, 0.6)
+        XCTAssertEqual(result.radius, 2)
+    }
+
+    func test_should_return_node_shadow_style_with_no_name() {
+        let result = underTest.nodeShadowStyle(nil)
+        XCTAssertEqual(result.color, UIColor(hexString: "#070707"))
+        XCTAssertEqual(result.offset, CGSizeMake(2, 2))
+        XCTAssertEqual(result.opacity, 0.4)
+        XCTAssertEqual(result.radius, 2)
+    }
 }

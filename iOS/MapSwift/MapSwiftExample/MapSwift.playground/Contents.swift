@@ -16,6 +16,10 @@ if let data = data {
 }
 
 
+let s = "cornerRadius,back"
+
+s.componentsSeparatedByString(",")
+
 
 
 

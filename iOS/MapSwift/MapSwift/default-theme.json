@@ -11,7 +11,7 @@
             },
             "shadow": {
                 "color": "#070707",
-                "opacity": "0.4",
+                "opacity": 0.4,
                 "offset": {
                     "width": 2,
                     "height": 2
