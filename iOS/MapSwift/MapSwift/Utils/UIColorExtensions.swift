@@ -23,7 +23,12 @@ func mm_int2rgb(rgbValue: CUnsignedInt) -> (CGFloat, CGFloat, CGFloat) {
 }
 
 extension UIColor {
-
+    class  func fromMapSwiftTheme(string:NSString) -> UIColor {
+        if string == "transparent" {
+            return UIColor.clearColor()
+        }
+        return UIColor(hexString: string);
+    }
     convenience init(hexValue: CUnsignedInt) {
         let (r,g,b) = mm_int2rgb(hexValue)
         self.init(red: r, green: g, blue: b, alpha: 1.0)

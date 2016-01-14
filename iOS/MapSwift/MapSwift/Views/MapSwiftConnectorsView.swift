@@ -20,7 +20,7 @@ class MapSwiftConnectorsView : UIView {
     }
 
     private func horizontalConnector(from:CGRect, to: CGRect) -> ConnectorPath {
-        let inset = MapSwiftNodeView.BackgroundInset + MapSwiftNodeView.LabelInset
+        let inset = MapSwiftNodeView.BackgroundInset + 5.0
         var pointFrom = CGPointMake(from.maxX - inset, from.midY)
         var pointTo = CGPointMake(to.minX + inset, to.midY)
         if pointFrom.x > pointTo.x {
@@ -34,7 +34,7 @@ class MapSwiftConnectorsView : UIView {
         if abs(from.midY - to.midY) + tolerance < max(to.height, from.height * 0.75) {
             return horizontalConnector(from, to: to)
         }
-        let inset = MapSwiftNodeView.BackgroundInset + MapSwiftNodeView.LabelInset
+        let inset = MapSwiftNodeView.BackgroundInset + 5.0
         let pointFrom = CGPointMake(from.midX, from.midY)
         var pointTo = CGPointMake(to.minX + inset, to.midY)
         if from.minX > to.minX {

@@ -17,10 +17,19 @@
                     "height": 2
                 },
                 "radius": 2
+            },
+            "text": {
+                "margin": 5.0,
+                "alignment": "center",
+                "color": "#4F4F4F",
+                "lineSpacing": 2.5,
+                "font": {
+                    "size": 12,
+                    "weight": "bold"
+                }
             }
-
         },
-        "center": {
+        "level 1": {
             "backgroundColor": "#22AAE0",
             "activatedColor": "#E0E0E0"
         },
@@ -33,12 +42,41 @@
     },
     "connector": {
         "default": {
-            "color": "#707070",
-            "width": 1.0,
-            "controlPoint": {
-                "width": 0.75,
-                "height": 1.5
-            }
+            "start": {
+                "h": "center",
+                "v": "nearest"
+            },
+            "end": {
+                "h": "nearest-inset",
+                "v": "center"
+            },
+            "line": {
+                "color": "#707070",
+                "width": 1.0
+            },
+            "controlPoints": [
+                {
+                    "width": 0.75,
+                    "height": 1.5
+                }
+            ]
+        },
+        "horizontal": {
+            "start": {
+                "h": "nearest-inset",
+                "v": "center"
+            },
+            "end": {
+                "h": "nearest",
+                "v": "center"
+            },
+            "controlPoints": [
+                {
+                   "width": 0,
+                   "height": 1
+                }
+            ]
         }
+
     }
 }

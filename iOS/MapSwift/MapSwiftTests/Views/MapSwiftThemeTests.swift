@@ -32,6 +32,7 @@ class MapSwiftThemeTests: XCTestCase {
     func test_should_return_default() {
         XCTAssertEqual(MapSwiftTheme.Default().name, "MindMup Default")
     }
+    
     //MARK: - nodeAttribute
 
     func test_should_return_node_attribute() {
@@ -51,6 +52,34 @@ class MapSwiftThemeTests: XCTestCase {
     func test_should_return_node_attribute_with_style() {
         let result = underTest.nodeAttribute(.BackgroundColor, styles: ["center"], fallback:"wrong")
         XCTAssertEqual(result, "#22AAE0")
+    }
+
+    //MARK: - nodeFontStyle
+    func test_should_return_node_font_style_with_no_name() {
+        let result = underTest.nodeFontStyle([])
+        XCTAssertEqual(result.size, 14.0)
+        XCTAssertEqual(result.weight, UIFontWeightSemibold)
+    }
+
+    func test_should_return_node_font_style_with_name() {
+        let result = underTest.nodeFontStyle(["center"])
+        XCTAssertEqual(result.size, 15.0)
+        XCTAssertEqual(result.weight, UIFontWeightSemibold)
+    }
+
+    //MARK: - nodeTextStyle
+    func test_should_return_node_text_style_with_no_name() {
+        let result = underTest.nodeTextStyle([])
+        XCTAssertEqual(result.alignment, NSTextAlignment.Center)
+        XCTAssertEqual(result.color, UIColor(hexString: "#4F4F4F"))
+        XCTAssertEqual(result.font.size, 14.0)
+    }
+
+    func test_should_return_node_text_style_with_name() {
+        let result = underTest.nodeTextStyle(["center"])
+        XCTAssertEqual(result.alignment, NSTextAlignment.Left)
+        XCTAssertEqual(result.color, UIColor(hexString: "#4F4F4F"))
+        XCTAssertEqual(result.font.size, 15.0)
     }
 
     //MARK: - nodeBorderStyle
@@ -84,10 +113,11 @@ class MapSwiftThemeTests: XCTestCase {
 
     //MARK: - nodeStyle
     func test_should_return_node_style_with_name() {
-        let result = underTest.nodeStyle("center")
+        let result = underTest.nodeStyle(["center"])
         
         XCTAssertEqual(result.backgroundColor, UIColor(hexString: "#22AAE0"))
         XCTAssertEqual(result.activatedColor, UIColor(hexString: "#E0E0E0"))
+        XCTAssertEqual(result.text.font.size, 15.0)
         XCTAssertEqual(result.cornerRadius, 10.0)
     }
 }

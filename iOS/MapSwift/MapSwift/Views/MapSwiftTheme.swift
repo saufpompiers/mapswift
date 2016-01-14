@@ -7,7 +7,33 @@
 //
 
 import Foundation
+extension NSTextAlignment {
+    static func mapswift_parseThemeAlignment(alignment:String) -> NSTextAlignment {
+        switch alignment {
+        case "left":
+            return NSTextAlignment.Left
+        case "right":
+            return NSTextAlignment.Right
+        default:
+            return NSTextAlignment.Center
+        }
+    }
+}
 
+extension CGFloat {
+    static func mapswift_parseFontWeight(weight:String) -> CGFloat {
+        switch weight {
+        case "bold":
+            return UIFontWeightBold
+        case "semibold":
+            return UIFontWeightSemibold
+        case "light":
+            return UIFontWeightLight
+        default:
+            return UIFontWeightRegular
+        }
+    }
+}
 public class MapSwiftTheme {
 
     let themeDictionary:MapSwiftDefaultedDictionary
@@ -31,8 +57,9 @@ public class MapSwiftTheme {
 
 //MARK: - general styling tuples
     public typealias LineStyle = (color:UIColor, width:CGFloat)
-
-    public typealias ShadowStyle = (color:UIColor, opacity:CGFloat, offset:CGSize, radius:CGFloat)
+    public typealias ShadowStyle = (color:UIColor, opacity:Float, offset:CGSize, radius:CGFloat)
+    public typealias FontStyle = (size:CGFloat, weight:CGFloat)
+    public typealias TextStyle = (font:FontStyle, alignment:NSTextAlignment, color:UIColor, lineSpacing:CGFloat, margin:CGFloat)
 
     var name:String {
         get {
@@ -49,6 +76,7 @@ public class MapSwiftTheme {
         let activatedColor:UIColor
         let borderStyle:LineStyle
         let shadow:ShadowStyle
+        let text:TextStyle
     }
 
     public enum NodeAttribute:String {
@@ -62,7 +90,13 @@ public class MapSwiftTheme {
         ShadowOpacity = "shadow:opacity",
         ShadowOffsetWidth = "shadow:offset:width",
         ShadowOffsetHeight = "shadow:offset:height",
-        ShadowRadius = "shadow:radius"
+        ShadowRadius = "shadow:radius",
+        TextAlignment = "text:alignment",
+        TextColor = "text:color",
+        TextLineSpacing = "text:lineSpacing",
+        TextMargin = "text:margin",
+        FontSize = "text:font:size",
+        FontWeight = "text:font:weight"
 
         static let Prefixes = ["node"]
         var postFixes:[String] {
@@ -82,28 +116,44 @@ public class MapSwiftTheme {
         }
         return fallback
     }
+    
+    func nodeFontStyle(styles:[String]) -> FontStyle {
+        let size:CGFloat = nodeAttribute(.FontSize, styles: styles, fallback: 12)
+        let weightDescription = nodeAttribute(.FontWeight, styles: styles, fallback: "regular")
+        let weight = CGFloat.mapswift_parseFontWeight(weightDescription)
+        return FontStyle(size:size, weight:weight)
+    }
 
     func nodeBorderStyle(styles:[String]) -> LineStyle {
-        let colorHex:String = nodeAttribute(.BorderColor, styles:styles, fallback: "#707070")
+        let color:String = nodeAttribute(.BorderColor, styles:styles, fallback: "#707070")
         let width:CGFloat = nodeAttribute(.BorderWidth, styles: styles, fallback: 1.0)
-        return LineStyle(color: UIColor(hexString: colorHex), width:width)
+        return LineStyle(color: UIColor.fromMapSwiftTheme(color), width:width)
+    }
+
+    func nodeTextStyle(styles:[String]) -> TextStyle {
+        let font = self.nodeFontStyle(styles)
+        let color = nodeAttribute(.TextColor, styles: styles, fallback: "#4F4F4F")
+        let alignmentDescription = nodeAttribute(.TextAlignment, styles: styles, fallback: "center")
+        let lineSpacing:CGFloat = nodeAttribute(.TextLineSpacing, styles: styles, fallback: 3.0)
+        let margin:CGFloat = nodeAttribute(.TextMargin, styles: styles, fallback: 10.0)
+        return TextStyle(font:font, alignment:NSTextAlignment.mapswift_parseThemeAlignment(alignmentDescription), color:UIColor.fromMapSwiftTheme(color), lineSpacing:lineSpacing, margin: margin)
     }
 
     func nodeShadowStyle(styles:[String]) -> ShadowStyle {
-        let colorHex:String = nodeAttribute(.ShadowColor, styles: styles, fallback: "#070707")
-        let opacity:CGFloat = nodeAttribute(.ShadowOpacity, styles: styles, fallback: 0.4)
+        let color:String = nodeAttribute(.ShadowColor, styles: styles, fallback: "#070707")
+        let opacity:Float = nodeAttribute(.ShadowOpacity, styles: styles, fallback: 0.4)
         let offsetWidth:CGFloat = nodeAttribute(.ShadowOffsetWidth, styles: styles, fallback: 2)
         let offsetHeight:CGFloat = nodeAttribute(.ShadowOffsetHeight, styles: styles, fallback: 2)
         let offset = CGSizeMake(offsetWidth, offsetHeight)
         let radius:CGFloat = nodeAttribute(.ShadowRadius, styles: styles, fallback: 2)
-        return ShadowStyle(color:UIColor(hexString: colorHex), opacity:opacity, offset:offset, radius:radius)
+        return ShadowStyle(color:UIColor.fromMapSwiftTheme(color), opacity:opacity, offset:offset, radius:radius)
     }
 
-    func nodeStyle(styles:String...) -> NodeStyle {
+    func nodeStyle(styles:[String]) -> NodeStyle {
         let cornerRadius:CGFloat = nodeAttribute(.CornerRadius, styles: styles, fallback: 10.0)
         let backgroundColorHex:String = nodeAttribute(.BackgroundColor, styles: styles, fallback: "#E0E0E0")
         let activatedColorHex:String = nodeAttribute(.ActivatedColor, styles: styles, fallback: "#22AAE0")
 
-        return NodeStyle(cornerRadius: cornerRadius, backgroundColor: UIColor(hexString: backgroundColorHex), activatedColor: UIColor(hexString: activatedColorHex), borderStyle: nodeBorderStyle(styles), shadow: nodeShadowStyle(styles))
+        return NodeStyle(cornerRadius: cornerRadius, backgroundColor: UIColor.fromMapSwiftTheme( backgroundColorHex), activatedColor: UIColor.fromMapSwiftTheme(activatedColorHex), borderStyle: nodeBorderStyle(styles), shadow: nodeShadowStyle(styles), text: nodeTextStyle(styles))
     }
 }

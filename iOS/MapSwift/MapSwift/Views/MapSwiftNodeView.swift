@@ -15,14 +15,14 @@ protocol MapSwiftNodeViewDelegate:class {
 }
 class MapSwiftNodeView: UIView {
     static let BackgroundInset:CGFloat = 10
-    static let LabelInset:CGFloat = 15
+    var labelInset = MapSwiftNodeView.BackgroundInset
+//    static let LabelInset:CGFloat = 15
     class func NodeRect(rect:CGRect) -> CGRect {
         let outset = -1 * MapSwiftNodeView.BackgroundInset
         return CGRectInset(rect, outset , outset)
     }
 
     weak var delegate:MapSwiftNodeViewDelegate?
-
     private var _node:MapSwiftNode?
     var node:MapSwiftNode? {
         get {
@@ -30,39 +30,77 @@ class MapSwiftNodeView: UIView {
         }
         set (n) {
             _node = n
-            if let node = _node {
-                self.nodeTextlabel.text = node.title
-                self.nodeTextlabel.textColor = UIColor(hexString: "#4F4F4F")
-                if node.level == 1 {
-                    self.nodeBackgroundView.backgroundColor = UIColor(hexString: "#22AAE0")
-                    self.nodeDecorationView.activatedColor = UIColor(hexString: "#E0E0E0")
-                } else {
-                    self.nodeBackgroundView.backgroundColor = UIColor(hexString: "#E0E0E0")
-                    self.nodeDecorationView.activatedColor = UIColor(hexString: "#22AAE0")
-                }
-            }
             self.setNeedsLayout()
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    func showTextForNodeStyle(node:MapSwiftNode, nodeStyle:MapSwiftTheme.NodeStyle) {
+        let label = self.nodeTextlabel
+        label.font = UIFont.systemFontOfSize(nodeStyle.text.font.size, weight: nodeStyle.text.font.weight)
+        label.textColor = nodeStyle.text.color
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 3.0
+        paragraphStyle.alignment = nodeStyle.text.alignment
+        let attrString = NSMutableAttributedString(string: node.title)
+        attrString.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, attrString.length))
+        label.attributedText = attrString
+    }
+
+    func calcNodeStyles() -> [String] {
+        var styles:[String] = []
+        if _isSelected {
+            styles.append("selected")
+        }
+        if let node = _node {
+            styles.append("level \(node.level)")
+        }
+        return styles
+    }
+    func  calcNodeStyle() -> MapSwiftTheme.NodeStyle {
+        return self.theme.nodeStyle(calcNodeStyles())
+    }
+    private var _theme:MapSwiftTheme?
+    var theme:MapSwiftTheme {
+        get {
+            if let theme = _theme {
+                return theme
+            }
+            let def = MapSwiftTheme.Default()
+            _theme = def
+            return def
+        }
+        set (val){
+            _theme = val
+            self.setNeedsLayout()
+        }
+    }
+
+    convenience init?(coder aDecoder: NSCoder, theme:MapSwiftTheme) {
+        self.init(coder: aDecoder)
+        self._theme = theme
         self.defaultColors()
     }
 
-    override init(frame: CGRect) {
+    init(frame: CGRect, theme:MapSwiftTheme) {
+        self._theme = theme
         super.init(frame: frame)
         self.userInteractionEnabled = true
         self.defaultColors()
-
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    private var _isSelected = false
     var isSelected:Bool {
         get {
-            return nodeBackgroundView.selected
+            return _isSelected
         }
         set (s) {
-            nodeBackgroundView.selected = s
+            _isSelected = s
+            self.setNeedsLayout()
         }
     }
     var isActivated:Bool {
@@ -75,7 +113,7 @@ class MapSwiftNodeView: UIView {
     }
     private var labelFrame:CGRect {
         get {
-            return CGRectInset(self.bounds, MapSwiftNodeView.LabelInset, MapSwiftNodeView.LabelInset)
+            return CGRectInset(self.bounds, labelInset, labelInset)
         }
     }
 
@@ -88,8 +126,6 @@ class MapSwiftNodeView: UIView {
             let label = UILabel(frame:self.labelFrame)
             self._label = label
             label.numberOfLines = 0
-            label.textAlignment = NSTextAlignment.Center
-            label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
             label.adjustsFontSizeToFitWidth = true
             label.minimumScaleFactor = 0.2
             self.insertSubview(label, aboveSubview: nodeDecorationView)
@@ -114,6 +150,7 @@ class MapSwiftNodeView: UIView {
             let bg = MapSwiftNodeBackgroundView(frame: self.backgroundFrame)
             _nodeBackgroundView = bg
             self.addSubview(bg)
+            self.setNeedsLayout()
             return bg
         }
     }
@@ -144,8 +181,16 @@ class MapSwiftNodeView: UIView {
 
     }
     override func layoutSubviews() {
-        nodeTextlabel.frame = self.labelFrame
-        nodeBackgroundView.frame = self.backgroundFrame
+        if let node = _node {
+            let nodeStyle = self.calcNodeStyle()
+            self.nodeBackgroundView.setNodeStyle(nodeStyle)
+            self.labelInset = MapSwiftNodeView.BackgroundInset + nodeStyle.text.margin
+            self.nodeBackgroundView.setNodeStyle(nodeStyle)
+            self.nodeDecorationView.setNodeStyle(nodeStyle)
+            self.showTextForNodeStyle(node, nodeStyle: nodeStyle)
+        }
+        self.nodeTextlabel.frame = self.labelFrame
+        self.nodeBackgroundView.frame = self.backgroundFrame
     }
 
     func onTapGesture() {

@@ -17,8 +17,15 @@
                     "height": 2
                 },
                 "radius": 2
+            },
+            "text": {
+                "alignment": "center",
+                "color": "#4F4F4F",
+                "font": {
+                    "size": 14,
+                    "weight": "semibold"
+                }
             }
-
         },
         "center": {
             "backgroundColor": "#22AAE0",
@@ -30,6 +37,12 @@
                 "opacity": 0.6,
                 "offset": {
                     "height": 4
+                }
+            },
+            "text": {
+                "alignment": "left",
+                "font": {
+                    "size": 15
                 }
             }
         },

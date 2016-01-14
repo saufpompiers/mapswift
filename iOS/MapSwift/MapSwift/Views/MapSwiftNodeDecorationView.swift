@@ -22,11 +22,18 @@ class MapSwiftNodeDecorationView: UIView {
     func defaultColors() {
         self.backgroundColor = UIColor.clearColor();
     }
-    var activatedColor = UIColor.blueColor()
-    static let BorderInset:CGFloat = (MapSwiftNodeBackgroundView.BorderWidth * 2)
-    var inset:CGFloat = MapSwiftNodeView.BackgroundInset + MapSwiftNodeDecorationView.BorderInset
-    var cornerRadius = MapSwiftNodeBackgroundView.CornerRadius - MapSwiftNodeDecorationView.BorderInset
+    private var borderInset:CGFloat = 0
+    private var activatedColor = UIColor.blueColor()
+    private var cornerRadius:CGFloat = 0
+    private var inset:CGFloat = MapSwiftNodeView.BackgroundInset
 
+    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle) {
+        self.borderInset = nodeStyle.borderStyle.width * 2
+        self.activatedColor = nodeStyle.activatedColor
+        self.cornerRadius = max(0, nodeStyle.cornerRadius - self.borderInset)
+        self.inset = MapSwiftNodeView.BackgroundInset + borderInset
+        self.setNeedsDisplay()
+    }
     private var _activated:Bool = false
     var activated:Bool {
         get {
@@ -53,7 +60,7 @@ class MapSwiftNodeDecorationView: UIView {
             path.setLineDash(dashLengths, count: 2, phase: phase)
             CGContextSetStrokeColorWithColor(ctx,activatedColor.CGColor)
 
-            path.lineWidth = MapSwiftNodeBackgroundView.BorderWidth * 2
+            path.lineWidth = self.borderInset
             path.stroke()
         }
     }
