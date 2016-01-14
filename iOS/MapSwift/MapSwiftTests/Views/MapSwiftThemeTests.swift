@@ -25,10 +25,17 @@ class MapSwiftThemeTests: XCTestCase {
         super.tearDown()
     }
 
+    func test_should_return_name() {
+        XCTAssertEqual(underTest.name, "MindMup Test Theme")
+    }
+
+    func test_should_return_default() {
+        XCTAssertEqual(MapSwiftTheme.Default().name, "MindMup Default")
+    }
     //MARK: - nodeAttribute
 
     func test_should_return_node_attribute() {
-        if let result = underTest.nodeAttribute(.BackgroundColor, style: nil) as? String {
+        if let result = underTest.nodeAttribute(.BackgroundColor, styles: []) as? String {
             XCTAssertEqual(result, "#E0E0E0")
         } else {
             XCTFail("background color not found")
@@ -38,29 +45,29 @@ class MapSwiftThemeTests: XCTestCase {
     //MARK: - nodeAttribute<T>
 
     func test_should_return_node_attribute_with_no_style() {
-        let result = underTest.nodeAttribute(.BackgroundColor, style: nil, fallback:"wrong")
+        let result = underTest.nodeAttribute(.BackgroundColor, styles: [], fallback:"wrong")
         XCTAssertEqual(result, "#E0E0E0")
     }
     func test_should_return_node_attribute_with_style() {
-        let result = underTest.nodeAttribute(.BackgroundColor, style: "center", fallback:"wrong")
+        let result = underTest.nodeAttribute(.BackgroundColor, styles: ["center"], fallback:"wrong")
         XCTAssertEqual(result, "#22AAE0")
     }
 
     //MARK: - nodeBorderStyle
     func test_should_return_node_border_style_with_name() {
-        let result = underTest.nodeBorderStyle("center")
+        let result = underTest.nodeBorderStyle(["center"])
         XCTAssertEqual(result.width, 2.0)
         XCTAssertEqual(result.color, UIColor(hexString: "#707070"))
     }
 
     func test_should_return_node_border_style_with_no_name() {
-        let result = underTest.nodeBorderStyle(nil)
+        let result = underTest.nodeBorderStyle([])
         XCTAssertEqual(result.width, 1.0)
         XCTAssertEqual(result.color, UIColor(hexString: "#707070"))
     }
     //MARK: - nodeShadowStyle
     func test_should_return_node_shadow_style_with_name() {
-        let result = underTest.nodeShadowStyle("center")
+        let result = underTest.nodeShadowStyle(["center"])
         XCTAssertEqual(result.color, UIColor(hexString: "#070707"))
         XCTAssertEqual(result.offset, CGSizeMake(2, 4))
         XCTAssertEqual(result.opacity, 0.6)
@@ -68,10 +75,19 @@ class MapSwiftThemeTests: XCTestCase {
     }
 
     func test_should_return_node_shadow_style_with_no_name() {
-        let result = underTest.nodeShadowStyle(nil)
+        let result = underTest.nodeShadowStyle([])
         XCTAssertEqual(result.color, UIColor(hexString: "#070707"))
         XCTAssertEqual(result.offset, CGSizeMake(2, 2))
         XCTAssertEqual(result.opacity, 0.4)
         XCTAssertEqual(result.radius, 2)
+    }
+
+    //MARK: - nodeStyle
+    func test_should_return_node_style_with_name() {
+        let result = underTest.nodeStyle("center")
+        
+        XCTAssertEqual(result.backgroundColor, UIColor(hexString: "#22AAE0"))
+        XCTAssertEqual(result.activatedColor, UIColor(hexString: "#E0E0E0"))
+        XCTAssertEqual(result.cornerRadius, 10.0)
     }
 }
