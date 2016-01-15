@@ -30,16 +30,44 @@
                     "size": 12,
                     "weight": "bold"
                 }
+            },
+            "connections": {
+                "from": {
+                    "above": {
+                        "h": "center",
+                        "v": "center"
+                    },
+                    "below": {
+                        "h": "center",
+                        "v": "center"
+                    },
+                    "horizontal": {
+                        "h": "center",
+                        "v": "nearest"
+                    }
+                },
+                "to": {
+                    "h": "nearest",
+                    "v": "center"
+                }
             }
         },
         "level 1": {
             "backgroundColor": "#22AAE0",
             "activatedColor": "#E0E0E0"
         },
+        "level 2": {
+            "connections": {
+                "style": "curve"
+            }
+        },
         "level 3": {
             "backgroundColor": "transparent",
+            "connections": {
+                "style": "straightline"
+            },
             "shadow": {
-                "color": "transparent",
+                "color": "transparent"
             },
             "border": {
                 "type": "underline",
@@ -47,7 +75,7 @@
                     "color": "#707070",
                     "width": 1.0
                 }
-            },
+            }
         },
         "selected": {
             "shadow": {
@@ -58,40 +86,29 @@
     },
     "connector": {
         "default": {
-            "start": {
-                "h": "center",
-                "v": "nearest"
-            },
-            "end": {
-                "h": "nearest-inset",
-                "v": "center"
-            },
             "line": {
                 "color": "#707070",
                 "width": 1.0
             },
-            "controlPoints": [
-                {
-                    "width": 0.75,
-                    "height": 1.5
-                }
-            ]
+            "controlPoints": {
+                "above": [{"width": 0.75, "height": 1.5}],
+                "below": [{"width": 0.75, "height": 1.5}],
+                "horizontal": [{"width": 0, "height": 1}]
+            }
         },
-        "horizontal": {
-            "start": {
-                "h": "nearest-inset",
-                "v": "center"
-            },
-            "end": {
-                "h": "nearest",
-                "v": "center"
-            },
-            "controlPoints": [
-                {
-                   "width": 0,
-                   "height": 1
-                }
-            ]
+        "curve": {
+            "controlPoints": {
+                "above": [{"width": 0.5, "height": 1}],
+                "below": [{"width": 0.5, "height": 1}],
+                "horizontal": [{"width": 0, "height": 1}]
+            }
+        },
+        "straightline": {
+            "controlPoints": {
+                "above": [],
+                "below": [],
+                "horizontal": []
+            }
         }
 
     }

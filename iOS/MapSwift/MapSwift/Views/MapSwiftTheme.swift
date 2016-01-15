@@ -176,4 +176,6 @@ public class MapSwiftTheme {
 
         return NodeStyle(cornerRadius: cornerRadius, backgroundColor: UIColor.fromMapSwiftTheme( backgroundColorHex), activatedColor: UIColor.fromMapSwiftTheme(activatedColorHex), borderStyle: nodeBorderStyle(styles), shadow: nodeShadowStyle(styles), text: nodeTextStyle(styles))
     }
+
+
 }
