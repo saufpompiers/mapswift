@@ -70,7 +70,7 @@ class MapSwiftConnectorsView : UIView {
         self.clipsToBounds = false
         let ctx = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(ctx,UIColor(hexString: "#4F4F4F").CGColor)
-        CGContextSetLineWidth(ctx, MapSwiftNodeBackgroundView.BorderWidth)
+        CGContextSetLineWidth(ctx, 1)
         for (_, connector) in self.connectors {
                 if let fromRect = nodeRects[connector.from], toRect = nodeRects[connector.to] {
                     let connectorPath = calculateConnector(fromRect, to: toRect)

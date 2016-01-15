@@ -65,6 +65,7 @@
 		558055E81C342C5D0063F39D /* MapSwiftTestMap.mup in Resources */ = {isa = PBXBuildFile; fileRef = 558055E71C342C5D0063F39D /* MapSwiftTestMap.mup */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
 		55F0FD311C456691005A18CD /* MapSwiftThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0FD301C456691005A18CD /* MapSwiftThemeTests.swift */; };
+		55F0FD331C49532B005A18CD /* MapSwiftNodeBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
 		55F3FE8B1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */; };
 		55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE8C1C157A47007333CE /* MapSwiftProxyResponse.swift */; };
@@ -171,6 +172,7 @@
 		558055E71C342C5D0063F39D /* MapSwiftTestMap.mup */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MapSwiftTestMap.mup; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
 		55F0FD301C456691005A18CD /* MapSwiftThemeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftThemeTests.swift; sourceTree = "<group>"; };
+		55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeBorderView.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
 		55F3FE891C155DBD007333CE /* MapSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MapSwift.playground; sourceTree = "<group>"; };
 		55F3FE8A1C1578F0007333CE /* MapSwiftWKProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyProtocol.swift; sourceTree = "<group>"; };
@@ -366,6 +368,7 @@
 				554AA97D1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift */,
 				558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */,
 				55F625181C45245000E9421C /* MapSwiftTheme.swift */,
+				55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 			files = (
 				558055BF1C246C7C0063F39D /* MapSwiftProxyProtocolDelegateWrapper.swift in Sources */,
 				557856171C1B010D001C5E17 /* NSDateExtensions.swift in Sources */,
+				55F0FD331C49532B005A18CD /* MapSwiftNodeBorderView.swift in Sources */,
 				558055E41C33BCC10063F39D /* MapSwiftMapView.swift in Sources */,
 				55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */,
 				55610E561C15D9280030F416 /* NSURLExtensions.swift in Sources */,

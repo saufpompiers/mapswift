@@ -37,7 +37,7 @@
             "activatedColor": "#E0E0E0"
         },
         "level 3": {
-            "backgroundColor": "#FFFFFF",
+            "backgroundColor": "transparent",
             "shadow": {
                 "color": "transparent",
             },
