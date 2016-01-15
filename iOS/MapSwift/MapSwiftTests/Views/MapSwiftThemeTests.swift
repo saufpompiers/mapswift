@@ -83,16 +83,26 @@ class MapSwiftThemeTests: XCTestCase {
     }
 
     //MARK: - nodeBorderStyle
+    func test_border_inset_is_0_if_type_is_none() {
+        let result = underTest.nodeBorderStyle(["borderless"])
+        XCTAssertEqual(result.type, MapSwiftTheme.BorderType.None)
+        XCTAssertEqual(result.inset, 0.0)
+
+    }
     func test_should_return_node_border_style_with_name() {
         let result = underTest.nodeBorderStyle(["center"])
-        XCTAssertEqual(result.width, 2.0)
-        XCTAssertEqual(result.color, UIColor(hexString: "#707070"))
+        XCTAssertEqual(result.type, MapSwiftTheme.BorderType.Underline)
+        XCTAssertEqual(result.line.width, 2.0)
+        XCTAssertEqual(result.line.color, UIColor(hexString: "#707070"))
+        XCTAssertEqual(result.inset, 2.0)
     }
 
     func test_should_return_node_border_style_with_no_name() {
         let result = underTest.nodeBorderStyle([])
-        XCTAssertEqual(result.width, 1.0)
-        XCTAssertEqual(result.color, UIColor(hexString: "#707070"))
+        XCTAssertEqual(result.type, MapSwiftTheme.BorderType.Surround)
+        XCTAssertEqual(result.line.width, 1.0)
+        XCTAssertEqual(result.line.color, UIColor(hexString: "#707070"))
+        XCTAssertEqual(result.inset, 1.0)
     }
     //MARK: - nodeShadowStyle
     func test_should_return_node_shadow_style_with_name() {

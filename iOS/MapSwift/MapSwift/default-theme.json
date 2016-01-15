@@ -6,8 +6,11 @@
             "backgroundColor": "#E0E0E0",
             "activatedColor": "#22AAE0",
             "border": {
-                "color": "#707070",
-                "width": 1.0
+                "type": "surround",
+                "line": {
+                    "color": "#707070",
+                    "width": 1.0
+                }
             },
             "shadow": {
                 "color": "#070707",
@@ -32,6 +35,19 @@
         "level 1": {
             "backgroundColor": "#22AAE0",
             "activatedColor": "#E0E0E0"
+        },
+        "level 3": {
+            "backgroundColor": "#FFFFFF",
+            "shadow": {
+                "color": "transparent",
+            },
+            "border": {
+                "type": "underline",
+                "line": {
+                    "color": "#707070",
+                    "width": 1.0
+                }
+            },
         },
         "selected": {
             "shadow": {

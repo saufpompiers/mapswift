@@ -6,8 +6,11 @@
             "backgroundColor": "#E0E0E0",
             "activatedColor": "#22AAE0",
             "border": {
-                "color": "#707070",
-                "width": 1.0
+                "type": "surround",
+                "line": {
+                    "color": "#707070",
+                    "width": 1.0
+                }
             },
             "shadow": {
                 "color": "#070707",
@@ -31,7 +34,10 @@
             "backgroundColor": "#22AAE0",
             "activatedColor": "#E0E0E0",
             "border": {
-                "width": 2.0
+                "type": "underline",
+                "line": {
+                    "width": 2.0
+                }
             },
             "shadow": {
                 "opacity": 0.6,
@@ -44,6 +50,11 @@
                 "font": {
                     "size": 15
                 }
+            }
+        },
+        "borderless": {
+            "border": {
+                "type": "none"
             }
         },
         "selected": {

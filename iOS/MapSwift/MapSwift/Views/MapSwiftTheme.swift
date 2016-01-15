@@ -54,9 +54,22 @@ public class MapSwiftTheme {
         options.append("default")
         return options
     }
-
+    public enum BorderType: String {
+        case Surround = "surround", Underline = "underline", None = "none"
+        static func parse(string:String) -> BorderType {
+            switch string {
+            case "underline":
+                return .Underline
+            case "none":
+                return .None
+            default:
+                return .Surround
+            }
+        }
+    }
 //MARK: - general styling tuples
     public typealias LineStyle = (color:UIColor, width:CGFloat)
+    public typealias BorderStyle = (type:BorderType, line:LineStyle, inset:CGFloat)
     public typealias ShadowStyle = (color:UIColor, opacity:Float, offset:CGSize, radius:CGFloat)
     public typealias FontStyle = (size:CGFloat, weight:CGFloat)
     public typealias TextStyle = (font:FontStyle, alignment:NSTextAlignment, color:UIColor, lineSpacing:CGFloat, margin:CGFloat)
@@ -74,7 +87,7 @@ public class MapSwiftTheme {
         let cornerRadius:CGFloat
         let backgroundColor:UIColor
         let activatedColor:UIColor
-        let borderStyle:LineStyle
+        let borderStyle:BorderStyle
         let shadow:ShadowStyle
         let text:TextStyle
     }
@@ -84,8 +97,9 @@ public class MapSwiftTheme {
         CornerRadius = "cornerRadius",
         BackgroundColor = "backgroundColor",
         ActivatedColor = "activatedColor",
-        BorderColor = "border:color",
-        BorderWidth = "border:width",
+        BorderType = "border:type",
+        BorderColor = "border:line:color",
+        BorderWidth = "border:line:width",
         ShadowColor = "shadow:color",
         ShadowOpacity = "shadow:opacity",
         ShadowOffsetWidth = "shadow:offset:width",
@@ -124,10 +138,16 @@ public class MapSwiftTheme {
         return FontStyle(size:size, weight:weight)
     }
 
-    func nodeBorderStyle(styles:[String]) -> LineStyle {
+    func nodeBorderStyle(styles:[String]) -> BorderStyle {
         let color:String = nodeAttribute(.BorderColor, styles:styles, fallback: "#707070")
         let width:CGFloat = nodeAttribute(.BorderWidth, styles: styles, fallback: 1.0)
-        return LineStyle(color: UIColor.fromMapSwiftTheme(color), width:width)
+        let typeName = nodeAttribute(.BorderType, styles: styles, fallback: "")
+        var inset = width
+        let type = BorderType.parse(typeName)
+        if type == BorderType.None {
+            inset = 0
+        }
+        return BorderStyle(type: type, line:LineStyle(color:UIColor.fromMapSwiftTheme(color), width:width), inset:inset)
     }
 
     func nodeTextStyle(styles:[String]) -> TextStyle {
