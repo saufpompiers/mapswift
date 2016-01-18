@@ -130,4 +130,23 @@ class MapSwiftThemeTests: XCTestCase {
         XCTAssertEqual(result.text.font.size, 15.0)
         XCTAssertEqual(result.cornerRadius, 10.0)
     }
+
+    //MARK: - controlPointsForStylesAndPosition
+    func test_should_return_default_if_no_style_supplied() {
+        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwiftTheme.RelativeNodePosition.Above)
+        XCTAssertEqual(1, result.count)
+        XCTAssertEqual(CGSizeMake(0.75, 1.5), result.first)
+    }
+
+    func test_should_return_multiple_control_points_if_configured() {
+        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwiftTheme.RelativeNodePosition.Below)
+        XCTAssertEqual(2, result.count)
+        XCTAssertEqual(CGSizeMake(0.5, 1.8), result.first)
+        XCTAssertEqual(CGSizeMake(0.3, 0.5), result.last)
+    }
+
+    func test_should_return_empty_array_if_configrued_without() {
+        let result = underTest.controlPointsForStylesAndPosition(["straightline"], position: MapSwiftTheme.RelativeNodePosition.Below)
+        XCTAssertEqual(0, result.count)
+    }
 }

@@ -177,5 +177,48 @@ public class MapSwiftTheme {
         return NodeStyle(cornerRadius: cornerRadius, backgroundColor: UIColor.fromMapSwiftTheme( backgroundColorHex), activatedColor: UIColor.fromMapSwiftTheme(activatedColorHex), borderStyle: nodeBorderStyle(styles), shadow: nodeShadowStyle(styles), text: nodeTextStyle(styles))
     }
 
+//MARK: - Connector styling
+    public enum ConnectorAttribute:String {
+        case
+        LineColor = "line:color",
+        LineWidth = "line:width",
+        ControlPoints = "controlPoints"
 
+        static let Prefixes = ["connector"]
+
+        var postFixes:[String] {
+            get {
+                return self.rawValue.componentsSeparatedByString(":")
+            }
+        }
+    }
+
+    public enum RelativeNodePosition:String {
+        case Above = "above", Below = "below", Horizontal = "horizontal"
+    }
+
+    func connectorAttribute(attribute:ConnectorAttribute, styles:[String]) -> AnyObject? {
+        return self.themeDictionary.valueForKeyWithOptions(ConnectorAttribute.Prefixes, keyOptions: optionsFromStyle(styles), keyPostFixes: attribute.postFixes)
+    }
+
+    func connectAttribute<T>(attribute:ConnectorAttribute, styles:[String], fallback:T) -> T {
+        if let val =  self.connectorAttribute(attribute, styles: styles) as? T {
+            return val
+        }
+        return fallback
+    }
+
+    public func controlPointsForStylesAndPosition(styles:[String], position:RelativeNodePosition) -> [CGSize] {
+        var postFixes = ConnectorAttribute.ControlPoints.postFixes
+        postFixes.append(position.rawValue)
+        var parsedPoints:[CGSize] = []
+        if let controlPoints = self.themeDictionary.valueForKeyWithOptions(ConnectorAttribute.Prefixes, keyOptions: optionsFromStyle(styles), keyPostFixes: postFixes) as? NSArray {
+            for item in controlPoints {
+                if let controlPoint = item as? NSDictionary, width = controlPoint["width"] as? CGFloat, height = controlPoint["height"] as? CGFloat {
+                    parsedPoints.append(CGSizeMake(width, height))
+                }
+            }
+        }
+        return parsedPoints
+    }
 }
