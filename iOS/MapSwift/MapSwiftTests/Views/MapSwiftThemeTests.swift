@@ -109,6 +109,7 @@ class MapSwiftThemeTests: XCTestCase {
         let result = underTest.nodeShadowStyle(["center"])
         XCTAssertEqual(result.color, UIColor(hexString: "#070707"))
         XCTAssertEqual(result.offset, CGSizeMake(2, 4))
+
         XCTAssertEqual(result.opacity, 0.6)
         XCTAssertEqual(result.radius, 2)
     }
@@ -145,8 +146,45 @@ class MapSwiftThemeTests: XCTestCase {
         XCTAssertEqual(CGSizeMake(0.3, 0.5), result.last)
     }
 
+    func test_should_fallback_to_default_if_style_supplied() {
+        let result = underTest.controlPointsForStylesAndPosition(["curve"], position: MapSwiftTheme.RelativeNodePosition.Horizontal)
+        XCTAssertEqual(1, result.count)
+        XCTAssertEqual(CGSizeMake(0, 1), result.first)
+    }
+
     func test_should_return_empty_array_if_configrued_without() {
         let result = underTest.controlPointsForStylesAndPosition(["straightline"], position: MapSwiftTheme.RelativeNodePosition.Below)
         XCTAssertEqual(0, result.count)
+    }
+
+    //MARK: - nodeConnectionStyle
+    func test_should_return_default_style() {
+        let result = underTest.nodeConnectionStyle([]);
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.above.h)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.h)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.horizontal.h)
+
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.above.v)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.v)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.from.horizontal.v)
+
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.to.h)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.to.v)
+        XCTAssertEqual("", result.style)
+    }
+
+    func test_should_return_with_style_overrides() {
+        let result = underTest.nodeConnectionStyle(["borderless"]);
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.from.above.h)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.h)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.horizontal.h)
+
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.above.v)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.v)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.from.horizontal.v)
+
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.to.h)
+        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.to.v)
+        XCTAssertEqual("curve", result.style)
     }
 }

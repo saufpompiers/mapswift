@@ -28,6 +28,26 @@
                     "size": 14,
                     "weight": "semibold"
                 }
+            },
+            "connections": {
+                "from": {
+                    "above": {
+                        "h": "center",
+                        "v": "center"
+                    },
+                    "below": {
+                        "h": "center",
+                        "v": "center"
+                    },
+                    "horizontal": {
+                        "h": "center",
+                        "v": "nearest"
+                    }
+                },
+                "to": {
+                    "h": "nearest",
+                    "v": "center"
+                }
             }
         },
         "center": {
@@ -55,6 +75,15 @@
         "borderless": {
             "border": {
                 "type": "none"
+            },
+            "connections": {
+                "style": "curve",
+                "from": {
+                    "above": {
+                        "h": "nearest",
+                        "v": "center"
+                    }
+                }
             }
         },
         "selected": {

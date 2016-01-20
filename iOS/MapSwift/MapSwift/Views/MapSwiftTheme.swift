@@ -73,6 +73,20 @@ public class MapSwiftTheme {
     public typealias ShadowStyle = (color:UIColor, opacity:Float, offset:CGSize, radius:CGFloat)
     public typealias FontStyle = (size:CGFloat, weight:CGFloat)
     public typealias TextStyle = (font:FontStyle, alignment:NSTextAlignment, color:UIColor, lineSpacing:CGFloat, margin:CGFloat)
+    public typealias ConnectionJoinPositions = (h:ConnectionJoinPosition, v:ConnectionJoinPosition)
+    public typealias ConnectionJoinsFrom = (above:ConnectionJoinPositions, below:ConnectionJoinPositions, horizontal:ConnectionJoinPositions)
+    public typealias ConnectionStyle = (from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?)
+    public enum ConnectionJoinPosition : String {
+        case Center = "center", Nearest = "nearest"
+        static func parse(string:String) -> ConnectionJoinPosition {
+            switch string {
+            case "center":
+                return .Center
+            default:
+                return .Nearest
+            }
+        }
+    }
 
     var name:String {
         get {
@@ -110,8 +124,11 @@ public class MapSwiftTheme {
         TextLineSpacing = "text:lineSpacing",
         TextMargin = "text:margin",
         FontSize = "text:font:size",
-        FontWeight = "text:font:weight"
-
+        FontWeight = "text:font:weight",
+        ConnectionsFrom = "connections:from",
+        ConnectionsToH = "connections:to:h",
+        ConnectionsToV = "connections:to:v",
+        ConnectionsStyle = "connections:style"
         static let Prefixes = ["node"]
         var postFixes:[String] {
             get {
@@ -159,6 +176,32 @@ public class MapSwiftTheme {
         return TextStyle(font:font, alignment:NSTextAlignment.mapswift_parseThemeAlignment(alignmentDescription), color:UIColor.fromMapSwiftTheme(color), lineSpacing:lineSpacing, margin: margin)
     }
 
+    func nodeConnectionStyle(styles:[String]) -> ConnectionStyle {
+        func calcConnectionJoinPositions(styles:[String], postFixes:[String], pos:RelativeNodePosition) -> ConnectionJoinPositions {
+            let postFixesH = postFixes + [pos.rawValue, "h"]
+            let postFixesV = postFixes + [pos.rawValue, "v"]
+            var hString = ""
+            var vString = ""
+            if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: styles, keyPostFixes: postFixesH) as? String {
+                hString = val
+            }
+            if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: styles, keyPostFixes: postFixesV) as? String {
+                vString = val
+            }
+            return ConnectionJoinPositions(h: ConnectionJoinPosition.parse(hString), v: ConnectionJoinPosition.parse(vString))
+        }
+        let options = optionsFromStyle(styles)
+        let postFixesFrom = NodeAttribute.ConnectionsFrom.postFixes
+        let fromAbove = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Above);
+        let fromBelow = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Below);
+        let fromHorizontal = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Horizontal);
+        let from = ConnectionJoinsFrom(above:fromAbove, below:fromBelow, horizontal:fromHorizontal)
+        let toH = self.nodeAttribute(.ConnectionsToH, styles: styles, fallback: "center");
+        let toV = self.nodeAttribute(.ConnectionsToV, styles: styles, fallback: "center");
+        let to = ConnectionJoinPositions(h: ConnectionJoinPosition.parse(toH), v: ConnectionJoinPosition.parse(toV))
+        let style = self.nodeAttribute(.ConnectionsStyle, styles: styles, fallback: "")
+        return ConnectionStyle(from:from, to:to, style:style)
+    }
     func nodeShadowStyle(styles:[String]) -> ShadowStyle {
         let color:String = nodeAttribute(.ShadowColor, styles: styles, fallback: "#070707")
         let opacity:Float = nodeAttribute(.ShadowOpacity, styles: styles, fallback: 0.4)
@@ -195,6 +238,9 @@ public class MapSwiftTheme {
 
     public enum RelativeNodePosition:String {
         case Above = "above", Below = "below", Horizontal = "horizontal"
+        static var allValues:[RelativeNodePosition] {
+            return [.Above, .Below, .Horizontal]
+        }
     }
 
     func connectorAttribute(attribute:ConnectorAttribute, styles:[String]) -> AnyObject? {
