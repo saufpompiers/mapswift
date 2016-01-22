@@ -41,6 +41,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             queueViewTask({
                 for (_, nodeView) in self.nodeViews {
                     nodeView.theme = val
+                    self.connectorLayerView.theme = val
                 }
             })
         }
@@ -64,6 +65,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         self.addSubview(scrollView)
         self.scrollView.addSubview(mapContentView)
         connectorLayerView.backgroundColor = UIColor.clearColor()
+        connectorLayerView.theme = self.theme
         nodeLayerView.backgroundColor = UIColor.clearColor()
         self.mapContentView.addSubview(connectorLayerView)
         self.mapContentView.insertSubview(nodeLayerView, aboveSubview: connectorLayerView)
@@ -97,7 +99,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                 var nodeFrame = MapSwiftNodeView.NodeRect(frame)
                 nodeFrame = CGRectMake(nodeFrame.origin.x + translation.x, nodeFrame.origin.y + translation.y, nodeFrame.width, nodeFrame.height)
                 draggedNode.frame = nodeFrame
-                connectorLayerView.nodeRect(node.id, nodeRect: nodeFrame)
+                connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: []);
             } else {
                 endDragging()
                 let frame = coordinateSystem.nodeAdded(node)
@@ -125,7 +127,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                 nodeView.removeFromSuperview()
                 nodeViews.removeValueForKey(node.id)
                 coordinateSystem.nodeRemoved(node)
-                connectorLayerView.nodeRect(node.id, nodeRect:nil)
+                connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nil, styles: []);
                 return
             }
         }
@@ -143,7 +145,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             nodeViews[node.id] = nodeView
         }
         nodeView.node = node
-        connectorLayerView.nodeRect(node.id, nodeRect: nodeFrame)
+        connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: []);
         UIView.animateWithDuration(0.2, animations: {
             nodeView.frame = nodeFrame
         })
@@ -258,7 +260,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                 if let node = nodeView.node {
                     let nodeFrame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))
                     nodeView.frame = nodeFrame
-                    self.connectorLayerView.nodeRect(node.id, nodeRect: nodeFrame)
+                    self.connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: []);
                     nodeView.setNeedsLayout()
                 }
             }

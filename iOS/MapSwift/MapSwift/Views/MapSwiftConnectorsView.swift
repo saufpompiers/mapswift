@@ -9,15 +9,38 @@
 import Foundation
 class MapSwiftConnectorsView : UIView {
     typealias ConnectorPath = (from:CGPoint, to:CGPoint, controlPoint:CGPoint)
+    struct NodeConnectorInfo {
+        let nodeRect:CGRect
+        let styles:[String]
+        let connectionStyle:MapSwiftTheme.ConnectionStyle
+    }
     private var connectors:[String: MapSwiftNodeConnector] = [:]
-    private var nodeRects:[String:CGRect] = [:]
+    private var nodeConnectorInfoMap:[String:NodeConnectorInfo] = [:]
+
+    private var _theme:MapSwiftTheme?
+    var theme:MapSwiftTheme {
+        get {
+            if let theme = _theme {
+                return theme
+            }
+            let defaultTheme = MapSwiftTheme.Default()
+            _theme = defaultTheme
+            return defaultTheme
+        }
+        set (val) {
+            _theme = val
+            for (nodeId, connectorInfo) in nodeConnectorInfoMap {
+                nodeConnectorInfoMap[nodeId] = NodeConnectorInfo(nodeRect: connectorInfo.nodeRect, styles: connectorInfo.styles, connectionStyle: self.theme.nodeConnectionStyle(connectorInfo.styles))
+            }
+            self.setNeedsDisplay()
+        }
+    }
+
 
     private func keyForConnector(connector:MapSwiftNodeConnector) -> String {
         return "\(connector.from)->\(connector.to)"
     }
 
-    private func drawPathForConnector(from:MapSwiftNode, to:MapSwiftNode)  {
-    }
 
     private func horizontalConnector(from:CGRect, to: CGRect) -> ConnectorPath {
         let inset = MapSwiftNodeView.BackgroundInset + 5.0
@@ -46,16 +69,22 @@ class MapSwiftConnectorsView : UIView {
 
         return ConnectorPath(from: pointFrom, to:pointTo, controlPoint:CGPointMake(pointFrom.x, pointTo.y - offset))
     }
-    func nodeRect(nodeId:String, nodeRect:CGRect?) {
+    func nodeConnectorInfo(nodeId:String, nodeRect:CGRect?, styles:[String]) {
         if let nodeRect = nodeRect {
-            nodeRects[nodeId] = nodeRect
+            let connectorInfo = NodeConnectorInfo(nodeRect: nodeRect, styles: styles, connectionStyle: self.theme.nodeConnectionStyle(styles))
+            nodeConnectorInfoMap[nodeId] = connectorInfo
         } else {
-            nodeRects.removeValueForKey(nodeId)
+            nodeConnectorInfoMap.removeValueForKey(nodeId)
         }
         self.setNeedsDisplay()
+
     }
+
     func animateNodeRectWithDuration(duration:NSTimeInterval, nodeId:String, nodeRect:CGRect) {
-        self.nodeRect(nodeId, nodeRect: nodeRect)
+        if let info = nodeConnectorInfoMap[nodeId] {
+            nodeConnectorInfoMap[nodeId] = NodeConnectorInfo(nodeRect: nodeRect, styles: info.styles, connectionStyle: self.theme.nodeConnectionStyle(info.styles))
+            self.setNeedsDisplay()
+        }
     }
     func addConnector(connector:MapSwiftNodeConnector) {
         self.connectors[keyForConnector(connector)] = connector
@@ -72,9 +101,8 @@ class MapSwiftConnectorsView : UIView {
         CGContextSetStrokeColorWithColor(ctx,UIColor(hexString: "#4F4F4F").CGColor)
         CGContextSetLineWidth(ctx, 1)
         for (_, connector) in self.connectors {
-                if let fromRect = nodeRects[connector.from], toRect = nodeRects[connector.to] {
-                    let connectorPath = calculateConnector(fromRect, to: toRect)
-//                    print("from:\(connector.from) rect:\(fromRect) to:\(connector.to) rect:\(toRect)")
+                if let fromInfo = nodeConnectorInfoMap[connector.from], toInfo = nodeConnectorInfoMap[connector.to] {
+                    let connectorPath = calculateConnector(fromInfo.nodeRect, to: toInfo.nodeRect)
                     CGContextMoveToPoint(ctx, connectorPath.from.x, connectorPath.from.y)
                     CGContextAddQuadCurveToPoint(ctx, connectorPath.controlPoint.x, connectorPath.controlPoint.y, connectorPath.to.x, connectorPath.to.y)
 
