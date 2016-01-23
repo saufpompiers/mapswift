@@ -187,4 +187,24 @@ class MapSwiftThemeTests: XCTestCase {
         XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.to.v)
         XCTAssertEqual("curve", result.style)
     }
+
+    //MARK: - CGRect.mapswift_relativePositionOfPoint
+    let exampleRect = CGRect(x: 10, y: 20, width: 100, height: 200)
+    func test_should_return_below_if_point_is_above_the_bottom_of_the_rect_with_tolerance() {
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Below, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 241), tolerance:20))
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Below, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 221), tolerance:0))
+    }
+    func test_should_return_above_if_point_is_above_the_top_of_the_rect_with_tolerance() {
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Above, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, -1), tolerance:20))
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Above, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 19), tolerance:0))
+    }
+
+    func test_should_return_horizontal_if_point_is_within_the_top_and_bottom_of_the_rect_with_tolerance() {
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 240), tolerance:20))
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 220), tolerance:0))
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 0), tolerance:20))
+        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 20), tolerance:0))
+
+    }
+
 }

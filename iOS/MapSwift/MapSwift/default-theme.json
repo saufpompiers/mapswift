@@ -43,7 +43,7 @@
                     },
                     "horizontal": {
                         "h": "center",
-                        "v": "nearest"
+                        "v": "nearest-inset"
                     }
                 },
                 "to": {
@@ -64,7 +64,25 @@
         "level 3": {
             "backgroundColor": "transparent",
             "connections": {
-                "style": "straightline"
+                "style": "straightline",
+                "from": {
+                    "above": {
+                        "h": "nearest",
+                        "v": "base"
+                    },
+                    "below": {
+                        "h": "nearest",
+                        "v": "base"
+                    },
+                    "horizontal": {
+                        "h": "nearest",
+                        "v": "base"
+                    }
+                },
+                "to": {
+                    "h": "nearest",
+                    "v": "base"
+                }
             },
             "shadow": {
                 "color": "transparent"

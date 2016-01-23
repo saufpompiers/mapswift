@@ -7,6 +7,19 @@
 //
 
 import Foundation
+extension CGRect {
+    func mapswift_relativePositionOfPoint(to:CGPoint, tolerance:CGFloat = 10) -> MapSwiftTheme.RelativeNodePosition {
+        if to.y > self.maxY + tolerance {
+            return MapSwiftTheme.RelativeNodePosition.Below
+        }
+        if to.y < self.minY - tolerance {
+            return MapSwiftTheme.RelativeNodePosition.Above
+        }
+        return MapSwiftTheme.RelativeNodePosition.Horizontal
+    }
+}
+
+
 extension NSTextAlignment {
     static func mapswift_parseThemeAlignment(alignment:String) -> NSTextAlignment {
         switch alignment {
@@ -77,11 +90,15 @@ public class MapSwiftTheme {
     public typealias ConnectionJoinsFrom = (above:ConnectionJoinPositions, below:ConnectionJoinPositions, horizontal:ConnectionJoinPositions)
     public typealias ConnectionStyle = (from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?)
     public enum ConnectionJoinPosition : String {
-        case Center = "center", Nearest = "nearest"
+        case Center = "center", Nearest = "nearest", NearestInset = "nearest-inset", Base = "base"
         static func parse(string:String) -> ConnectionJoinPosition {
             switch string {
-            case "center":
+            case Center.rawValue:
                 return .Center
+            case Base.rawValue:
+                return .Base
+            case NearestInset.rawValue:
+                return .NearestInset
             default:
                 return .Nearest
             }

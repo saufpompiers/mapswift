@@ -7,6 +7,20 @@
 //
 
 import Foundation
+
+
+extension UIColor {
+    static func mapswift_colorForPosition(position:MapSwiftTheme.RelativeNodePosition) -> UIColor {
+        switch position {
+        case .Above:
+            return UIColor.redColor()
+        case .Below:
+            return UIColor.blueColor()
+        default:
+            return UIColor.greenColor()
+        }
+    }
+}
 class MapSwiftConnectorsView : UIView {
     typealias ConnectorPath = (from:CGPoint, to:CGPoint, controlPoint:CGPoint)
     struct NodeConnectorInfo {
@@ -103,6 +117,9 @@ class MapSwiftConnectorsView : UIView {
         for (_, connector) in self.connectors {
                 if let fromInfo = nodeConnectorInfoMap[connector.from], toInfo = nodeConnectorInfoMap[connector.to] {
                     let connectorPath = calculateConnector(fromInfo.nodeRect, to: toInfo.nodeRect)
+                    let pos = fromInfo.nodeRect.mapswift_relativePositionOfPoint(connectorPath.to)
+                    let color = UIColor.mapswift_colorForPosition(pos)
+                    CGContextSetStrokeColorWithColor(ctx,color.CGColor)
                     CGContextMoveToPoint(ctx, connectorPath.from.x, connectorPath.from.y)
                     CGContextAddQuadCurveToPoint(ctx, connectorPath.controlPoint.x, connectorPath.controlPoint.y, connectorPath.to.x, connectorPath.to.y)
 
