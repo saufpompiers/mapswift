@@ -42,8 +42,8 @@
                         "v": "center"
                     },
                     "horizontal": {
-                        "h": "center",
-                        "v": "nearest-inset"
+                        "h": "nearest-inset",
+                        "v": "center"
                     }
                 },
                 "to": {
