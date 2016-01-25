@@ -277,27 +277,35 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
 //MARK: - MapSwiftNodeViewDelegate 
     func nodeViewWasTapped(nodeView: MapSwiftNodeView) {
-        if let node = nodeView.node, delegate = self.delegate {
-            delegate.mapViewDidSelectNode(self, nodeSelected: node)
-        }
+        queueViewTask({
+            if let node = nodeView.node, delegate = self.delegate {
+                delegate.mapViewDidSelectNode(self, nodeSelected: node)
+            }
+        })
     }
     func nodeViewWasTouched(nodeView: MapSwiftNodeView) {
-        if let node = nodeView.node where node.level > 1 {
-            print("dragging start")
-            draggedNode = nodeView
-            nodeLayerView.bringSubviewToFront(nodeView)
-            self.scrollView.scrollEnabled = false
-        }
+        queueViewTask({
+            if let node = nodeView.node where node.level > 1 {
+                print("dragging start")
+                self.draggedNode = nodeView
+                self.nodeLayerView.bringSubviewToFront(nodeView)
+                self.scrollView.scrollEnabled = false
+            }
+        })
     }
     func endDragging() {
-        if let _ = self.delegate {
-            print("dragging end")
-            draggedNode = nil
-            self.scrollView.scrollEnabled = true
-        }
+        queueViewTask({
+            if let _ = self.delegate {
+                print("dragging end")
+                self.draggedNode = nil
+                self.scrollView.scrollEnabled = true
+            }
+        });
 
     }
     func nodeViewTouchEnded(nodeView: MapSwiftNodeView) {
-        endDragging()
+        queueViewTask({
+            self.endDragging()
+        });
     }
 }
