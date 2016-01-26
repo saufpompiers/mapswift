@@ -186,12 +186,23 @@ class MapSwiftConnectorsView : UIView {
 
     private func calculateConnector(from:NodeConnectorInfo, to: NodeConnectorInfo) -> ConnectorPath {
         let tolerance:CGFloat = 10
+        var connectorStyles:[String] = []
+        if let style = to.connectionStyle.style {
+            connectorStyles.append(style)
+        }
+        connectorStyles.append("default");
 
         let toPoint = to.connectToPointForRectFrom(from.nodeRect)
         let pos = from.nodeRect.mapswift_relativePositionOfPoint(toPoint, tolerance: tolerance)
         let toRelativePosition = from.connectionStyleFromForPosition(pos)
         let fromPoint = from.nodeRect.mapswift_connectionPointForJoinPositions(toRelativePosition, relativePoint: toPoint)
+        let controlPoints = self.theme.controlPointsForStylesAndPosition(connectorStyles, position: pos)
+        if controlPoints.count == 0 {
+            return ConnectorPath(from: fromPoint, to:toPoint, controlPoint:CGPointMake(fromPoint.x, fromPoint.y))
+        }
+
         if pos == MapSwiftTheme.RelativeNodePosition.Horizontal {
+
             let x = toPoint.y < fromPoint.y ? toPoint.x : fromPoint.x
             let y = toPoint.y < fromPoint.y ? fromPoint.y : toPoint.y
             return ConnectorPath(from: fromPoint, to:toPoint, controlPoint:CGPointMake(x, y))
