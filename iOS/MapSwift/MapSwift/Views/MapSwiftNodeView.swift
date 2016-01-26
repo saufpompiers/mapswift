@@ -53,7 +53,7 @@ class MapSwiftNodeView: UIView {
             styles.append("selected")
         }
         if let node = _node {
-            styles.append("level \(node.level)")
+            styles += node.styles
         }
         return styles
     }

@@ -47,7 +47,7 @@
                     }
                 },
                 "to": {
-                    "h": "nearest",
+                    "h": "nearest-inset",
                     "v": "center"
                 }
             }
@@ -67,20 +67,20 @@
                 "style": "straightline",
                 "from": {
                     "above": {
-                        "h": "nearest",
+                        "h": "nearest-inset",
                         "v": "base"
                     },
                     "below": {
-                        "h": "nearest",
+                        "h": "nearest-inset",
                         "v": "base"
                     },
                     "horizontal": {
-                        "h": "nearest",
+                        "h": "nearest-inset",
                         "v": "base"
                     }
                 },
                 "to": {
-                    "h": "nearest",
+                    "h": "nearest-inset",
                     "v": "base"
                 }
             },

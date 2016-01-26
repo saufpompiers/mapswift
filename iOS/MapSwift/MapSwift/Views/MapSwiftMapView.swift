@@ -99,7 +99,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                 var nodeFrame = MapSwiftNodeView.NodeRect(frame)
                 nodeFrame = CGRectMake(nodeFrame.origin.x + translation.x, nodeFrame.origin.y + translation.y, nodeFrame.width, nodeFrame.height)
                 draggedNode.frame = nodeFrame
-                connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: []);
+                connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: node.styles);
             } else {
                 endDragging()
                 let frame = coordinateSystem.nodeAdded(node)
@@ -127,7 +127,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                 nodeView.removeFromSuperview()
                 nodeViews.removeValueForKey(node.id)
                 coordinateSystem.nodeRemoved(node)
-                connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nil, styles: []);
+                connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nil, styles: node.styles);
                 return
             }
         }
@@ -145,7 +145,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             nodeViews[node.id] = nodeView
         }
         nodeView.node = node
-        connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: []);
+        connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: node.styles);
         UIView.animateWithDuration(0.2, animations: {
             nodeView.frame = nodeFrame
         })
@@ -260,7 +260,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                 if let node = nodeView.node {
                     let nodeFrame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))
                     nodeView.frame = nodeFrame
-                    self.connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: []);
+                    self.connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: node.styles);
                     nodeView.setNeedsLayout()
                 }
             }

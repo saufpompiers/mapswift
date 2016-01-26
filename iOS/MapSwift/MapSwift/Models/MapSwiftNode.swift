@@ -15,6 +15,11 @@ public struct MapSwiftNode {
     public var rect:CGRect
     public var attr:Dictionary<String, AnyObject>?
 
+    public var styles:[String] {
+        get {
+            return ["level \(self.level)"]
+        }
+    }
     static func parseDictionary(dictionary:Dictionary<String, AnyObject>) -> MapSwiftNode? {
         if let id = String.mapswift_fromAnyObject(dictionary["id"], fallback:""), level = dictionary["level"] as? Int, width = dictionary["width"] as? CGFloat, height = dictionary["height"] as? CGFloat, x = dictionary["x"] as? CGFloat, y = dictionary["y"] as? CGFloat {
             let attr = dictionary["attr"] as? Dictionary<String, AnyObject>
