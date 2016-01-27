@@ -190,7 +190,7 @@ class MapSwiftConnectorsView : UIView {
 
     private func calculateConnector(from:NodeConnectorInfo, to: NodeConnectorInfo) -> ConnectorPath {
         let tolerance:CGFloat = 10
-        let connectorBounds = from.nodeRect.union(to.nodeRect)
+        let connectorBounds = CGRectInset(from.nodeRect.union(to.nodeRect), -30, -30)
 
         var connectorStyles:[String] = []
         if let style = to.connectionStyle.style {

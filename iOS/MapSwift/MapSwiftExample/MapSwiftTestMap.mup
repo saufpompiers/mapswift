@@ -42,7 +42,7 @@
           }
         },
         "2": {
-          "title": "right one child two",
+          "title": "right one child two\nwith\nmultiline text",
           "id": 8
         },
         "3": {

@@ -61,6 +61,10 @@
                 "style": "straightline",
             }
         },
+        "level 5": {
+            "cornerRadius": 2.0,
+            "backgroundColor": "#ffff99"
+        },
         "level 3": {
             "backgroundColor": "transparent",
             "cornerRadius": 1.0,
@@ -119,6 +123,13 @@
             "controlPoints": {
                 "above": [{"width": 0, "height": 1}],
                 "below": [{"width": 0, "height": 1}],
+                "horizontal": [{"width": 0, "height": 1}]
+            }
+        },
+        "slight-curve": {
+            "controlPoints": {
+                "above": [{"width": 0.5, "height": 1}],
+                "below": [{"width": 0.5, "height": 1}],
                 "horizontal": [{"width": 0, "height": 1}]
             }
         },
