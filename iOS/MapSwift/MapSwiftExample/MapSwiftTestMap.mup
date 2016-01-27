@@ -16,11 +16,28 @@
               "id": 10,
               "attr": {
                 "style": {}
+              },
+              "ideas": {
+                "1": {
+                  "title": "level 4",
+                  "id": 15
+                },
+                "2": {
+                  "title": "another example",
+                  "id": 16,
+                  "ideas": {}
+                }
               }
             },
             "2": {
               "title": "under multiline",
-              "id": 14
+              "id": 14,
+              "ideas": {
+                "1": {
+                  "title": "level 4 again",
+                  "id": 23
+                }
+              }
             }
           }
         },
@@ -30,7 +47,29 @@
         },
         "3": {
           "title": "right one child three",
-          "id": 12
+          "id": 12,
+          "ideas": {
+            "1": {
+              "title": "one",
+              "id": 24
+            },
+            "2": {
+              "title": "two",
+              "id": 25
+            },
+            "3": {
+              "title": "three",
+              "id": 26
+            },
+            "4": {
+              "title": "four",
+              "id": 27
+            },
+            "5": {
+              "title": "five",
+              "id": 28
+            }
+          }
         }
       }
     },
@@ -44,11 +83,35 @@
           "ideas": {
             "1": {
               "title": "Long Text example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-              "id": 11
+              "id": 11,
+              "ideas": {}
             },
             "2": {
               "title": "under long text",
-              "id": 13
+              "id": 13,
+              "ideas": {
+                "1": {
+                  "title": "Some child nodes",
+                  "id": 19
+                },
+                "2": {
+                  "title": "more child nodes",
+                  "id": 20
+                },
+                "3": {
+                  "title": "colored node",
+                  "id": 21,
+                  "attr": {
+                    "style": {
+                      "background": "#FF0000"
+                    }
+                  }
+                },
+                "4": {
+                  "title": "another child",
+                  "id": 22
+                }
+              }
             }
           }
         },

@@ -56,15 +56,16 @@
             "backgroundColor": "#22AAE0",
             "activatedColor": "#E0E0E0"
         },
-        "level 2": {
+        "level 4": {
             "connections": {
-                "style": "curve"
+                "style": "straightline",
             }
         },
         "level 3": {
             "backgroundColor": "transparent",
+            "cornerRadius": 1.0,
             "connections": {
-                "style": "straightline",
+                "style": "curve",
                 "from": {
                     "above": {
                         "h": "nearest-inset",
@@ -109,23 +110,23 @@
                 "width": 1.0
             },
             "controlPoints": {
-                "above": [{"width": 0.75, "height": 1.5}],
-                "below": [{"width": 0.75, "height": 1.5}],
+                "above": [{"width": 0, "height": 1.75}],
+                "below": [{"width": 0, "height": 1.75}],
                 "horizontal": [{"width": 0, "height": 1}]
             }
         },
         "curve": {
             "controlPoints": {
-                "above": [{"width": 0.5, "height": 1}],
-                "below": [{"width": 0.5, "height": 1}],
+                "above": [{"width": 0, "height": 1}],
+                "below": [{"width": 0, "height": 1}],
                 "horizontal": [{"width": 0, "height": 1}]
             }
         },
         "straightline": {
             "controlPoints": {
-                "above": [],
-                "below": [],
-                "horizontal": []
+                "above": [{"width": 1, "height": 1}],
+                "below": [{"width": 1, "height": 1}],
+                "horizontal": [{"width": 1, "height": 1}]
             }
         }
 
