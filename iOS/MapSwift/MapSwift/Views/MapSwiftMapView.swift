@@ -78,6 +78,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         self.scrollView.alwaysBounceVertical = true
         self.scrollView.bounces = true
         self.coordinateSystem.delegate = self
+        self.setNeedsLayout()
     }
     public override func layoutSubviews() {
         self.scrollView.frame = self.bounds
@@ -86,10 +87,13 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         let hoffset = (self.bounds.size.width - contentSize.width)/2
         let hinset:CGFloat = max(0, hoffset)
         let voffset = (self.bounds.size.height - contentSize.height)/2
+        print("hoffset:\(hoffset) voffset:\(voffset)")
         let vinset:CGFloat = max(0, voffset)
         let insets = UIEdgeInsetsMake(vinset, hinset, vinset, hinset)
         self.scrollView.contentInset = insets
+        self.scrollView.contentOffset = CGPointMake(0, 0)
         self.centerOnSelectedNode();
+        print("bounds:\(self.bounds) scrollView:\(self.scrollView.frame) contentSize:\(self.scrollView.contentSize) contentOffset:\(self.scrollView.contentOffset) insets:\(insets)")
     }
     func onContentPanGesture(pan:UIPanGestureRecognizer) {
         if let draggedNode = draggedNode, node = draggedNode.node {
@@ -120,6 +124,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         for nodeEvent in queuedNodeEvents {
             self.applyNodeEvent(nodeEvent.event, node: nodeEvent.node)
         }
+        self.setNeedsLayout()
     }
     private func applyNodeEvent(event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode) {
         if event == MapSwiftMapModel.NodeEvent.NodeRemoved {
@@ -157,7 +162,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     private func centerOnSelectedNode() {
         if let selectedNodeId = self.selectedNodeId {
             if let nodeView = self.nodeViews[selectedNodeId] {
-                self.scrollView.scrollRectToVisible(nodeView.frame, animated: true)
+                self.scrollView.scrollRectToVisible(CGRectInset(nodeView.frame, -30, -30), animated: true)
             }
         }
     }
@@ -263,11 +268,13 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                     self.connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: node.styles);
                     nodeView.setNeedsLayout()
                 }
+                self.setNeedsLayout()
             }
         })
     }
     func mapSwiftViewSizeChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, mapSize:CGSize) {
         queueViewTask({
+            print("mapSwiftViewSizeChanged mapSize:\(mapSize)")
             self.mapContentView.frame = CGRectMake(0, 0, mapSize.width, mapSize.height)
             self.nodeLayerView.frame = self.mapContentView.bounds
             self.connectorLayerView.frame = self.mapContentView.bounds
