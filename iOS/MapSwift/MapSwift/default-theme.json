@@ -25,10 +25,12 @@
                 "margin": 5.0,
                 "alignment": "center",
                 "color": "#4F4F4F",
-                "lineSpacing": 2.5,
+                "lightColor": "#EEEEEE",
+                "darkColor": "#000000",
+                "lineSpacing": 3.5,
                 "font": {
                     "size": 12,
-                    "weight": "bold"
+                    "weight": "semibold"
                 }
             },
             "connections": {

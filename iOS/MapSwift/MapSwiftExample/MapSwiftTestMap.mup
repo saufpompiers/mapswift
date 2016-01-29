@@ -42,8 +42,26 @@
           }
         },
         "2": {
-          "title": "right one child two\nwith\nmultiline text",
-          "id": 8
+          "title": "right one child two\nwith\nmultiline text collapsed",
+          "id": 8,
+          "ideas": {
+            "1": {
+              "title": "1",
+              "id": 36
+            },
+            "2": {
+              "title": "2",
+              "id": 37
+            },
+            "3": {
+              "title": "3",
+              "id": 38
+            }
+          },
+          "attr": {
+            "collapsed": true,
+            "style": {}
+          }
         },
         "3": {
           "title": "right one child three",
@@ -54,8 +72,26 @@
               "id": 24
             },
             "2": {
-              "title": "two",
-              "id": 25
+              "title": "two collapsed",
+              "id": 25,
+              "ideas": {
+                "1": {
+                  "title": "1",
+                  "id": 29
+                },
+                "2": {
+                  "title": "2",
+                  "id": 30
+                },
+                "3": {
+                  "title": "3",
+                  "id": 31
+                }
+              },
+              "attr": {
+                "collapsed": true,
+                "style": {}
+              }
             },
             "3": {
               "title": "three",
@@ -74,7 +110,7 @@
       }
     },
     "-1": {
-      "title": "left one",
+      "title": "left one white",
       "id": 4,
       "ideas": {
         "1": {
@@ -108,8 +144,27 @@
                   }
                 },
                 "4": {
-                  "title": "another child",
-                  "id": 22
+                  "title": "another child collapsed",
+                  "id": 22,
+                  "ideas": {
+                    "1": {
+                      "title": "1",
+                      "id": 32,
+                      "ideas": {}
+                    },
+                    "2": {
+                      "title": "2",
+                      "id": 34
+                    },
+                    "3": {
+                      "title": "3",
+                      "id": 35
+                    }
+                  },
+                  "attr": {
+                    "collapsed": true,
+                    "style": {}
+                  }
                 }
               }
             }
@@ -118,6 +173,11 @@
         "2": {
           "title": "left one child two",
           "id": 6
+        }
+      },
+      "attr": {
+        "style": {
+          "background": "#FFFFFF"
         }
       }
     }

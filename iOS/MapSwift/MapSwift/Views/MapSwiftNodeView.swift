@@ -15,7 +15,7 @@ protocol MapSwiftNodeViewDelegate:class {
 }
 class MapSwiftNodeView: UIView {
     static let BackgroundInset:CGFloat = 10
-    var labelInset = MapSwiftNodeView.BackgroundInset
+    var labelInset:CGFloat = 0.0 //MapSwiftNodeView.BackgroundInset - 8
 //    static let LabelInset:CGFloat = 15
     class func NodeRect(rect:CGRect) -> CGRect {
         let outset = -1 * MapSwiftNodeView.BackgroundInset
@@ -37,10 +37,25 @@ class MapSwiftNodeView: UIView {
     func showTextForNodeStyle(node:MapSwiftNode, nodeStyle:MapSwiftTheme.NodeStyle) {
         let label = self.nodeTextlabel
         label.font = UIFont.systemFontOfSize(nodeStyle.text.font.size, weight: nodeStyle.text.font.weight)
-        label.textColor = nodeStyle.text.color
+        if let bkgcolor = self.nodeBackgroundView.nodeBorderView.backgroundColor  {
+            let bgcolor = bkgcolor == UIColor.clearColor() ? UIColor.whiteColor() : bkgcolor;
+            let blend = bgcolor.mapswift_blend(UIColor(hexString: "#EEEEEE"))
+            let luminocity = blend.mapswift_rgbLuminosity
+            if luminocity < 0.5 {
+                label.textColor = nodeStyle.text.lightColor
+            } else if luminocity  > 0.9 {
+                label.textColor = nodeStyle.text.darkColor
+            } else {
+                label.textColor = nodeStyle.text.color
+            }
+            print("luminocity:\(bgcolor.mapswift_rgbLuminosity) rgb:\(bgcolor.mapswift_rgba), blend:\(blend.mapswift_rgba) blendluminocity:\(luminocity)")
+        } else {
+            label.textColor = nodeStyle.text.color
+        }
+
 
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 3.0
+        paragraphStyle.lineSpacing = nodeStyle.text.lineSpacing
         paragraphStyle.alignment = nodeStyle.text.alignment
         let attrString = NSMutableAttributedString(string: node.title)
         attrString.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, attrString.length))

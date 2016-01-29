@@ -85,7 +85,7 @@ public class MapSwiftTheme {
     public typealias BorderStyle = (type:BorderType, line:LineStyle, inset:CGFloat)
     public typealias ShadowStyle = (color:UIColor, opacity:Float, offset:CGSize, radius:CGFloat)
     public typealias FontStyle = (size:CGFloat, weight:CGFloat)
-    public typealias TextStyle = (font:FontStyle, alignment:NSTextAlignment, color:UIColor, lineSpacing:CGFloat, margin:CGFloat)
+    public typealias TextStyle = (font:FontStyle, alignment:NSTextAlignment, color:UIColor, lightColor:UIColor, darkColor:UIColor, lineSpacing:CGFloat, margin:CGFloat)
     public typealias ConnectionJoinPositions = (h:ConnectionJoinPosition, v:ConnectionJoinPosition)
     public typealias ConnectionJoinsFrom = (above:ConnectionJoinPositions, below:ConnectionJoinPositions, horizontal:ConnectionJoinPositions)
     public typealias ConnectionStyle = (from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?)
@@ -138,6 +138,8 @@ public class MapSwiftTheme {
         ShadowRadius = "shadow:radius",
         TextAlignment = "text:alignment",
         TextColor = "text:color",
+        LightTextColor = "text:lightColor",
+        DarkTextColor = "text:darkColor",
         TextLineSpacing = "text:lineSpacing",
         TextMargin = "text:margin",
         FontSize = "text:font:size",
@@ -186,11 +188,14 @@ public class MapSwiftTheme {
 
     func nodeTextStyle(styles:[String]) -> TextStyle {
         let font = self.nodeFontStyle(styles)
-        let color = nodeAttribute(.TextColor, styles: styles, fallback: "#4F4F4F")
+        let defaultTextColorHex = "#4F4F4F"
+        let color = nodeAttribute(.TextColor, styles: styles, fallback: defaultTextColorHex)
+        let lightColor = nodeAttribute(.LightTextColor, styles: styles, fallback: defaultTextColorHex)
+        let darkColor = nodeAttribute(.DarkTextColor, styles: styles, fallback: defaultTextColorHex)
         let alignmentDescription = nodeAttribute(.TextAlignment, styles: styles, fallback: "center")
         let lineSpacing:CGFloat = nodeAttribute(.TextLineSpacing, styles: styles, fallback: 3.0)
         let margin:CGFloat = nodeAttribute(.TextMargin, styles: styles, fallback: 10.0)
-        return TextStyle(font:font, alignment:NSTextAlignment.mapswift_parseThemeAlignment(alignmentDescription), color:UIColor.fromMapSwiftTheme(color), lineSpacing:lineSpacing, margin: margin)
+        return TextStyle(font:font, alignment:NSTextAlignment.mapswift_parseThemeAlignment(alignmentDescription), color:UIColor.fromMapSwiftTheme(color), lightColor:UIColor.fromMapSwiftTheme(lightColor), darkColor:UIColor.fromMapSwiftTheme(darkColor), lineSpacing:lineSpacing, margin: margin)
     }
 
     func nodeConnectionStyle(styles:[String]) -> ConnectionStyle {
