@@ -4,8 +4,13 @@
   "formatVersion": 2,
   "ideas": {
     "1": {
-      "title": "right one",
+      "title": "right one black",
       "id": 2,
+      "attr": {
+        "style": {
+          "background": "#000000"
+        }
+      },      
       "ideas": {
         "1": {
           "title": "right one child one",
