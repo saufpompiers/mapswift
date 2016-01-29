@@ -33,8 +33,8 @@ class MapSwiftNodeBackgroundView: UIView {
     override func layoutSubviews() {
         self.nodeBorderView.frame = self.bounds
     }
-    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle) {
-        self.nodeBorderView.setNodeStyle(nodeStyle)
+    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
+        self.nodeBorderView.setNodeStyle(nodeStyle, nodeAttributes:nodeAttributes)
         self.layer.shadowColor = nodeStyle.shadow.color.CGColor
         self.layer.shadowOffset = nodeStyle.shadow.offset
         self.layer.shadowOpacity = nodeStyle.shadow.opacity

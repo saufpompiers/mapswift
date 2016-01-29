@@ -23,10 +23,14 @@ class MapSwiftNodeBorderView: UIView {
         self.clipsToBounds = true
     }
 
-    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle) {
+    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
         self.nodeStyle = nodeStyle
         self.layer.cornerRadius = nodeStyle.cornerRadius
-        self.backgroundColor = nodeStyle.backgroundColor
+        if let color = nodeAttributes.backgroundColor {
+            self.backgroundColor = color
+        } else {
+            self.backgroundColor = nodeStyle.backgroundColor
+        }
     }
 
     override func drawRect(rect: CGRect) {

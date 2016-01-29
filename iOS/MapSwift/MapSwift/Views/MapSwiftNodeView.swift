@@ -183,9 +183,8 @@ class MapSwiftNodeView: UIView {
     override func layoutSubviews() {
         if let node = _node {
             let nodeStyle = self.calcNodeStyle()
-            self.nodeBackgroundView.setNodeStyle(nodeStyle)
             self.labelInset = MapSwiftNodeView.BackgroundInset + nodeStyle.text.margin
-            self.nodeBackgroundView.setNodeStyle(nodeStyle)
+            self.nodeBackgroundView.setNodeStyle(nodeStyle, nodeAttributes:node.attr)
             self.nodeDecorationView.setNodeStyle(nodeStyle)
             self.showTextForNodeStyle(node, nodeStyle: nodeStyle)
         }

@@ -45,7 +45,7 @@ class MapSwiftViewCoordiantesTests: XCTestCase {
     var node:MapSwiftNode!
     override func setUp() {
         super.setUp()
-        node = MapSwiftNode(title: "hello", level: 1, id: "1", rect: CGRectMake(-35.5, -10, 71, 20), attr: [:])
+        node = MapSwiftNode(title: "hello", level: 1, id: "1", rect: CGRectMake(-35.5, -10, 71, 20), attr: MapSwiftNodeAttributes.empty())
         stubCoordinateSystem = StubMapSwiftCoordinateSystem()
         stubMapSwiftViewCoordinatesDelegate = StubMapSwiftViewCoordinatesDelegate()
         underTest = MapSwiftViewCoordinates(margin:10.0, coordinateSystem: stubCoordinateSystem)

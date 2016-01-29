@@ -87,13 +87,11 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         let hoffset = (self.bounds.size.width - contentSize.width)/2
         let hinset:CGFloat = max(0, hoffset)
         let voffset = (self.bounds.size.height - contentSize.height)/2
-        print("hoffset:\(hoffset) voffset:\(voffset)")
         let vinset:CGFloat = max(0, voffset)
         let insets = UIEdgeInsetsMake(vinset, hinset, vinset, hinset)
         self.scrollView.contentInset = insets
         self.scrollView.contentOffset = CGPointMake(0, 0)
         self.centerOnSelectedNode();
-        print("bounds:\(self.bounds) scrollView:\(self.scrollView.frame) contentSize:\(self.scrollView.contentSize) contentOffset:\(self.scrollView.contentOffset) insets:\(insets)")
     }
     func onContentPanGesture(pan:UIPanGestureRecognizer) {
         if let draggedNode = draggedNode, node = draggedNode.node {
@@ -274,7 +272,6 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
     func mapSwiftViewSizeChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, mapSize:CGSize) {
         queueViewTask({
-            print("mapSwiftViewSizeChanged mapSize:\(mapSize)")
             self.mapContentView.frame = CGRectMake(0, 0, mapSize.width, mapSize.height)
             self.nodeLayerView.frame = self.mapContentView.bounds
             self.connectorLayerView.frame = self.mapContentView.bounds
@@ -293,7 +290,6 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     func nodeViewWasTouched(nodeView: MapSwiftNodeView) {
         queueViewTask({
             if let node = nodeView.node where node.level > 1 {
-                print("dragging start")
                 self.draggedNode = nodeView
                 self.nodeLayerView.bringSubviewToFront(nodeView)
                 self.scrollView.scrollEnabled = false
@@ -303,7 +299,6 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     func endDragging() {
         queueViewTask({
             if let _ = self.delegate {
-                print("dragging end")
                 self.draggedNode = nil
                 self.scrollView.scrollEnabled = true
             }
