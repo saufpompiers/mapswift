@@ -14,7 +14,7 @@ class MapSwiftNodeAttributesTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let style:[String:AnyObject] = [ "background": "#FF0000"]
-        dictionary = [ "style": style]
+        dictionary = [ "style": style, "collapsed": true]
         underTest = MapSwiftNodeAttributes.parseDictionary(dictionary)
     }
     
@@ -31,10 +31,15 @@ class MapSwiftNodeAttributesTests: XCTestCase {
         XCTAssertEqual(underTest.backgroundColor, UIColor(hexString: "#FF0000"))
     }
 
-    func test_should_parse_dictionary_with_no_background() {
+    func test_should_parse_collapsed_from_dictionary() {
+        XCTAssertTrue(underTest.collapsed)
+    }
+
+    func test_should_parse_empty_dictionary() {
         let result = MapSwiftNodeAttributes.parseDictionary([:])
         XCTAssertNotNil(result)
         XCTAssertNil(result.backgroundColor)
+        XCTAssertFalse(result.collapsed)
     }
 
 

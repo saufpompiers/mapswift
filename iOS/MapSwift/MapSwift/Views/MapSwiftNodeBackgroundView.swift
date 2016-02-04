@@ -9,6 +9,11 @@
 import UIKit
 
 class MapSwiftNodeBackgroundView: UIView {
+    enum ShowShadowOn {
+        case Collapsed, Never, UnCollapsed
+    }
+    var shadowOn:ShowShadowOn = ShowShadowOn.UnCollapsed
+
     var _nodeBorderView:MapSwiftNodeBorderView?
     var nodeBorderView:MapSwiftNodeBorderView {
         get {
@@ -33,11 +38,29 @@ class MapSwiftNodeBackgroundView: UIView {
     override func layoutSubviews() {
         self.nodeBorderView.frame = self.bounds
     }
+    func showShadow(nodeAttributes:MapSwiftNodeAttributes) -> Bool {
+        if shadowOn == .Never {
+            return false
+        }
+        if nodeAttributes.collapsed && shadowOn == .UnCollapsed {
+            return false
+        }
+        if !nodeAttributes.collapsed && shadowOn == .Collapsed {
+            return false
+        }
+        return true
+    }
     func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
         self.nodeBorderView.setNodeStyle(nodeStyle, nodeAttributes:nodeAttributes)
-        self.layer.shadowColor = nodeStyle.shadow.color.CGColor
-        self.layer.shadowOffset = nodeStyle.shadow.offset
-        self.layer.shadowOpacity = nodeStyle.shadow.opacity
+        if showShadow(nodeAttributes) {
+            self.layer.shadowColor = nodeStyle.shadow.color.CGColor
+            self.layer.shadowOffset = nodeStyle.shadow.offset
+            self.layer.shadowOpacity = nodeStyle.shadow.opacity
+        } else {
+            self.layer.shadowColor = UIColor.clearColor().CGColor
+            self.layer.shadowOffset = CGSizeMake(0,0)
+            self.layer.shadowOpacity = 0
+        }
     }
 
 

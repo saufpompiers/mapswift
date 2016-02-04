@@ -169,7 +169,19 @@ class MapSwiftNodeView: UIView {
             return bg
         }
     }
-
+    private var _nodeCollapsedBackground:MapSwiftNodeCollapsedView?
+    var nodeCollapsedBackground:MapSwiftNodeCollapsedView {
+        get {
+            if let v = _nodeCollapsedBackground {
+                return v
+            }
+            let v = MapSwiftNodeCollapsedView(frame:self.bounds)
+            _nodeCollapsedBackground = v
+            self.insertSubview(v, belowSubview: self.nodeBackgroundView);
+            self.setNeedsLayout()
+            return v
+        }
+    }
     private var _nodeDecorationView:MapSwiftNodeDecorationView?
     var nodeDecorationView:MapSwiftNodeDecorationView {
         get {
@@ -200,11 +212,13 @@ class MapSwiftNodeView: UIView {
             let nodeStyle = self.calcNodeStyle()
             self.labelInset = MapSwiftNodeView.BackgroundInset + nodeStyle.text.margin
             self.nodeBackgroundView.setNodeStyle(nodeStyle, nodeAttributes:node.attr)
+            self.nodeCollapsedBackground.setNodeStyle(nodeStyle, nodeAttributes:node.attr)
             self.nodeDecorationView.setNodeStyle(nodeStyle)
             self.showTextForNodeStyle(node, nodeStyle: nodeStyle)
         }
         self.nodeTextlabel.frame = self.labelFrame
         self.nodeBackgroundView.frame = self.backgroundFrame
+        self.nodeCollapsedBackground.frame = self.bounds
     }
 
     func onTapGesture() {
