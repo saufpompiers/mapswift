@@ -21,7 +21,7 @@ public class MapSwiftPingModel {
     init(proxy:MapSwiftProxyProtocol) throws {
         self.proxy = proxy
         try self.proxy.addProxyListener(COMPONENT_ID) { (eventName, args) -> () in
-            if let delegate = self.delegate, identifer = args[0] as? String, timestamp = args[1] as? Int {
+            if let delegate = self.delegate, identifer = args[0] as? String, timestamp = args[1] as? Int64 {
                 delegate.ping(identifer, sent: NSDate.MapSwift_fromJSTimestamp(timestamp))
             }
         }
@@ -45,6 +45,7 @@ public class MapSwiftPingModel {
     public func echo(message:String, then:((response:MapSwiftProxyEchoResponse)->()), fail:MapSwiftProxyProtocolFail) {
         let sent = NSDate()
         proxy.sendCommand(COMPONENT_ID, selector: "echo", args: [message], then:{ (response) -> () in
+            print("echo response:\(response)")
             if let echoResponse = MapSwiftProxyEchoResponse.fromProxyResponse(response, sent: sent, received: NSDate()) {
                 then(response: echoResponse)
             } else {

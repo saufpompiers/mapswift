@@ -9,12 +9,12 @@
 import Foundation
 
 public extension NSTimeInterval {
-    var mapswift_JSTimeInterval:Int {
+    var mapswift_JSTimeInterval:Int64 {
         get {
-            return Int(floor(self * 1000))
+            return Int64(floor(self * 1000))
         }
     }
-    static func MapSwift_fromJSTimeInterval(jsInterval:Int) -> NSTimeInterval {
+    static func MapSwift_fromJSTimeInterval(jsInterval:Int64) -> NSTimeInterval {
         let jsIntervalDouble = Double(jsInterval)
         return jsIntervalDouble / 1000
     }

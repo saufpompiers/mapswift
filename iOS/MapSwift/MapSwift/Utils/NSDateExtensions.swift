@@ -10,13 +10,13 @@ import Foundation
 
 
 public extension NSDate {
-    var mapswift_jsTimestamp:Int {
+    var mapswift_jsTimestamp:Int64 {
         get {
             return self.timeIntervalSince1970.mapswift_JSTimeInterval
         }
     }
 
-    static func MapSwift_fromJSTimestamp(jsTimeStamp:Int) -> NSDate {
+    static func MapSwift_fromJSTimestamp(jsTimeStamp:Int64) -> NSDate {
         let ts = NSTimeInterval.MapSwift_fromJSTimeInterval(jsTimeStamp)
         return NSDate(timeIntervalSince1970: ts)
     }
