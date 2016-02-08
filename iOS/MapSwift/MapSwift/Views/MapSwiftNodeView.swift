@@ -48,7 +48,6 @@ class MapSwiftNodeView: UIView {
             } else {
                 label.textColor = nodeStyle.text.color
             }
-            print("luminocity:\(bgcolor.mapswift_rgbLuminosity) rgb:\(bgcolor.mapswift_rgba), blend:\(blend.mapswift_rgba) blendluminocity:\(luminocity)")
         } else {
             label.textColor = nodeStyle.text.color
         }
@@ -144,7 +143,7 @@ class MapSwiftNodeView: UIView {
             label.adjustsFontSizeToFitWidth = true
             label.minimumScaleFactor = 0.2
             self.insertSubview(label, aboveSubview: nodeDecorationView)
-            label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "onTapGesture"))
+            label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "onTapGesture:"))
             label.userInteractionEnabled = true
             return label
         }
@@ -221,7 +220,7 @@ class MapSwiftNodeView: UIView {
         self.nodeCollapsedBackground.frame = self.bounds
     }
 
-    func onTapGesture() {
+    func onTapGesture(gesture:UITapGestureRecognizer) {
         if let delegate = self.delegate {
             delegate.nodeViewWasTapped(self)
         }

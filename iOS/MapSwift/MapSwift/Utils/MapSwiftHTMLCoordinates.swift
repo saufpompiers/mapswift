@@ -73,7 +73,7 @@ class MapSwiftHTMLCoordinates: MapSwiftCoordinateSystem {
     private func rectIsWithinBounds(rect:CGRect) -> Bool {
         let bounds = mapBounds
         if bounds.minX < rect.origin.x && bounds.maxX > (rect.origin.x + rect.width) && bounds.minY < rect.origin.y && bounds.maxY > rect.origin.y + rect.height {
-            print("is in bounds bounds:\(bounds) rect:\(rect)")
+//            print("is in bounds bounds:\(bounds) rect:\(rect)")
             return true
         }
         return false

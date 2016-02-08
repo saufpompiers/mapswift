@@ -20,9 +20,8 @@ public struct MapSwiftProxyEchoResponse {
         }
     }
     static func fromProxyResponse(response:MapSwiftProxyResponse, sent:NSDate, received:NSDate) -> MapSwiftProxyEchoResponse? {
-        if let result = response.result as? NSDictionary, identifier = result["identifier"] as? String, receivedJSTS = result["received"] as? Int64 {
-
-            print("received:\(result["received"]) receivedJSTS:\(receivedJSTS)")
+        if let result = response.result as? NSDictionary, identifier = result["identifier"] as? String, receivedTs = result["received"] as? NSNumber {
+            let receivedJSTS = receivedTs.longLongValue
             return MapSwiftProxyEchoResponse(identifier: identifier, sent:sent, reply:NSDate.MapSwift_fromJSTimestamp(receivedJSTS), received: received)
         }
         return nil;

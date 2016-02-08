@@ -14870,7 +14870,7 @@ MapSwift.editorMain = function () {
 		mapModel = new MAPJS.MapModel(MAPJS.DOMRender.layoutCalculator, []);
 
 	containerProxy.proxyComponent(pingModel, 'pingModel').withEvents('ping');
-	containerProxy.proxyComponent(mapModel, 'mapModel').withEvents('layoutChangeStarting', 'layoutChangeComplete', 'nodeCreated', 'nodeRemoved', 'nodeSelectionChanged', 'nodeMoved', 'nodeTitleChanged', 'nodeAttrChanged nodeLabelChanged', 'connectorCreated', 'connectorRemoved', 'linkCreated', 'linkRemoved', 'mapScaleChanged', 'nodeVisibilityRequested', 'nodeFocusRequested', 'mapViewResetRequested', 'nodeEditRequested', 'addLinkModeToggled', 'linkAttrChanged', 'activatedNodesChanged');
+	containerProxy.proxyComponent(mapModel, 'mapModel').withEvents('layoutChangeStarting', 'layoutChangeComplete', 'nodeCreated', 'nodeRemoved', 'nodeSelectionChanged', 'nodeMoved', 'nodeTitleChanged', 'nodeAttrChanged', 'nodeLabelChanged', 'connectorCreated', 'connectorRemoved', 'linkCreated', 'linkRemoved', 'mapScaleChanged', 'nodeVisibilityRequested', 'nodeFocusRequested', 'mapViewResetRequested', 'nodeEditRequested', 'addLinkModeToggled', 'linkAttrChanged', 'activatedNodesChanged');
 	window.components = {
 		containerProxy: containerProxy,
 		pingModel: pingModel,

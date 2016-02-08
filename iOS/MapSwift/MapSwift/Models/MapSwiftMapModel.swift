@@ -238,12 +238,18 @@ public class MapSwiftMapModel {
         }, fail: fail)
     }
 
+    let Source = "iOS"
     public func addSubIdea(parentId:String, initialTitle:String, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
-        self.exec("addSubIdea", args: ["iOS", parentId, initialTitle], then: { response in then() }, fail: fail)
+        self.exec("addSubIdea", args: [Source, parentId, initialTitle], then: { response in then() }, fail: fail)
+    }
+
+    public func collapse(collapse:Bool, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
+        self.exec("collapse", args: [Source, collapse], then: { response in then() }, fail: fail)
     }
     public func selectNode(id:String, force:Bool, appendToActive:Bool, then:MapSwiftProxyProtocolThen, fail:MapSwiftProxyProtocolFail) {
         self.exec("selectNode", args: [id, force, appendToActive], then: { response in then() }, fail: fail)
     }
+    
     public typealias MapSwiftLayout = AnyObject
     public func getCurrentLayout(then:((layout:MapSwiftLayout)->()), fail:MapSwiftProxyProtocolFail) {
         self.exec("getCurrentLayout", args: [], then: { (response) -> () in
