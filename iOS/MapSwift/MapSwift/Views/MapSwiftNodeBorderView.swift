@@ -26,6 +26,7 @@ class MapSwiftNodeBorderView: UIView {
     func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
         self.nodeStyle = nodeStyle
         self.layer.cornerRadius = nodeStyle.cornerRadius
+        print("layer.cornerRadius:\(nodeStyle.cornerRadius)")
         if let color = nodeAttributes.backgroundColor {
             self.backgroundColor = color
         } else {
@@ -37,16 +38,12 @@ class MapSwiftNodeBorderView: UIView {
         if let nodeStyle = nodeStyle  {
             switch nodeStyle.borderStyle.type {
             case .Surround:
-                let ctx = UIGraphicsGetCurrentContext()
-                let outlineRect = self.bounds
-                let path = UIBezierPath(roundedRect: outlineRect, byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(nodeStyle.cornerRadius, nodeStyle.cornerRadius))
-//                CGContextSetFillColorWithColor(ctx, nodeStyle.backgroundColor.CGColor)
-                CGContextSetStrokeColorWithColor(ctx,nodeStyle.borderStyle.line.color.CGColor)
-                path.lineWidth = nodeStyle.borderStyle.line.width * 2
-                path.stroke()
-//                path.fill()
+                self.layer.borderColor = nodeStyle.borderStyle.line.color.CGColor
+                self.layer.borderWidth = nodeStyle.borderStyle.line.width
                 break;
             case .Underline:
+                self.layer.borderColor = UIColor.clearColor().CGColor
+                self.layer.borderWidth = 0
                 let ctx = UIGraphicsGetCurrentContext()
                 CGContextSetStrokeColorWithColor(ctx,nodeStyle.borderStyle.line.color.CGColor)
                 CGContextSetLineWidth(ctx, nodeStyle.borderStyle.line.width * 2)
@@ -56,8 +53,6 @@ class MapSwiftNodeBorderView: UIView {
                 break;
             default:
                 break
-            }
-            if nodeStyle.borderStyle.type == MapSwiftTheme.BorderType.Underline {
             }
         }
     }

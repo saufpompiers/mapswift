@@ -89,5 +89,12 @@ class ViewController: UIViewController, MapSwiftProxyProtocolDelegate, MapSwiftP
             }
         }
     }
+
+    @IBAction func toggleCollapse() {
+        print("toggle collapse");
+        if let mapView = self.mapView {
+            mapView.toggleCollapsed()
+        }
+    }
 }
 

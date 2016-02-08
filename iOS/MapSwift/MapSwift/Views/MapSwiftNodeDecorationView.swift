@@ -54,14 +54,31 @@ class MapSwiftNodeDecorationView: UIView {
         if _activated {
             let ctx = UIGraphicsGetCurrentContext()
             let outlineRect = CGRectInset(self.bounds, self.inset, self.inset)
-            let path = UIBezierPath(roundedRect: outlineRect, byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
-            let phase:CGFloat = 2 //perim % 2
-            let dashLengths:[CGFloat] = [2, 2];
-            path.setLineDash(dashLengths, count: 2, phase: phase)
-            CGContextSetStrokeColorWithColor(ctx,activatedColor.CGColor)
+            let x0 = outlineRect.origin.x
+            let x1 = outlineRect.origin.x + cornerRadius
+            let x2 = outlineRect.origin.x + outlineRect.width - cornerRadius
+            let x3 = outlineRect.origin.x + outlineRect.width
 
-            path.lineWidth = self.borderInset
-            path.stroke()
+            let y0 = outlineRect.origin.y
+            let y1 = outlineRect.origin.y + cornerRadius
+            let y2 = outlineRect.origin.y + outlineRect.height - cornerRadius
+            let y3 = outlineRect.origin.y + outlineRect.height
+
+            CGContextSetStrokeColorWithColor(ctx,activatedColor.CGColor)
+            CGContextSetLineWidth(ctx, self.borderInset)
+            let phase:CGFloat = 1 //perim % 2
+            let dashLengths:[CGFloat] = [2, 2];
+            CGContextSetLineDash(ctx, phase, dashLengths, 2)
+            CGContextMoveToPoint(ctx, x1, y0);
+            CGContextAddLineToPoint(ctx, x2, y0)
+            CGContextAddQuadCurveToPoint(ctx, x3, y0, x3, y1)
+            CGContextAddLineToPoint(ctx, x3, y2)
+            CGContextAddQuadCurveToPoint(ctx, x3, y3, x2, y3)
+            CGContextAddLineToPoint(ctx, x1, y3)
+            CGContextAddQuadCurveToPoint(ctx, x0, y3, x0, y2)
+            CGContextAddLineToPoint(ctx, x0, y1)
+            CGContextAddQuadCurveToPoint(ctx, x0, y0, x1, y0)
+            CGContextStrokePath(ctx);
         }
     }
 

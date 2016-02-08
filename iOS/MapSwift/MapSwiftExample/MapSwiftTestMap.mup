@@ -51,11 +51,11 @@
           "id": 8,
           "ideas": {
             "1": {
-              "title": "1",
+              "title": "1 with some text",
               "id": 36
             },
             "2": {
-              "title": "2",
+              "title": "2 less",
               "id": 37
             },
             "3": {

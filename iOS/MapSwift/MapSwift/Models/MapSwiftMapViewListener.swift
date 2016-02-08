@@ -21,4 +21,11 @@ public class MapSwiftMapViewListener : MapSwiftMapViewDelegate {
                 print("mapViewDidSelectNode error:\(error.localizedDescription)")
         }
     }
+    public func mapViewDidCollapse(mapView: MapSwiftMapView, collapse: Bool) {
+        components.mapModel.collapse(collapse, then: { () -> () in
+
+            }) { (error) -> () in
+                print("mapViewDidSelectNode error:\(error.localizedDescription)")
+        }
+    }    
 }

@@ -9,6 +9,7 @@
 import UIKit
 public protocol MapSwiftMapViewDelegate : class {
     func mapViewDidSelectNode(mapView:MapSwiftMapView, nodeSelected:MapSwiftNode)
+    func mapViewDidCollapse(mapView:MapSwiftMapView, collapse:Bool)
 }
 public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate, MapSwiftNodeViewDelegate {
     typealias NodeEventArgs = (event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode)
@@ -160,7 +161,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     private func centerOnSelectedNode() {
         if let selectedNodeId = self.selectedNodeId {
             if let nodeView = self.nodeViews[selectedNodeId] {
-                self.scrollView.scrollRectToVisible(CGRectInset(nodeView.frame, -30, -30), animated: true)
+                self.scrollView.scrollRectToVisible(CGRectInset(nodeView.frame, -10, -10), animated: true)
             }
         }
     }
@@ -208,6 +209,12 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             }
         })
 
+    }
+    public func toggleCollapsed() {
+        if let delegate = self.delegate, nodeId = self.selectedNodeId, nodeView = self.nodeViews[nodeId], node = nodeView.node {
+            let collapsed = node.attr.collapsed
+            delegate.mapViewDidCollapse(self, collapse:!collapsed)
+        }
     }
     public func mapModelNodeIdEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool) {
         queueViewTask({
