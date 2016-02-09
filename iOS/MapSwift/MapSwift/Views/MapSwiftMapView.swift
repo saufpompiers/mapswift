@@ -11,15 +11,22 @@ public protocol MapSwiftMapViewDelegate : class {
     func mapViewDidSelectNode(mapView:MapSwiftMapView, nodeSelected:MapSwiftNode)
     func mapViewDidCollapse(mapView:MapSwiftMapView, collapse:Bool)
 }
-public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate, MapSwiftNodeViewDelegate {
+extension MapSwift {
     typealias NodeEventArgs = (event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode)
+    typealias ConnectorEventArgs = (event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>)
+    typealias NodeIdEventArgs = (event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool)
+    typealias RectConverter = ((rect:CGRect)->(CGRect))
+}
+public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate, MapSwiftNodeViewDelegate {
+
     weak public var delegate:MapSwiftMapViewDelegate?
 
     private var selectedNodeId:String?
 
     private var nodeViews:[String:MapSwiftNodeView] = [:]
-    private var layoutChanging = false
-    private var queuedNodeEvents:[NodeEventArgs] = []
+
+    var layoutChange:MapSwift.LayoutChange? = nil
+
     private var coordinateSystem = MapSwiftViewCoordinates()
     private let scrollView:UIScrollView
     private let mapContentView = UIView(frame: CGRectMake(0,0,10, 10))
@@ -119,11 +126,30 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         dispatch_async(dispatch_get_main_queue(), block)
     }
 
-    private func applyQueuedChanges() {
-        for nodeEvent in queuedNodeEvents {
-            self.applyNodeEvent(nodeEvent.event, node: nodeEvent.node)
+    private func applyLayoutChange() {
+        print(">>applyLayoutChange")
+        if let layoutChange = self.layoutChange {
+            for evt in layoutChange.nodeEvents {
+                self.applyNodeEvent(evt.event, node: evt.node)
+            }
+            if let mapSize = layoutChange.mapSize {
+                self.applyMapSizeChange(mapSize)
+            }
+            if let rectConverter = layoutChange.rectConverter {
+                self.applyRectConverter(rectConverter, applyToConnectors: false)
+            }
+            for evt in layoutChange.connectorEvents {
+                self.applyConnectorEvent(evt.event, connector: evt.connector)
+            }
+            if let _ = layoutChange.rectConverter {
+                self.applyNodeRectsToConnectors()
+            }
+            for evt in layoutChange.nodeIdEvents {
+                self.applyNodeIdEvent(evt.event, nodeId: evt.nodeId, toggle: evt.toggle)
+            }
         }
-        self.setNeedsLayout()
+        self.layoutChange = nil
+        print("<<applyLayoutChange")
     }
     private func applyNodeEvent(event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode) {
         if event == MapSwiftMapModel.NodeEvent.NodeRemoved {
@@ -153,9 +179,55 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         UIView.animateWithDuration(0.2, animations: {
             nodeView.frame = nodeFrame
         })
-        self.setNeedsLayout()
     }
 
+    private func applyConnectorEvent(event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>) {
+        if let connector = MapSwiftNodeConnector.parseDictionary(connector) {
+            switch event {
+            case .ConnectorCreated:
+                self.connectorLayerView.addConnector(connector)
+            case .ConnectorRemoved:
+                self.connectorLayerView.removeConnector(connector)
+            }
+        }
+    }
+
+    private func applyNodeIdEvent(event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool) {
+        if event == MapSwiftMapModel.NodeRequestEvent.NodeSelectionChanged {
+            self.selectedNodeId = nil
+            if let nodeView = self.nodeViews[nodeId] {
+                nodeView.isSelected = toggle
+                if toggle {
+                    self.selectedNodeId = nodeId
+                }
+            }
+            if toggle {
+                self.centerOnSelectedNode();
+            }
+        }
+    }
+
+    private func applyRectConverter(rectConverter:MapSwift.RectConverter, applyToConnectors:Bool) {
+        print("applyRectConverter \(self.layoutChange)")
+        for (_, nodeView) in self.nodeViews {
+            if let node = nodeView.node {
+                let nodeFrame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))
+                nodeView.frame = nodeFrame
+                if (applyToConnectors) {
+                    self.connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeView.frame, styles: node.styles);
+                }
+                nodeView.setNeedsLayout()
+            }
+        }
+    }
+    private func applyNodeRectsToConnectors() {
+        for (_, nodeView) in self.nodeViews {
+            if let node = nodeView.node {
+                self.connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeView.frame, styles: node.styles);
+            }
+        }
+
+    }
     private func resetScrollView() {
     }
     private func centerOnSelectedNode() {
@@ -171,11 +243,13 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         queueViewTask({
             switch event {
             case MapSwiftMapModel.MapEvent.LayoutChangeStarting:
-                self.layoutChanging = true
+                if self.layoutChange == nil {
+                    self.layoutChange = MapSwift.LayoutChange();
+                }
                 break
             case MapSwiftMapModel.MapEvent.LayoutChangeComplete:
-                self.applyQueuedChanges()
-                self.layoutChanging = false
+                self.applyLayoutChange()
+                self.setNeedsLayout()
                 break
             case MapSwiftMapModel.MapEvent.MapViewResetRequested:
                 self.resetScrollView()
@@ -186,10 +260,11 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
 
     public func mapModelNodeEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeEvent, node:MapSwiftNode) {
         queueViewTask({
-            if self.layoutChanging {
-                self.queuedNodeEvents.append((event:event, node:node))
+            if let layoutChange = self.layoutChange {
+                layoutChange.nodeEvents.append((event:event, node:node))
             } else {
                 self.applyNodeEvent(event, node: node)
+                self.setNeedsLayout()
             }
         })
     }
@@ -199,16 +274,13 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
     public func mapModelConnectorEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>) {
         queueViewTask({
-            if let connector = MapSwiftNodeConnector.parseDictionary(connector) {
-                switch event {
-                case .ConnectorCreated:
-                    self.connectorLayerView.addConnector(connector)
-                case .ConnectorRemoved:
-                    self.connectorLayerView.removeConnector(connector)
-                }
+            if let layoutChange = self.layoutChange {
+                layoutChange.connectorEvents.append((event:event, connector: connector))
+            } else {
+                    self.applyConnectorEvent(event, connector: connector)
+                    self.setNeedsLayout()
             }
         })
-
     }
     public func toggleCollapsed() {
         if let delegate = self.delegate, nodeId = self.selectedNodeId, nodeView = self.nodeViews[nodeId], node = nodeView.node {
@@ -218,21 +290,14 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
     public func mapModelNodeIdEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool) {
         queueViewTask({
-            if event == MapSwiftMapModel.NodeRequestEvent.NodeSelectionChanged {
-                if toggle {
-                    self.selectedNodeId = nodeId
-                } else {
-                    self.selectedNodeId = nil
-                }
-                if let nodeView = self.nodeViews[nodeId] {
-                    nodeView.isSelected = toggle
-                }
-                if toggle {
-                    self.centerOnSelectedNode();
-                }
-
+            if let layoutChange = self.layoutChange {
+                layoutChange.nodeIdEvents.append((event:event, nodeId: nodeId, toggle: toggle))
+            } else {
+                self.applyNodeIdEvent(event, nodeId: nodeId, toggle: toggle);
+                self.setNeedsLayout()
             }
         });
+
     }
     public func mapModelToggleEvent(mapModel:MapSwiftMapModel, event:MapSwiftMapModel.ToggleRequestEvent, toggle:Bool) {
 
@@ -264,29 +329,39 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         })
     }
 //MARK: - MapSwiftViewCoordinatesDelegate
-    func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
-        queueViewTask({
-            print("mapSwiftViewCoordinatesChanged")
-            for (_, nodeView) in self.nodeViews {
-                if let node = nodeView.node {
-                    let nodeFrame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))
-                    nodeView.frame = nodeFrame
-                    self.connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: node.styles);
-                    nodeView.setNeedsLayout()
-                }
+    func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:MapSwift.RectConverter) {
+        print("mapSwiftViewCoordinatesChanged \(self.layoutChange)")
+        if let layoutChange = self.layoutChange {
+            print("delay rectConverter")
+            layoutChange.rectConverter = rectConverter
+        } else {
+            queueViewTask({
+                self.applyRectConverter(rectConverter, applyToConnectors: true);
                 self.setNeedsLayout()
-            }
-        })
+            })
+        }
+
+    }
+    private func applyMapSizeChange(mapSize:CGSize) {
+        print("applyMapSizeChange")
+        self.mapContentView.frame = CGRectMake(0, 0, mapSize.width, mapSize.height)
+        self.nodeLayerView.frame = self.mapContentView.bounds
+        self.connectorLayerView.frame = self.mapContentView.bounds
+        self.centerOnSelectedNode();
     }
     func mapSwiftViewSizeChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, mapSize:CGSize) {
-        queueViewTask({
-            self.mapContentView.frame = CGRectMake(0, 0, mapSize.width, mapSize.height)
-            self.nodeLayerView.frame = self.mapContentView.bounds
-            self.connectorLayerView.frame = self.mapContentView.bounds
-            self.centerOnSelectedNode();
-            self.setNeedsLayout()
-        });
+        if let layoutChange = self.layoutChange {
+            print("delay mapSwiftViewSizeChanged")
+            layoutChange.mapSize = mapSize
+        } else {
+            queueViewTask({
+                self.applyMapSizeChange(mapSize)
+                self.setNeedsLayout()
+            })
+        }
     }
+
+
 //MARK: - MapSwiftNodeViewDelegate 
     func nodeViewWasTapped(nodeView: MapSwiftNodeView) {
         queueViewTask({

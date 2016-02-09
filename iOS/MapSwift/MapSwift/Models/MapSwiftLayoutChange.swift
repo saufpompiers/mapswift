@@ -8,7 +8,12 @@
 
 import Foundation
 
-
-class MapSwiftLayoutChange {
-
+extension MapSwift {
+    class LayoutChange {
+        var nodeEvents:[NodeEventArgs] = []
+        var connectorEvents:[ConnectorEventArgs] = []
+        var nodeIdEvents:[NodeIdEventArgs] = []
+        var rectConverter:MapSwift.RectConverter?
+        var mapSize:CGSize?
+    }
 }

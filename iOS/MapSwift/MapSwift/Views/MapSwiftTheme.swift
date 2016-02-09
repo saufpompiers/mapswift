@@ -175,8 +175,13 @@ public class MapSwiftTheme {
         let toH = self.nodeAttribute(.ConnectionsToH, styles: styles, fallback: "center");
         let toV = self.nodeAttribute(.ConnectionsToV, styles: styles, fallback: "center");
         let to = MapSwift.ConnectionJoinPositions(h: MapSwift.ConnectionJoinPosition.parse(toH), v: MapSwift.ConnectionJoinPosition.parse(toV))
+
         let style = self.nodeAttribute(.ConnectionsStyle, styles: styles, fallback: "")
-        let connectionStyle = MapSwift.ConnectionStyle(from:from, to:to, style:style)
+        let lineWidth:CGFloat = connectAttribute(.LineWidth, styles: [style], fallback: 1.0)
+        let lineColorHex:String = connectAttribute(.LineColor, styles: [style], fallback: "#4F4F4F")
+        let lineColor = UIColor(hexString: lineColorHex)
+        let lineStyle = MapSwift.LineStyle(color:lineColor, width:lineWidth)
+        let connectionStyle = MapSwift.ConnectionStyle(from:from, to:to, style:style, lineStyle: lineStyle)
         cache.cacheItemForKey(connectionStyle, key: cacheKey)
         return connectionStyle
 
@@ -259,6 +264,5 @@ public class MapSwiftTheme {
         let points = parsedPoints
         cache.cacheItemForKey(MapSwift.ControlPoints(points:points), key: cacheKey)
         return points
-
     }
 }

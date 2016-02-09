@@ -86,10 +86,10 @@ struct NodeConnectorInfo {
     let styles:[String]
     let connectionStyle:MapSwift.ConnectionStyle
     let nodeStyle:MapSwift.NodeStyle
-    func connectToPointForRectFrom(rectFrom:CGRect) -> CGPoint {
+    func connectToPointForRectFrom(rectFrom:CGRect, lineWidth:CGFloat) -> CGPoint {
         let inset = MapSwiftNodeView.BackgroundInset
         let xinset = inset + self.nodeStyle.cornerRadius
-        let halfLineWidth:CGFloat = 0.5
+        let halfLineWidth:CGFloat = 0.5 * lineWidth
         func getY(pos:MapSwift.ConnectionJoinPosition) -> CGFloat {
             switch pos {
             case MapSwift.ConnectionJoinPosition.Center:
@@ -198,10 +198,10 @@ class MapSwiftConnectorsView : UIView {
         }
         connectorStyles.append("default");
 
-        let toPoint = to.connectToPointForRectFrom(from.nodeRect)
+        let toPoint = to.connectToPointForRectFrom(from.nodeRect, lineWidth:to.connectionStyle.lineStyle.width)
         let pos = from.nodeRect.mapswift_relativePositionOfPoint(toPoint, tolerance: tolerance)
         let toRelativePosition = from.connectionStyleFromForPosition(pos)
-        let fromPoint = from.nodeRect.mapswift_connectionPointForJoinPositions(toRelativePosition, relativePoint: toPoint, cornerRadius: from.nodeStyle.cornerRadius, lineWidth:1.0)
+        let fromPoint = from.nodeRect.mapswift_connectionPointForJoinPositions(toRelativePosition, relativePoint: toPoint, cornerRadius: from.nodeStyle.cornerRadius, lineWidth:to.connectionStyle.lineStyle.width)
         let controlPointMultipliers = self.theme.controlPointsForStylesAndPosition(connectorStyles, position: pos)
         var controlPoints:[CGPoint] = []
         let dx = toPoint.x - fromPoint.x
@@ -248,11 +248,12 @@ class MapSwiftConnectorsView : UIView {
     override func drawRect(rect: CGRect) {
         self.clipsToBounds = false
         let ctx = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(ctx,UIColor(hexString: "#4F4F4F").CGColor)
-        CGContextSetLineWidth(ctx, 1)
         for (_, connector) in self.connectors {
+
                 if let fromInfo = nodeConnectorInfoMap[connector.from], toInfo = nodeConnectorInfoMap[connector.to] {
                     let connectorPath = calculateConnector(fromInfo, to: toInfo)
+                    CGContextSetStrokeColorWithColor(ctx,toInfo.connectionStyle.lineStyle.color.CGColor)
+                    CGContextSetLineWidth(ctx, toInfo.connectionStyle.lineStyle.width)
                     CGContextSetLineCap(ctx, CGLineCap.Round)
                     CGContextMoveToPoint(ctx, connectorPath.from.x, connectorPath.from.y)
                     CGContextAddQuadCurveToPoint(ctx, connectorPath.controlPoint.x, connectorPath.controlPoint.y, connectorPath.to.x, connectorPath.to.y)

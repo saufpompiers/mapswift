@@ -29,7 +29,7 @@ class StubMapSwiftCoordinateSystem: MapSwiftCoordinateSystem {
 }
 class StubMapSwiftViewCoordinatesDelegate: MapSwiftViewCoordinatesDelegate {
     var mapSwiftViewCoordinatesChangedCalls = 0
-    func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
+    func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:MapSwift.RectConverter) {
         mapSwiftViewCoordinatesChangedCalls++
     }
     var mapSwiftViewSizeChangedCalls:[CGSize] = []

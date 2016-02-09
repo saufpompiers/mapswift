@@ -45,9 +45,10 @@ class MapSwiftNodeBorderView: UIView {
                 self.layer.borderWidth = 0
                 let ctx = UIGraphicsGetCurrentContext()
                 CGContextSetStrokeColorWithColor(ctx,nodeStyle.borderStyle.line.color.CGColor)
-                CGContextSetLineWidth(ctx, nodeStyle.borderStyle.line.width * 2)
-                CGContextMoveToPoint(ctx, nodeStyle.cornerRadius, self.bounds.height)
-                CGContextAddLineToPoint(ctx, self.bounds.width - nodeStyle.cornerRadius, self.bounds.height)
+                CGContextSetLineWidth(ctx, nodeStyle.borderStyle.line.width)
+                let y = self.bounds.height - (0.5 * nodeStyle.borderStyle.line.width)
+                CGContextMoveToPoint(ctx, nodeStyle.cornerRadius, y)
+                CGContextAddLineToPoint(ctx, self.bounds.width - nodeStyle.cornerRadius, y)
                 CGContextStrokePath(ctx)
                 break;
             default:

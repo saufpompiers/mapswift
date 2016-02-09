@@ -72,11 +72,12 @@ extension MapSwift {
     typealias ConnectionJoinPositions = (h:ConnectionJoinPosition, v:ConnectionJoinPosition)
     typealias ConnectionJoinsFrom = (above:ConnectionJoinPositions, below:ConnectionJoinPositions, horizontal:ConnectionJoinPositions)
     class ConnectionStyle {
-        let from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?
-        init(from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?) {
+        let from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?, lineStyle:LineStyle
+        init(from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?, lineStyle:LineStyle) {
             self.from = from
             self.to = to
             self.style = style
+            self.lineStyle = lineStyle
         }
     }
 

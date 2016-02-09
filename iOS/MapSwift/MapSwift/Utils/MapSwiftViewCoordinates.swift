@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MapSwiftViewCoordinatesDelegate:class {
-    func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect)))
+    func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:MapSwift.RectConverter)
     func mapSwiftViewSizeChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, mapSize:CGSize)
 }
 
