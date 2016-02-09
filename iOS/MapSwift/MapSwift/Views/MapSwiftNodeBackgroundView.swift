@@ -50,7 +50,7 @@ class MapSwiftNodeBackgroundView: UIView {
         }
         return true
     }
-    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
+    func setNodeStyle(nodeStyle:MapSwift.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
         self.nodeBorderView.setNodeStyle(nodeStyle, nodeAttributes:nodeAttributes)
         if showShadow(nodeAttributes) {
             self.layer.shadowColor = nodeStyle.shadow.color.CGColor

@@ -27,7 +27,7 @@ class MapSwiftNodeDecorationView: UIView {
     private var cornerRadius:CGFloat = 0
     private var inset:CGFloat = MapSwiftNodeView.BackgroundInset
 
-    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle) {
+    func setNodeStyle(nodeStyle:MapSwift.NodeStyle) {
         self.borderInset = nodeStyle.borderStyle.inset * 2
         self.activatedColor = nodeStyle.activatedColor
         self.cornerRadius = max(0, nodeStyle.cornerRadius - nodeStyle.borderStyle.inset)

@@ -31,7 +31,7 @@ class MapSwiftNodeCollapsedView: UIView {
             return frames
         }
     }
-    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
+    func setNodeStyle(nodeStyle:MapSwift.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
         func ensureCollapsed() {
             if backgrounds.count == 0 {
                 let frames = self.backgroundFrames

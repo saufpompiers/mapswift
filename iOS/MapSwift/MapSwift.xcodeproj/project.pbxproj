@@ -67,6 +67,13 @@
 		558055E61C33BD6F0063F39D /* MapSwiftNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */; };
 		558055E81C342C5D0063F39D /* MapSwiftTestMap.mup in Resources */ = {isa = PBXBuildFile; fileRef = 558055E71C342C5D0063F39D /* MapSwiftTestMap.mup */; };
 		55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A864961C19797800F587D1 /* MapSwiftError.swift */; };
+		55C210D31C69CF9F0089C291 /* MapSwiftLayoutChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210D21C69CF9F0089C291 /* MapSwiftLayoutChange.swift */; };
+		55C210D51C69F29F0089C291 /* MapSwiftCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210D41C69F29F0089C291 /* MapSwiftCache.swift */; };
+		55C210D71C69F6860089C291 /* CGFloatExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210D61C69F6860089C291 /* CGFloatExtensions.swift */; };
+		55C210D91C69F6A50089C291 /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210D81C69F6A50089C291 /* CGRectExtensions.swift */; };
+		55C210DB1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210DA1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift */; };
+		55C210DE1C69F7280089C291 /* MapSwiftStyleDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210DD1C69F7280089C291 /* MapSwiftStyleDescriptors.swift */; };
+		55C210E01C69FAE30089C291 /* MapSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210DF1C69FAE30089C291 /* MapSwift.swift */; };
 		55F0FD311C456691005A18CD /* MapSwiftThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0FD301C456691005A18CD /* MapSwiftThemeTests.swift */; };
 		55F0FD331C49532B005A18CD /* MapSwiftNodeBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
@@ -177,6 +184,13 @@
 		558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeView.swift; sourceTree = "<group>"; };
 		558055E71C342C5D0063F39D /* MapSwiftTestMap.mup */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MapSwiftTestMap.mup; sourceTree = "<group>"; };
 		55A864961C19797800F587D1 /* MapSwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftError.swift; sourceTree = "<group>"; };
+		55C210D21C69CF9F0089C291 /* MapSwiftLayoutChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftLayoutChange.swift; sourceTree = "<group>"; };
+		55C210D41C69F29F0089C291 /* MapSwiftCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftCache.swift; sourceTree = "<group>"; };
+		55C210D61C69F6860089C291 /* CGFloatExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloatExtensions.swift; sourceTree = "<group>"; };
+		55C210D81C69F6A50089C291 /* CGRectExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
+		55C210DA1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTextAlignmentExtensions.swift; sourceTree = "<group>"; };
+		55C210DD1C69F7280089C291 /* MapSwiftStyleDescriptors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftStyleDescriptors.swift; sourceTree = "<group>"; };
+		55C210DF1C69FAE30089C291 /* MapSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwift.swift; sourceTree = "<group>"; };
 		55F0FD301C456691005A18CD /* MapSwiftThemeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftThemeTests.swift; sourceTree = "<group>"; };
 		55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeBorderView.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
@@ -288,6 +302,7 @@
 				5523D2761C104DF500069905 /* mapswift-ios.html */,
 				55610E521C15CF340030F416 /* MapSwiftResources.swift */,
 				55F6251A1C4524CB00E9421C /* default-theme.json */,
+				55C210DF1C69FAE30089C291 /* MapSwift.swift */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -319,6 +334,7 @@
 				558055CE1C2BE01A0063F39D /* MapSwiftConnector.swift */,
 				554AA9791C3EB7D1006DF4E1 /* MapSwiftMapViewListener.swift */,
 				557D9D0E1C5B6F5A0093EB59 /* MapSwiftNodeAttributes.swift */,
+				55C210D21C69CF9F0089C291 /* MapSwiftLayoutChange.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -326,16 +342,20 @@
 		55610E541C15D8EB0030F416 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				55610E551C15D9280030F416 /* NSURLExtensions.swift */,
-				55A864961C19797800F587D1 /* MapSwiftError.swift */,
-				557856101C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift */,
-				557856161C1B010D001C5E17 /* NSDateExtensions.swift */,
-				558055BA1C21C3F90063F39D /* StringExtensions.swift */,
-				558055D41C2C044A0063F39D /* MapSwiftViewCoordinates.swift */,
-				558055DE1C314E480063F39D /* MapSwiftHTMLCoordinates.swift */,
-				556764E21C3AD640001574F1 /* UIColorExtensions.swift */,
+				55C210D61C69F6860089C291 /* CGFloatExtensions.swift */,
+				55C210D81C69F6A50089C291 /* CGRectExtensions.swift */,
+				55C210D41C69F29F0089C291 /* MapSwiftCache.swift */,
 				55F6251C1C45309100E9421C /* MapSwiftDefaultedDictionary.swift */,
+				55A864961C19797800F587D1 /* MapSwiftError.swift */,
+				558055DE1C314E480063F39D /* MapSwiftHTMLCoordinates.swift */,
+				558055D41C2C044A0063F39D /* MapSwiftViewCoordinates.swift */,
+				557856161C1B010D001C5E17 /* NSDateExtensions.swift */,
 				55F6251E1C4547CB00E9421C /* NSJSONSerializationExtensions.swift */,
+				55C210DA1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift */,
+				557856101C1AF5B0001C5E17 /* NSTimeIntervalExtensions.swift */,
+				55610E551C15D9280030F416 /* NSURLExtensions.swift */,
+				558055BA1C21C3F90063F39D /* StringExtensions.swift */,
+				556764E21C3AD640001574F1 /* UIColorExtensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -378,6 +398,7 @@
 				55F625181C45245000E9421C /* MapSwiftTheme.swift */,
 				55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */,
 				55688B411C633BCA0066F01C /* MapSwiftNodeCollapsedView.swift */,
+				55C210DD1C69F7280089C291 /* MapSwiftStyleDescriptors.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -568,6 +589,7 @@
 				557856171C1B010D001C5E17 /* NSDateExtensions.swift in Sources */,
 				55F0FD331C49532B005A18CD /* MapSwiftNodeBorderView.swift in Sources */,
 				558055E41C33BCC10063F39D /* MapSwiftMapView.swift in Sources */,
+				55C210D31C69CF9F0089C291 /* MapSwiftLayoutChange.swift in Sources */,
 				55A864981C197AC400F587D1 /* MapSwiftError.swift in Sources */,
 				55688B421C633BCA0066F01C /* MapSwiftNodeCollapsedView.swift in Sources */,
 				55610E561C15D9280030F416 /* NSURLExtensions.swift in Sources */,
@@ -582,11 +604,15 @@
 				558055DF1C314E480063F39D /* MapSwiftHTMLCoordinates.swift in Sources */,
 				554AA97C1C43F6DA006DF4E1 /* MapSwiftNodeBackgroundView.swift in Sources */,
 				558055D51C2C044A0063F39D /* MapSwiftViewCoordinates.swift in Sources */,
+				55C210D71C69F6860089C291 /* CGFloatExtensions.swift in Sources */,
 				55F6251D1C45309100E9421C /* MapSwiftDefaultedDictionary.swift in Sources */,
 				554AA97A1C3EB7D1006DF4E1 /* MapSwiftMapViewListener.swift in Sources */,
+				55C210D51C69F29F0089C291 /* MapSwiftCache.swift in Sources */,
 				55610E5A1C15E9180030F416 /* MapSwiftComponents.swift in Sources */,
 				556764E31C3AD640001574F1 /* UIColorExtensions.swift in Sources */,
+				55C210D91C69F6A50089C291 /* CGRectExtensions.swift in Sources */,
 				5502B49A1C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift in Sources */,
+				55C210DB1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift in Sources */,
 				55610E531C15CF340030F416 /* MapSwiftResources.swift in Sources */,
 				5578561B1C1B076B001C5E17 /* MapSwiftProxyEchoResponse.swift in Sources */,
 				557D9D0F1C5B6F5A0093EB59 /* MapSwiftNodeAttributes.swift in Sources */,
@@ -595,8 +621,10 @@
 				558055C51C2802860063F39D /* MapSwiftMapModel.swift in Sources */,
 				558055BB1C21C3F90063F39D /* StringExtensions.swift in Sources */,
 				554AA97E1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift in Sources */,
+				55C210DE1C69F7280089C291 /* MapSwiftStyleDescriptors.swift in Sources */,
 				55610E581C15E6FE0030F416 /* MapSwiftCore.swift in Sources */,
 				558055CB1C2AD4790063F39D /* MapSwiftNode.swift in Sources */,
+				55C210E01C69FAE30089C291 /* MapSwift.swift in Sources */,
 				557856231C1B1C76001C5E17 /* MapSwiftProxyProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

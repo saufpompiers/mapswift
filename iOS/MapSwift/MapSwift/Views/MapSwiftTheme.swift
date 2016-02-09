@@ -7,46 +7,8 @@
 //
 
 import Foundation
-extension CGRect {
-    func mapswift_relativePositionOfPoint(to:CGPoint, tolerance:CGFloat = 10) -> MapSwiftTheme.RelativeNodePosition {
-        if to.y > self.maxY + tolerance {
-            return MapSwiftTheme.RelativeNodePosition.Below
-        }
-        if to.y < self.minY - tolerance {
-            return MapSwiftTheme.RelativeNodePosition.Above
-        }
-        return MapSwiftTheme.RelativeNodePosition.Horizontal
-    }
-}
 
 
-extension NSTextAlignment {
-    static func mapswift_parseThemeAlignment(alignment:String) -> NSTextAlignment {
-        switch alignment {
-        case "left":
-            return NSTextAlignment.Left
-        case "right":
-            return NSTextAlignment.Right
-        default:
-            return NSTextAlignment.Center
-        }
-    }
-}
-
-extension CGFloat {
-    static func mapswift_parseFontWeight(weight:String) -> CGFloat {
-        switch weight {
-        case "bold":
-            return UIFontWeightBold
-        case "semibold":
-            return UIFontWeightSemibold
-        case "light":
-            return UIFontWeightLight
-        default:
-            return UIFontWeightRegular
-        }
-    }
-}
 public class MapSwiftTheme {
 
     let themeDictionary:MapSwiftDefaultedDictionary
@@ -61,50 +23,13 @@ public class MapSwiftTheme {
         }
         return MapSwiftTheme(dictionary: NSDictionary())
     }
+
 //MARK: - private helper functions
     private func optionsFromStyle(styles:[String]) -> [String] {
         var options = styles
         options.append("default")
         return options
     }
-    public enum BorderType: String {
-        case Surround = "surround", Underline = "underline", None = "none"
-        static func parse(string:String) -> BorderType {
-            switch string {
-            case "underline":
-                return .Underline
-            case "none":
-                return .None
-            default:
-                return .Surround
-            }
-        }
-    }
-//MARK: - general styling tuples
-    public typealias LineStyle = (color:UIColor, width:CGFloat)
-    public typealias BorderStyle = (type:BorderType, line:LineStyle, inset:CGFloat)
-    public typealias ShadowStyle = (color:UIColor, opacity:Float, offset:CGSize, radius:CGFloat)
-    public typealias FontStyle = (size:CGFloat, weight:CGFloat)
-    public typealias TextStyle = (font:FontStyle, alignment:NSTextAlignment, color:UIColor, lightColor:UIColor, darkColor:UIColor, lineSpacing:CGFloat, margin:CGFloat)
-    public typealias ConnectionJoinPositions = (h:ConnectionJoinPosition, v:ConnectionJoinPosition)
-    public typealias ConnectionJoinsFrom = (above:ConnectionJoinPositions, below:ConnectionJoinPositions, horizontal:ConnectionJoinPositions)
-    public typealias ConnectionStyle = (from:ConnectionJoinsFrom, to:ConnectionJoinPositions, style:String?)
-    public enum ConnectionJoinPosition : String {
-        case Center = "center", Nearest = "nearest", NearestInset = "nearest-inset", Base = "base"
-        static func parse(string:String) -> ConnectionJoinPosition {
-            switch string {
-            case Center.rawValue:
-                return .Center
-            case Base.rawValue:
-                return .Base
-            case NearestInset.rawValue:
-                return .NearestInset
-            default:
-                return .Nearest
-            }
-        }
-    }
-
     var name:String {
         get {
             if let name = themeDictionary.valueForKey("name") as? String {
@@ -113,15 +38,18 @@ public class MapSwiftTheme {
             return "unknown theme"
         }
     }
-//MARK: - node styling
-    public struct NodeStyle {
-        let cornerRadius:CGFloat
-        let backgroundColor:UIColor
-        let activatedColor:UIColor
-        let borderStyle:BorderStyle
-        let shadow:ShadowStyle
-        let text:TextStyle
+    private var _cacheName:String?
+    private var cache:MapSwiftCache {
+        get {
+            if let cacheName = _cacheName {
+                return MapSwiftCaches.forName(cacheName)
+            }
+            let cacheName = "MapSwiftTheme:\(self.name)"
+            _cacheName = cacheName
+            return MapSwiftCaches.forName(cacheName)
+        }
     }
+//MARK: - node styling
 
     public enum NodeAttribute:String {
         case
@@ -155,7 +83,6 @@ public class MapSwiftTheme {
             }
         }
     }
-
     func nodeAttribute(attribute:NodeAttribute, styles:[String]) -> AnyObject? {
         return self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: optionsFromStyle(styles), keyPostFixes: attribute.postFixes)
     }
@@ -166,27 +93,47 @@ public class MapSwiftTheme {
         }
         return fallback
     }
-    
-    func nodeFontStyle(styles:[String]) -> FontStyle {
+    func cacheKeyForStyles(prefix:String, styles:[String]) -> String {
+        return "\(prefix)[\(styles.joinWithSeparator(":"))]"
+    }
+    func nodeFontStyle(styles:[String]) -> MapSwift.FontStyle {
+        let cacheKey = cacheKeyForStyles("nodeFontStyle", styles: styles)
+        if let cached:MapSwift.FontStyle = cache.itemForKey(cacheKey) {
+            return cached
+        }
         let size:CGFloat = nodeAttribute(.FontSize, styles: styles, fallback: 12)
         let weightDescription = nodeAttribute(.FontWeight, styles: styles, fallback: "regular")
         let weight = CGFloat.mapswift_parseFontWeight(weightDescription)
-        return FontStyle(size:size, weight:weight)
+        let style =  MapSwift.FontStyle(size:size, weight:weight)
+        cache.cacheItemForKey(style, key: cacheKey)
+        return style
     }
 
-    func nodeBorderStyle(styles:[String]) -> BorderStyle {
+    func nodeBorderStyle(styles:[String]) -> MapSwift.BorderStyle {
+        let cacheKey = cacheKeyForStyles("nodeBorderStyle", styles: styles)
+        if let cached:MapSwift.BorderStyle = cache.itemForKey(cacheKey) {
+            return cached
+        }
+
         let color:String = nodeAttribute(.BorderColor, styles:styles, fallback: "#707070")
         let width:CGFloat = nodeAttribute(.BorderWidth, styles: styles, fallback: 1.0)
         let typeName = nodeAttribute(.BorderType, styles: styles, fallback: "")
         var inset = width
-        let type = BorderType.parse(typeName)
-        if type == BorderType.None {
+        let type = MapSwift.BorderType.parse(typeName)
+        if type == MapSwift.BorderType.None {
             inset = 0
         }
-        return BorderStyle(type: type, line:LineStyle(color:UIColor.fromMapSwiftTheme(color), width:width), inset:inset)
+        let style = MapSwift.BorderStyle(type: type, line:MapSwift.LineStyle(color:UIColor.fromMapSwiftTheme(color), width:width), inset:inset)
+        cache.cacheItemForKey(style, key: cacheKey)
+        return style
     }
 
-    func nodeTextStyle(styles:[String]) -> TextStyle {
+    func nodeTextStyle(styles:[String]) -> MapSwift.TextStyle {
+        let cacheKey = cacheKeyForStyles("nodeTextStyle", styles: styles)
+        if let cached:MapSwift.TextStyle = cache.itemForKey(cacheKey) {
+            return cached
+        }
+
         let font = self.nodeFontStyle(styles)
         let defaultTextColorHex = "#4F4F4F"
         let color = nodeAttribute(.TextColor, styles: styles, fallback: defaultTextColorHex)
@@ -195,11 +142,18 @@ public class MapSwiftTheme {
         let alignmentDescription = nodeAttribute(.TextAlignment, styles: styles, fallback: "center")
         let lineSpacing:CGFloat = nodeAttribute(.TextLineSpacing, styles: styles, fallback: 3.0)
         let margin:CGFloat = nodeAttribute(.TextMargin, styles: styles, fallback: 10.0)
-        return TextStyle(font:font, alignment:NSTextAlignment.mapswift_parseThemeAlignment(alignmentDescription), color:UIColor.fromMapSwiftTheme(color), lightColor:UIColor.fromMapSwiftTheme(lightColor), darkColor:UIColor.fromMapSwiftTheme(darkColor), lineSpacing:lineSpacing, margin: margin)
+        let style = MapSwift.TextStyle(font:font, alignment:NSTextAlignment.mapswift_parseThemeAlignment(alignmentDescription), color:UIColor.fromMapSwiftTheme(color), lightColor:UIColor.fromMapSwiftTheme(lightColor), darkColor:UIColor.fromMapSwiftTheme(darkColor), lineSpacing:lineSpacing, margin: margin)
+        cache.cacheItemForKey(style, key: cacheKey)
+        return style
+
     }
 
-    func nodeConnectionStyle(styles:[String]) -> ConnectionStyle {
-        func calcConnectionJoinPositions(styles:[String], postFixes:[String], pos:RelativeNodePosition) -> ConnectionJoinPositions {
+    func nodeConnectionStyle(styles:[String]) -> MapSwift.ConnectionStyle {
+        let cacheKey = cacheKeyForStyles("nodeConnectionStyle", styles: styles)
+        if let cached:MapSwift.ConnectionStyle = cache.itemForKey(cacheKey) {
+            return cached
+        }
+        func calcConnectionJoinPositions(styles:[String], postFixes:[String], pos:MapSwift.RelativeNodePosition) -> MapSwift.ConnectionJoinPositions {
             let postFixesH = postFixes + [pos.rawValue, "h"]
             let postFixesV = postFixes + [pos.rawValue, "v"]
             var hString = ""
@@ -210,36 +164,52 @@ public class MapSwiftTheme {
             if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: styles, keyPostFixes: postFixesV) as? String {
                 vString = val
             }
-            return ConnectionJoinPositions(h: ConnectionJoinPosition.parse(hString), v: ConnectionJoinPosition.parse(vString))
+            return MapSwift.ConnectionJoinPositions(h: MapSwift.ConnectionJoinPosition.parse(hString), v: MapSwift.ConnectionJoinPosition.parse(vString))
         }
         let options = optionsFromStyle(styles)
         let postFixesFrom = NodeAttribute.ConnectionsFrom.postFixes
         let fromAbove = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Above);
         let fromBelow = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Below);
         let fromHorizontal = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Horizontal);
-        let from = ConnectionJoinsFrom(above:fromAbove, below:fromBelow, horizontal:fromHorizontal)
+        let from = MapSwift.ConnectionJoinsFrom(above:fromAbove, below:fromBelow, horizontal:fromHorizontal)
         let toH = self.nodeAttribute(.ConnectionsToH, styles: styles, fallback: "center");
         let toV = self.nodeAttribute(.ConnectionsToV, styles: styles, fallback: "center");
-        let to = ConnectionJoinPositions(h: ConnectionJoinPosition.parse(toH), v: ConnectionJoinPosition.parse(toV))
+        let to = MapSwift.ConnectionJoinPositions(h: MapSwift.ConnectionJoinPosition.parse(toH), v: MapSwift.ConnectionJoinPosition.parse(toV))
         let style = self.nodeAttribute(.ConnectionsStyle, styles: styles, fallback: "")
-        return ConnectionStyle(from:from, to:to, style:style)
+        let connectionStyle = MapSwift.ConnectionStyle(from:from, to:to, style:style)
+        cache.cacheItemForKey(connectionStyle, key: cacheKey)
+        return connectionStyle
+
     }
-    func nodeShadowStyle(styles:[String]) -> ShadowStyle {
+    func nodeShadowStyle(styles:[String]) -> MapSwift.ShadowStyle {
+        let cacheKey = cacheKeyForStyles("nodeShadowStyle", styles: styles)
+        if let cached:MapSwift.ShadowStyle = cache.itemForKey(cacheKey) {
+            return cached
+        }
         let color:String = nodeAttribute(.ShadowColor, styles: styles, fallback: "#070707")
         let opacity:Float = nodeAttribute(.ShadowOpacity, styles: styles, fallback: 0.4)
         let offsetWidth:CGFloat = nodeAttribute(.ShadowOffsetWidth, styles: styles, fallback: 2)
         let offsetHeight:CGFloat = nodeAttribute(.ShadowOffsetHeight, styles: styles, fallback: 2)
         let offset = CGSizeMake(offsetWidth, offsetHeight)
         let radius:CGFloat = nodeAttribute(.ShadowRadius, styles: styles, fallback: 2)
-        return ShadowStyle(color:UIColor.fromMapSwiftTheme(color), opacity:opacity, offset:offset, radius:radius)
+        let style = MapSwift.ShadowStyle(color:UIColor.fromMapSwiftTheme(color), opacity:opacity, offset:offset, radius:radius)
+        cache.cacheItemForKey(style, key: cacheKey)
+        return style
+
     }
 
-    func nodeStyle(styles:[String]) -> NodeStyle {
+    func nodeStyle(styles:[String]) -> MapSwift.NodeStyle {
+        let cacheKey = cacheKeyForStyles("nodeStyle", styles: styles)
+        if let cached:MapSwift.NodeStyle = cache.itemForKey(cacheKey) {
+            return cached
+        }
         let cornerRadius:CGFloat = nodeAttribute(.CornerRadius, styles: styles, fallback: 10.0)
         let backgroundColorHex:String = nodeAttribute(.BackgroundColor, styles: styles, fallback: "#E0E0E0")
         let activatedColorHex:String = nodeAttribute(.ActivatedColor, styles: styles, fallback: "#22AAE0")
 
-        return NodeStyle(cornerRadius: cornerRadius, backgroundColor: UIColor.fromMapSwiftTheme( backgroundColorHex), activatedColor: UIColor.fromMapSwiftTheme(activatedColorHex), borderStyle: nodeBorderStyle(styles), shadow: nodeShadowStyle(styles), text: nodeTextStyle(styles))
+        let style = MapSwift.NodeStyle(cornerRadius: cornerRadius, backgroundColor: UIColor.fromMapSwiftTheme( backgroundColorHex), activatedColor: UIColor.fromMapSwiftTheme(activatedColorHex), borderStyle: nodeBorderStyle(styles), shadow: nodeShadowStyle(styles), text: nodeTextStyle(styles))
+        cache.cacheItemForKey(style, key: cacheKey)
+        return style
     }
 
 //MARK: - Connector styling
@@ -258,25 +228,24 @@ public class MapSwiftTheme {
         }
     }
 
-    public enum RelativeNodePosition:String {
-        case Above = "above", Below = "below", Horizontal = "horizontal"
-        static var allValues:[RelativeNodePosition] {
-            return [.Above, .Below, .Horizontal]
-        }
-    }
 
-    func connectorAttribute(attribute:ConnectorAttribute, styles:[String]) -> AnyObject? {
+    private func connectorAttribute(attribute:ConnectorAttribute, styles:[String]) -> AnyObject? {
         return self.themeDictionary.valueForKeyWithOptions(ConnectorAttribute.Prefixes, keyOptions: optionsFromStyle(styles), keyPostFixes: attribute.postFixes)
     }
 
-    func connectAttribute<T>(attribute:ConnectorAttribute, styles:[String], fallback:T) -> T {
+    private func connectAttribute<T>(attribute:ConnectorAttribute, styles:[String], fallback:T) -> T {
         if let val =  self.connectorAttribute(attribute, styles: styles) as? T {
             return val
         }
         return fallback
     }
 
-    public func controlPointsForStylesAndPosition(styles:[String], position:RelativeNodePosition) -> [CGSize] {
+    public func controlPointsForStylesAndPosition(styles:[String], position:MapSwift.RelativeNodePosition) -> [CGSize] {
+        let cacheKey = cacheKeyForStyles("controlPointsForStylesAndPosition:\(position.rawValue)", styles: styles)
+        if let cached:MapSwift.ControlPoints = cache.itemForKey(cacheKey) {
+            return cached.points
+        }
+
         var postFixes = ConnectorAttribute.ControlPoints.postFixes
         postFixes.append(position.rawValue)
         var parsedPoints:[CGSize] = []
@@ -287,6 +256,9 @@ public class MapSwiftTheme {
                 }
             }
         }
-        return parsedPoints
+        let points = parsedPoints
+        cache.cacheItemForKey(MapSwift.ControlPoints(points:points), key: cacheKey)
+        return points
+
     }
 }

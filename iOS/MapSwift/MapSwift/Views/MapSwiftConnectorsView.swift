@@ -10,7 +10,7 @@ import Foundation
 
 
 extension UIColor {
-    static func mapswift_colorForPosition(position:MapSwiftTheme.RelativeNodePosition) -> UIColor {
+    static func mapswift_colorForPosition(position:MapSwift.RelativeNodePosition) -> UIColor {
         switch position {
         case .Above:
             return UIColor.redColor()
@@ -23,18 +23,18 @@ extension UIColor {
 }
 
 extension CGRect {
-    func mapswift_connectionPointForJoinPositions(positions:MapSwiftTheme.ConnectionJoinPositions, relativePoint:CGPoint, cornerRadius:CGFloat, lineWidth:CGFloat) -> CGPoint {
+    func mapswift_connectionPointForJoinPositions(positions:MapSwift.ConnectionJoinPositions, relativePoint:CGPoint, cornerRadius:CGFloat, lineWidth:CGFloat) -> CGPoint {
         let inset = MapSwiftNodeView.BackgroundInset
         let xinset = inset + cornerRadius
         let halfLineWidth:CGFloat = 0.5 * lineWidth
 
-        func getY(pos:MapSwiftTheme.ConnectionJoinPosition) -> CGFloat {
+        func getY(pos:MapSwift.ConnectionJoinPosition) -> CGFloat {
             switch pos {
-            case MapSwiftTheme.ConnectionJoinPosition.Center:
+            case MapSwift.ConnectionJoinPosition.Center:
                 return self.midY
-            case MapSwiftTheme.ConnectionJoinPosition.Base:
+            case MapSwift.ConnectionJoinPosition.Base:
                 return self.maxY  - inset - halfLineWidth
-            case MapSwiftTheme.ConnectionJoinPosition.Nearest:
+            case MapSwift.ConnectionJoinPosition.Nearest:
                 if relativePoint.y > self.midY {
                     return self.maxY - inset
                 }
@@ -42,7 +42,7 @@ extension CGRect {
                     return self.minY + inset
                 }
                 return self.midY
-            case  MapSwiftTheme.ConnectionJoinPosition.NearestInset:
+            case MapSwift.ConnectionJoinPosition.NearestInset:
                 if relativePoint.y > self.midY {
                     return self.maxY - xinset
                 }
@@ -52,11 +52,11 @@ extension CGRect {
                 return self.midY
             }
         }
-        func getX(pos:MapSwiftTheme.ConnectionJoinPosition) -> CGFloat {
+        func getX(pos:MapSwift.ConnectionJoinPosition) -> CGFloat {
             switch pos {
-            case MapSwiftTheme.ConnectionJoinPosition.Center:
+            case MapSwift.ConnectionJoinPosition.Center:
                 return self.midX
-            case MapSwiftTheme.ConnectionJoinPosition.Nearest, MapSwiftTheme.ConnectionJoinPosition.Base:
+            case MapSwift.ConnectionJoinPosition.Nearest, MapSwift.ConnectionJoinPosition.Base:
                 if relativePoint.x > self.midX {
                     return self.maxX - inset
                 }
@@ -64,7 +64,7 @@ extension CGRect {
                     return self.minX + inset
                 }
                 return self.midX
-            case  MapSwiftTheme.ConnectionJoinPosition.NearestInset:
+            case  MapSwift.ConnectionJoinPosition.NearestInset:
                 if relativePoint.x > self.midX {
                     return self.maxX - xinset
                 }
@@ -84,19 +84,19 @@ extension CGRect {
 struct NodeConnectorInfo {
     let nodeRect:CGRect
     let styles:[String]
-    let connectionStyle:MapSwiftTheme.ConnectionStyle
-    let nodeStyle:MapSwiftTheme.NodeStyle
+    let connectionStyle:MapSwift.ConnectionStyle
+    let nodeStyle:MapSwift.NodeStyle
     func connectToPointForRectFrom(rectFrom:CGRect) -> CGPoint {
         let inset = MapSwiftNodeView.BackgroundInset
         let xinset = inset + self.nodeStyle.cornerRadius
         let halfLineWidth:CGFloat = 0.5
-        func getY(pos:MapSwiftTheme.ConnectionJoinPosition) -> CGFloat {
+        func getY(pos:MapSwift.ConnectionJoinPosition) -> CGFloat {
             switch pos {
-            case MapSwiftTheme.ConnectionJoinPosition.Center:
+            case MapSwift.ConnectionJoinPosition.Center:
                 return self.nodeRect.midY
-            case MapSwiftTheme.ConnectionJoinPosition.Base:
+            case MapSwift.ConnectionJoinPosition.Base:
                 return self.nodeRect.maxY - inset - halfLineWidth
-            case MapSwiftTheme.ConnectionJoinPosition.Nearest:
+            case MapSwift.ConnectionJoinPosition.Nearest:
                 if rectFrom.minY > self.nodeRect.maxY {
                     return self.nodeRect.maxY - inset - halfLineWidth
                 }
@@ -104,7 +104,7 @@ struct NodeConnectorInfo {
                     return self.nodeRect.minY + inset - halfLineWidth
                 }
                 return self.nodeRect.midY
-            case  MapSwiftTheme.ConnectionJoinPosition.NearestInset:
+            case MapSwift.ConnectionJoinPosition.NearestInset:
                 if rectFrom.minY > self.nodeRect.maxY {
                     return self.nodeRect.maxY - xinset
                 }
@@ -114,11 +114,11 @@ struct NodeConnectorInfo {
                 return self.nodeRect.midY
             }
         }
-        func getX(pos:MapSwiftTheme.ConnectionJoinPosition) -> CGFloat {
+        func getX(pos:MapSwift.ConnectionJoinPosition) -> CGFloat {
             switch pos {
-            case MapSwiftTheme.ConnectionJoinPosition.Center:
+            case MapSwift.ConnectionJoinPosition.Center:
                 return self.nodeRect.midX
-            case MapSwiftTheme.ConnectionJoinPosition.Nearest, MapSwiftTheme.ConnectionJoinPosition.Base:
+            case MapSwift.ConnectionJoinPosition.Nearest, MapSwift.ConnectionJoinPosition.Base:
                 if rectFrom.minX > self.nodeRect.midX {
                     return self.nodeRect.maxX - inset
                 }
@@ -126,7 +126,7 @@ struct NodeConnectorInfo {
                     return self.nodeRect.minX + inset
                 }
                 return self.nodeRect.midX
-            case  MapSwiftTheme.ConnectionJoinPosition.NearestInset:
+            case  MapSwift.ConnectionJoinPosition.NearestInset:
                 if rectFrom.minX > self.nodeRect.midX {
                     return self.nodeRect.maxX - xinset
                 }
@@ -140,13 +140,13 @@ struct NodeConnectorInfo {
         let y = getY(self.connectionStyle.to.v)
         return CGPointMake(x,y)
     }
-    func connectionStyleFromForPosition(pos:MapSwiftTheme.RelativeNodePosition) -> MapSwiftTheme.ConnectionJoinPositions {
+    func connectionStyleFromForPosition(pos:MapSwift.RelativeNodePosition) -> MapSwift.ConnectionJoinPositions {
         switch pos {
-        case MapSwiftTheme.RelativeNodePosition.Above:
+        case MapSwift.RelativeNodePosition.Above:
             return self.connectionStyle.from.above
-        case MapSwiftTheme.RelativeNodePosition.Below:
+        case MapSwift.RelativeNodePosition.Below:
             return self.connectionStyle.from.below
-        case MapSwiftTheme.RelativeNodePosition.Horizontal:
+        case MapSwift.RelativeNodePosition.Horizontal:
             return self.connectionStyle.from.horizontal
         }
     }

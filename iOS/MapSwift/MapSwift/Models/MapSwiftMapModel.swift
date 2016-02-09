@@ -199,6 +199,7 @@ public class MapSwiftMapModel {
             if let delegate = self.delegate {
 //                print("\(eventName), \(args)")
                 if let mapEvent = MapEvent.parse(eventName) {
+                    print(eventName)
                     delegate.mapModelMapEvent(self, event: mapEvent)
                 } else if let nodeEvent = NodeEvent.parse(eventName), node = nodeEvent.parseArgs(args) {
                     delegate.mapModelNodeEvent(self, event: nodeEvent, node: node)

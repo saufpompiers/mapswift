@@ -34,7 +34,7 @@ class MapSwiftNodeView: UIView {
         }
     }
 
-    func showTextForNodeStyle(node:MapSwiftNode, nodeStyle:MapSwiftTheme.NodeStyle) {
+    func showTextForNodeStyle(node:MapSwiftNode, nodeStyle:MapSwift.NodeStyle) {
         let label = self.nodeTextlabel
         label.font = UIFont.systemFontOfSize(nodeStyle.text.font.size, weight: nodeStyle.text.font.weight)
         if let bkgcolor = self.nodeBackgroundView.nodeBorderView.backgroundColor  {
@@ -71,7 +71,7 @@ class MapSwiftNodeView: UIView {
         }
         return styles
     }
-    func  calcNodeStyle() -> MapSwiftTheme.NodeStyle {
+    func  calcNodeStyle() -> MapSwift.NodeStyle {
         return self.theme.nodeStyle(calcNodeStyles())
     }
     private var _theme:MapSwiftTheme?

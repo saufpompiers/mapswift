@@ -266,6 +266,7 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
 //MARK: - MapSwiftViewCoordinatesDelegate
     func mapSwiftViewCoordinatesChanged(mapSwiftViewCoordiates:MapSwiftViewCoordinates, rectConverter:((rect:CGRect)->(CGRect))) {
         queueViewTask({
+            print("mapSwiftViewCoordinatesChanged")
             for (_, nodeView) in self.nodeViews {
                 if let node = nodeView.node {
                     let nodeFrame = MapSwiftNodeView.NodeRect(rectConverter(rect: node.rect))

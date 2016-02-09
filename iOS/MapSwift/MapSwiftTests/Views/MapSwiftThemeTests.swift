@@ -85,13 +85,13 @@ class MapSwiftThemeTests: XCTestCase {
     //MARK: - nodeBorderStyle
     func test_border_inset_is_0_if_type_is_none() {
         let result = underTest.nodeBorderStyle(["borderless"])
-        XCTAssertEqual(result.type, MapSwiftTheme.BorderType.None)
+        XCTAssertEqual(result.type, MapSwift.BorderType.None)
         XCTAssertEqual(result.inset, 0.0)
 
     }
     func test_should_return_node_border_style_with_name() {
         let result = underTest.nodeBorderStyle(["center"])
-        XCTAssertEqual(result.type, MapSwiftTheme.BorderType.Underline)
+        XCTAssertEqual(result.type, MapSwift.BorderType.Underline)
         XCTAssertEqual(result.line.width, 2.0)
         XCTAssertEqual(result.line.color, UIColor(hexString: "#707070"))
         XCTAssertEqual(result.inset, 2.0)
@@ -99,7 +99,7 @@ class MapSwiftThemeTests: XCTestCase {
 
     func test_should_return_node_border_style_with_no_name() {
         let result = underTest.nodeBorderStyle([])
-        XCTAssertEqual(result.type, MapSwiftTheme.BorderType.Surround)
+        XCTAssertEqual(result.type, MapSwift.BorderType.Surround)
         XCTAssertEqual(result.line.width, 1.0)
         XCTAssertEqual(result.line.color, UIColor(hexString: "#707070"))
         XCTAssertEqual(result.inset, 1.0)
@@ -134,76 +134,76 @@ class MapSwiftThemeTests: XCTestCase {
 
     //MARK: - controlPointsForStylesAndPosition
     func test_should_return_default_if_no_style_supplied() {
-        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwiftTheme.RelativeNodePosition.Above)
+        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwift.RelativeNodePosition.Above)
         XCTAssertEqual(1, result.count)
         XCTAssertEqual(CGSizeMake(0.75, 1.5), result.first)
     }
 
     func test_should_return_multiple_control_points_if_configured() {
-        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwiftTheme.RelativeNodePosition.Below)
+        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwift.RelativeNodePosition.Below)
         XCTAssertEqual(2, result.count)
         XCTAssertEqual(CGSizeMake(0.5, 1.8), result.first)
         XCTAssertEqual(CGSizeMake(0.3, 0.5), result.last)
     }
 
     func test_should_fallback_to_default_if_style_supplied() {
-        let result = underTest.controlPointsForStylesAndPosition(["curve"], position: MapSwiftTheme.RelativeNodePosition.Horizontal)
+        let result = underTest.controlPointsForStylesAndPosition(["curve"], position: MapSwift.RelativeNodePosition.Horizontal)
         XCTAssertEqual(1, result.count)
         XCTAssertEqual(CGSizeMake(0, 1), result.first)
     }
 
     func test_should_return_empty_array_if_configrued_without() {
-        let result = underTest.controlPointsForStylesAndPosition(["straightline"], position: MapSwiftTheme.RelativeNodePosition.Below)
+        let result = underTest.controlPointsForStylesAndPosition(["straightline"], position: MapSwift.RelativeNodePosition.Below)
         XCTAssertEqual(0, result.count)
     }
 
     //MARK: - nodeConnectionStyle
     func test_should_return_default_style() {
         let result = underTest.nodeConnectionStyle([]);
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.above.h)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.h)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.horizontal.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.above.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.below.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.horizontal.h)
 
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.above.v)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.v)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.from.horizontal.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.above.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.below.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Nearest, result.from.horizontal.v)
 
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.to.h)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.to.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Nearest, result.to.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.to.v)
         XCTAssertEqual("", result.style)
     }
 
     func test_should_return_with_style_overrides() {
         let result = underTest.nodeConnectionStyle(["borderless"]);
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.from.above.h)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.h)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.horizontal.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Nearest, result.from.above.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.below.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.horizontal.h)
 
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.above.v)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.from.below.v)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.from.horizontal.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.above.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.from.below.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Nearest, result.from.horizontal.v)
 
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Nearest, result.to.h)
-        XCTAssertEqual(MapSwiftTheme.ConnectionJoinPosition.Center, result.to.v)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Nearest, result.to.h)
+        XCTAssertEqual(MapSwift.ConnectionJoinPosition.Center, result.to.v)
         XCTAssertEqual("curve", result.style)
     }
 
     //MARK: - CGRect.mapswift_relativePositionOfPoint
     let exampleRect = CGRect(x: 10, y: 20, width: 100, height: 200)
     func test_should_return_below_if_point_is_above_the_bottom_of_the_rect_with_tolerance() {
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Below, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 241), tolerance:20))
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Below, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 221), tolerance:0))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Below, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 241), tolerance:20))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Below, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 221), tolerance:0))
     }
     func test_should_return_above_if_point_is_above_the_top_of_the_rect_with_tolerance() {
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Above, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, -1), tolerance:20))
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Above, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 19), tolerance:0))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Above, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, -1), tolerance:20))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Above, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 19), tolerance:0))
     }
 
     func test_should_return_horizontal_if_point_is_within_the_top_and_bottom_of_the_rect_with_tolerance() {
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 240), tolerance:20))
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 220), tolerance:0))
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 0), tolerance:20))
-        XCTAssertEqual(MapSwiftTheme.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 20), tolerance:0))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 240), tolerance:20))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 220), tolerance:0))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 0), tolerance:20))
+        XCTAssertEqual(MapSwift.RelativeNodePosition.Horizontal, exampleRect.mapswift_relativePositionOfPoint(CGPointMake(120, 20), tolerance:0))
 
     }
 

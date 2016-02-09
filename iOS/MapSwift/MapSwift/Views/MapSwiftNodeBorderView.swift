@@ -9,7 +9,7 @@
 import UIKit
 
 class MapSwiftNodeBorderView: UIView {
-    private var nodeStyle:MapSwiftTheme.NodeStyle?
+    private var nodeStyle:MapSwift.NodeStyle?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,10 +23,9 @@ class MapSwiftNodeBorderView: UIView {
         self.clipsToBounds = true
     }
 
-    func setNodeStyle(nodeStyle:MapSwiftTheme.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
+    func setNodeStyle(nodeStyle:MapSwift.NodeStyle, nodeAttributes:MapSwiftNodeAttributes) {
         self.nodeStyle = nodeStyle
         self.layer.cornerRadius = nodeStyle.cornerRadius
-        print("layer.cornerRadius:\(nodeStyle.cornerRadius)")
         if let color = nodeAttributes.backgroundColor {
             self.backgroundColor = color
         } else {
