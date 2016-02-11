@@ -176,10 +176,8 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             nodeViews[node.id] = nodeView
         }
         nodeView.node = node
-        connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: node.styles);
-        UIView.animateWithDuration(0.2, animations: {
-            nodeView.frame = nodeFrame
-        })
+        connectorLayerView.nodeConnectorInfo(node.id, nodeRect: nodeFrame, styles: node.styles)
+        nodeView.frame = nodeFrame
     }
 
     private func applyConnectorEvent(event:MapSwiftMapModel.ConnectorEvent, connector:Dictionary<String, AnyObject>) {
