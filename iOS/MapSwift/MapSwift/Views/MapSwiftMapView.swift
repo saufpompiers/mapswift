@@ -115,10 +115,11 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
                 let frame = coordinateSystem.nodeAdded(node)
                 let nodeFrame = MapSwiftNodeView.NodeRect(frame)
                 let returnNode = draggedNode
-                self.connectorLayerView.animateNodeRectWithDuration(0.5, nodeId: node.id, nodeRect: nodeFrame)
-                UIView.animateWithDuration(0.2, animations: {
+                let duration:NSTimeInterval = 0.1
+                self.connectorLayerView.animateNodeRectWithDuration(duration, nodeId: node.id, nodeRect: nodeFrame)
+                UIView.animateWithDuration(duration, animations: { () -> Void in
                     returnNode.frame = nodeFrame
-                })
+                }, completion: nil)
             }
         }
     }

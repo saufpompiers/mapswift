@@ -15,11 +15,13 @@ class MapSwiftConnectorView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
+        self.clipsToBounds = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
         self.backgroundColor = UIColor.clearColor()
+        self.clipsToBounds = true
     }
     func showConnector(connector:Connector, line:MapSwift.LineStyle, inset:CGFloat) {
         self.connectorInfo = (connector:connector, line:line, inset:inset)

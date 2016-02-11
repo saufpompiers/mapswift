@@ -234,7 +234,7 @@ class MapSwiftConnectorsView : UIView {
             }
         }
     }
-    private func showConnectors(connectors:[MapSwiftNodeConnector]) {
+    private func showConnectors(connectors:[MapSwiftNodeConnector], animationDuration:NSTimeInterval) {
         for connector in connectors {
             let key = keyForConnector(connector)
 
@@ -243,8 +243,17 @@ class MapSwiftConnectorsView : UIView {
                 let inset:CGFloat = 30
                 let viewFrame = CGRectInset(connectorPath.frame, -inset, -inset)
                 if let view = connectorViews[key] {
-                    view.frame = viewFrame
-                    view.showConnector(connectorPath.connector, line: toInfo.connectionStyle.lineStyle, inset: inset)
+                    if animationDuration > 0 {
+                        UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+                            view.frame = connectorPath.frame
+                            }, completion: { (completed) in
+                                view.frame = viewFrame
+                                view.showConnector(connectorPath.connector, line: toInfo.connectionStyle.lineStyle, inset: inset)
+                        })
+                    } else {
+                        view.showConnector(connectorPath.connector, line: toInfo.connectionStyle.lineStyle, inset: inset)
+                        view.frame = viewFrame
+                    }
                 } else {
                     let view = MapSwiftConnectorView(frame:viewFrame)
                     self.addSubview(view)
@@ -261,13 +270,12 @@ class MapSwiftConnectorsView : UIView {
         }
     }
 
-
     func nodeConnectorInfo(nodeId:String, nodeRect:CGRect?, styles:[String]) {
         if let nodeRect = nodeRect {
             let connectorInfo = NodeConnectorInfo(nodeRect: nodeRect, styles: styles, connectionStyle: self.theme.nodeConnectionStyle(styles), nodeStyle: self.theme.nodeStyle(styles))
             nodeConnectorInfoMap[nodeId] = connectorInfo
             let connectors = self.connectorsForNodeId(nodeId)
-            self.showConnectors(connectors)
+            self.showConnectors(connectors, animationDuration: 0)
         } else {
             nodeConnectorInfoMap.removeValueForKey(nodeId)
             removeConnectorViewsForNodeId(nodeId)
@@ -278,12 +286,12 @@ class MapSwiftConnectorsView : UIView {
         if let info = nodeConnectorInfoMap[nodeId] {
             nodeConnectorInfoMap[nodeId] = NodeConnectorInfo(nodeRect: nodeRect, styles: info.styles, connectionStyle: self.theme.nodeConnectionStyle(info.styles), nodeStyle: info.nodeStyle)
             let connectors = self.connectorsForNodeId(nodeId)
-            self.showConnectors(connectors)
+            self.showConnectors(connectors, animationDuration: duration)
         }
     }
     func addConnector(connector:MapSwiftNodeConnector) {
         self.connectors[keyForConnector(connector)] = connector
-        self.showConnectors([connector])
+        self.showConnectors([connector], animationDuration: 0)
     }
 
     func removeConnector(connector:MapSwiftNodeConnector) {
@@ -294,26 +302,4 @@ class MapSwiftConnectorsView : UIView {
         }
         self.connectorViews.removeValueForKey(key)
     }
-
-
-/*
-    override func drawRect(rect: CGRect) {
-        self.clipsToBounds = false
-        let ctx = UIGraphicsGetCurrentContext()
-        for (_, connector) in self.connectors {
-
-                if let fromInfo = nodeConnectorInfoMap[connector.from], toInfo = nodeConnectorInfoMap[connector.to] {
-                    let connectorPath = calculateConnector(fromInfo, to: toInfo)
-                    CGContextSetStrokeColorWithColor(ctx,toInfo.connectionStyle.lineStyle.color.CGColor)
-                    CGContextSetLineWidth(ctx, toInfo.connectionStyle.lineStyle.width)
-                    CGContextSetLineCap(ctx, CGLineCap.Round)
-                    CGContextMoveToPoint(ctx, connectorPath.from.x, connectorPath.from.y)
-                    CGContextAddQuadCurveToPoint(ctx, connectorPath.controlPoint.x, connectorPath.controlPoint.y, connectorPath.to.x, connectorPath.to.y)
-
-                    CGContextStrokePath(ctx)
-                }
-        }
-
-    }
-*/
 }
