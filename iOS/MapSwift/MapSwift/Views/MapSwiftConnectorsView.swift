@@ -162,7 +162,7 @@ class MapSwiftConnectorsView : UIView {
 
     private var connectors:[String: MapSwiftNodeConnector] = [:]
     private var nodeConnectorInfoMap:[String:NodeConnectorInfo] = [:]
-
+    private var connectorViews:[String: MapSwiftConnectorView] = [:]
     private var _theme:MapSwiftTheme?
     var theme:MapSwiftTheme {
         get {
@@ -187,64 +187,116 @@ class MapSwiftConnectorsView : UIView {
         return "\(connector.from)->\(connector.to)"
     }
 
+    private func calculateViewConnectorInfo(connector:MapSwiftNodeConnector, from:NodeConnectorInfo, to: NodeConnectorInfo) -> (frame:CGRect, connector:MapSwiftConnectorView.Connector) {
 
-    private func calculateConnector(from:NodeConnectorInfo, to: NodeConnectorInfo) -> ConnectorPath {
         let tolerance:CGFloat = 10
-        let connectorBounds = CGRectInset(from.nodeRect.union(to.nodeRect), -30, -30)
 
         var connectorStyles:[String] = []
         if let style = to.connectionStyle.style {
             connectorStyles.append(style)
         }
         connectorStyles.append("default");
-
         let toPoint = to.connectToPointForRectFrom(from.nodeRect, lineWidth:to.connectionStyle.lineStyle.width)
         let pos = from.nodeRect.mapswift_relativePositionOfPoint(toPoint, tolerance: tolerance)
         let toRelativePosition = from.connectionStyleFromForPosition(pos)
         let fromPoint = from.nodeRect.mapswift_connectionPointForJoinPositions(toRelativePosition, relativePoint: toPoint, cornerRadius: from.nodeStyle.cornerRadius, lineWidth:to.connectionStyle.lineStyle.width)
-        let controlPointMultipliers = self.theme.controlPointsForStylesAndPosition(connectorStyles, position: pos)
-        var controlPoints:[CGPoint] = []
-        let dx = toPoint.x - fromPoint.x
-        let dy = toPoint.y - fromPoint.y
-        for controlPointMultiplier in controlPointMultipliers {
-            let x = (dx * controlPointMultiplier.width) + fromPoint.x
-            let y = (dy * controlPointMultiplier.height) + fromPoint.y
-            let controlPoint = CGPointMake(min(max(x, connectorBounds.minX), connectorBounds.maxX), min(max(y, connectorBounds.minY), connectorBounds.maxY))
-            controlPoints.append(controlPoint)
-        }
-        if controlPoints.count == 0 {
-            controlPoints.append(CGPointMake(fromPoint.x, fromPoint.y))
-        }
-        return ConnectorPath(from: fromPoint, to:toPoint, controlPoint:controlPoints.first!)
 
+        let connectorBounds = CGRect.mapswift_rectContainingPoints(fromPoint, to: toPoint, minSize: 1)
+
+        let convertedToAndFrom = connectorBounds.mapswift_pointsforFromAndToCGPoints(fromPoint, to: toPoint)
+        let controlPointMultipliers = self.theme.controlPointsForStylesAndPosition(connectorStyles, position: pos)
+        let controlPoints = controlPointMultipliers.map { (cp) -> MapSwift.Position.Point in
+            return MapSwift.Position.Point(type: MapSwift.Position.Measurement.Proportional, origin:convertedToAndFrom.from.origin, point: CGPointMake(cp.width, cp.height))
+        }
+        let frameConnector = MapSwiftConnectorView.Connector(nodes:connector, from:convertedToAndFrom.from, to: convertedToAndFrom.to, controlPoints:controlPoints);
+        return (frame:connectorBounds, connector:frameConnector)
     }
+
+    private func connectorsForNodeId(nodeId:String) -> [MapSwiftNodeConnector] {
+        return self.connectors.values.filter({ (connector) -> Bool in
+            return connector.from == nodeId || connector.to == nodeId
+        })
+    }
+    private func connectorViewsForNodeId(nodeId:String) -> [MapSwiftConnectorView] {
+        return self.connectorViews.values.filter({ (view) -> Bool in
+            if let connector = view.connector {
+                return connector.from == nodeId || connector.to == nodeId
+            }
+            return false
+        })
+    }
+    private func removeConnectorViewsForNodeId(nodeId:String) {
+        let views = connectorViewsForNodeId(nodeId)
+        for view in views {
+            view.removeFromSuperview()
+            if let connector = view.connector {
+                self.connectorViews.removeValueForKey(keyForConnector(connector))
+            }
+        }
+    }
+    private func showConnectors(connectors:[MapSwiftNodeConnector]) {
+        for connector in connectors {
+            let key = keyForConnector(connector)
+
+            if let fromInfo = nodeConnectorInfoMap[connector.from], toInfo = nodeConnectorInfoMap[connector.to] {
+                let connectorPath = calculateViewConnectorInfo(connector, from: fromInfo, to: toInfo)
+                let inset:CGFloat = 30
+                let viewFrame = CGRectInset(connectorPath.frame, -inset, -inset)
+                if let view = connectorViews[key] {
+                    view.frame = viewFrame
+                    view.showConnector(connectorPath.connector, line: toInfo.connectionStyle.lineStyle, inset: inset)
+                } else {
+                    let view = MapSwiftConnectorView(frame:viewFrame)
+                    self.addSubview(view)
+                    connectorViews[key] = view
+                    view.showConnector(connectorPath.connector, line: toInfo.connectionStyle.lineStyle, inset: inset)
+                }
+
+            } else {
+                if let view = connectorViews[key] {
+                    view.removeFromSuperview()
+                    connectorViews.removeValueForKey(key)
+                }
+            }
+        }
+    }
+
+
     func nodeConnectorInfo(nodeId:String, nodeRect:CGRect?, styles:[String]) {
         if let nodeRect = nodeRect {
             let connectorInfo = NodeConnectorInfo(nodeRect: nodeRect, styles: styles, connectionStyle: self.theme.nodeConnectionStyle(styles), nodeStyle: self.theme.nodeStyle(styles))
             nodeConnectorInfoMap[nodeId] = connectorInfo
+            let connectors = self.connectorsForNodeId(nodeId)
+            self.showConnectors(connectors)
         } else {
             nodeConnectorInfoMap.removeValueForKey(nodeId)
+            removeConnectorViewsForNodeId(nodeId)
         }
-        self.setNeedsDisplay()
-
     }
 
     func animateNodeRectWithDuration(duration:NSTimeInterval, nodeId:String, nodeRect:CGRect) {
         if let info = nodeConnectorInfoMap[nodeId] {
             nodeConnectorInfoMap[nodeId] = NodeConnectorInfo(nodeRect: nodeRect, styles: info.styles, connectionStyle: self.theme.nodeConnectionStyle(info.styles), nodeStyle: info.nodeStyle)
-            self.setNeedsDisplay()
+            let connectors = self.connectorsForNodeId(nodeId)
+            self.showConnectors(connectors)
         }
     }
     func addConnector(connector:MapSwiftNodeConnector) {
         self.connectors[keyForConnector(connector)] = connector
-        self.setNeedsDisplay()
+        self.showConnectors([connector])
     }
 
     func removeConnector(connector:MapSwiftNodeConnector) {
-        self.connectors.removeValueForKey(keyForConnector(connector))
-        self.setNeedsDisplay()
+        let key = keyForConnector(connector)
+        self.connectors.removeValueForKey(key)
+        if let view = self.connectorViews[key] {
+            view.removeFromSuperview()
+        }
+        self.connectorViews.removeValueForKey(key)
     }
 
+
+/*
     override func drawRect(rect: CGRect) {
         self.clipsToBounds = false
         let ctx = UIGraphicsGetCurrentContext()
@@ -263,4 +315,5 @@ class MapSwiftConnectorsView : UIView {
         }
 
     }
+*/
 }

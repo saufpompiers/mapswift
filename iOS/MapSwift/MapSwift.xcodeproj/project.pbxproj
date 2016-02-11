@@ -74,6 +74,9 @@
 		55C210DB1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210DA1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift */; };
 		55C210DE1C69F7280089C291 /* MapSwiftStyleDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210DD1C69F7280089C291 /* MapSwiftStyleDescriptors.swift */; };
 		55C210E01C69FAE30089C291 /* MapSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210DF1C69FAE30089C291 /* MapSwift.swift */; };
+		55C210E21C6B23C70089C291 /* MapSwiftConnectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210E11C6B23C70089C291 /* MapSwiftConnectorView.swift */; };
+		55C210E41C6B27810089C291 /* CGRectExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C210E31C6B27810089C291 /* CGRectExtensionsTests.swift */; };
+		55C210E81C6C5B010089C291 /* simple_map.mup in Resources */ = {isa = PBXBuildFile; fileRef = 55C210E71C6C5B010089C291 /* simple_map.mup */; };
 		55F0FD311C456691005A18CD /* MapSwiftThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0FD301C456691005A18CD /* MapSwiftThemeTests.swift */; };
 		55F0FD331C49532B005A18CD /* MapSwiftNodeBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */; };
 		55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */; };
@@ -191,6 +194,9 @@
 		55C210DA1C69F6DF0089C291 /* NSTextAlignmentExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTextAlignmentExtensions.swift; sourceTree = "<group>"; };
 		55C210DD1C69F7280089C291 /* MapSwiftStyleDescriptors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftStyleDescriptors.swift; sourceTree = "<group>"; };
 		55C210DF1C69FAE30089C291 /* MapSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwift.swift; sourceTree = "<group>"; };
+		55C210E11C6B23C70089C291 /* MapSwiftConnectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftConnectorView.swift; sourceTree = "<group>"; };
+		55C210E31C6B27810089C291 /* CGRectExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtensionsTests.swift; sourceTree = "<group>"; };
+		55C210E71C6C5B010089C291 /* simple_map.mup */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simple_map.mup; sourceTree = "<group>"; };
 		55F0FD301C456691005A18CD /* MapSwiftThemeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftThemeTests.swift; sourceTree = "<group>"; };
 		55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftNodeBorderView.swift; sourceTree = "<group>"; };
 		55F3FE871C1557A2007333CE /* MapSwiftWKProxyComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSwiftWKProxyComponent.swift; sourceTree = "<group>"; };
@@ -283,6 +289,7 @@
 		5523D2621C0F366600069905 /* MapSwiftExample */ = {
 			isa = PBXGroup;
 			children = (
+				55C210E71C6C5B010089C291 /* simple_map.mup */,
 				558055E71C342C5D0063F39D /* MapSwiftTestMap.mup */,
 				5523D2631C0F366600069905 /* AppDelegate.swift */,
 				5523D2651C0F366600069905 /* ViewController.swift */,
@@ -291,6 +298,7 @@
 				5523D26C1C0F366600069905 /* LaunchScreen.storyboard */,
 				5523D26F1C0F366600069905 /* Info.plist */,
 				55F3FE891C155DBD007333CE /* MapSwift.playground */,
+				55C210E31C6B27810089C291 /* CGRectExtensionsTests.swift */,
 			);
 			path = MapSwiftExample;
 			sourceTree = "<group>";
@@ -391,14 +399,15 @@
 			isa = PBXGroup;
 			children = (
 				5502B4991C3BBABC00EBDA3A /* MapSwiftConnectorsView.swift */,
+				55C210E11C6B23C70089C291 /* MapSwiftConnectorView.swift */,
 				558055E31C33BCC10063F39D /* MapSwiftMapView.swift */,
 				554AA97B1C43F6D9006DF4E1 /* MapSwiftNodeBackgroundView.swift */,
-				554AA97D1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift */,
-				558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */,
-				55F625181C45245000E9421C /* MapSwiftTheme.swift */,
 				55F0FD321C49532B005A18CD /* MapSwiftNodeBorderView.swift */,
 				55688B411C633BCA0066F01C /* MapSwiftNodeCollapsedView.swift */,
+				554AA97D1C4403F3006DF4E1 /* MapSwiftNodeDecorationView.swift */,
+				558055E51C33BD6F0063F39D /* MapSwiftNodeView.swift */,
 				55C210DD1C69F7280089C291 /* MapSwiftStyleDescriptors.swift */,
+				55F625181C45245000E9421C /* MapSwiftTheme.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -574,6 +583,7 @@
 				5523D26E1C0F366600069905 /* LaunchScreen.storyboard in Resources */,
 				5523D26B1C0F366600069905 /* Assets.xcassets in Resources */,
 				558055E81C342C5D0063F39D /* MapSwiftTestMap.mup in Resources */,
+				55C210E81C6C5B010089C291 /* simple_map.mup in Resources */,
 				5523D2691C0F366600069905 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -598,6 +608,7 @@
 				557856211C1B1C3E001C5E17 /* MapSwiftWKProxyEventListener.swift in Sources */,
 				558055CF1C2BE01A0063F39D /* MapSwiftConnector.swift in Sources */,
 				55F3FE881C1557A2007333CE /* MapSwiftWKProxyComponent.swift in Sources */,
+				55C210E21C6B23C70089C291 /* MapSwiftConnectorView.swift in Sources */,
 				55F625191C45245000E9421C /* MapSwiftTheme.swift in Sources */,
 				55F3FE8D1C157A47007333CE /* MapSwiftProxyResponse.swift in Sources */,
 				558055E61C33BD6F0063F39D /* MapSwiftNodeView.swift in Sources */,
@@ -642,6 +653,7 @@
 				557856151C1AF738001C5E17 /* NSTimeIntervalExtensionsTests.swift in Sources */,
 				558055C91C280C440063F39D /* MapSwiftMapModelTests.swift in Sources */,
 				556637E81C201FFF0010044E /* MapSwiftWKProxyProtocolTests.swift in Sources */,
+				55C210E41C6B27810089C291 /* CGRectExtensionsTests.swift in Sources */,
 				556637E21C200ED30010044E /* MapSwiftStubProxyProtocolDelegate.swift in Sources */,
 				5541E8A41C1EB95800318670 /* MapSwiftStubProxyProtocol.swift in Sources */,
 				5578561D1C1B0CFB001C5E17 /* MapSwiftProxyResponseTests.swift in Sources */,

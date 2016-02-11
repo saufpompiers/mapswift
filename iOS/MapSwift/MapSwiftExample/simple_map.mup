@@ -1,0 +1,11 @@
+{
+  "title": "simple map",
+  "id": 1,
+  "formatVersion": 2,
+  "ideas": {
+    "1": {
+      "title": "child one",
+      "id": 2
+    }
+  }
+}

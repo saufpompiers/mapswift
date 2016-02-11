@@ -2,24 +2,27 @@
 
 import UIKit
 
-var str = "Hello, playground"
+let x = ["A", "b", "c"]
 
-var data:NSData?
-var args:[AnyObject] = ["hello",  NSNull(), 1, true]
-do {
-    data  = try NSJSONSerialization.dataWithJSONObject(args, options: NSJSONWritingOptions(rawValue: 0))
-}
+var y = x
 
-if let data = data {
-    let s = NSString(data: data, encoding: NSUTF8StringEncoding);
-    let command = "containerProxies.pingModel.sentFromSwift()"
-}
+print(y.first!)
 
 
-let s = "cornerRadius,back"
 
-s.componentsSeparatedByString(",")
+let z = y.removeFirst()
 
+print(z)
+
+
+print(y.first!)
+
+print(x)
+
+print(y)
+
+
+var arr:[String] = []
 
 
 

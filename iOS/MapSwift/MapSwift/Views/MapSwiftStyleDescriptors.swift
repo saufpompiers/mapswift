@@ -9,12 +9,6 @@
 import Foundation
 
 extension MapSwift {
-    public enum RelativeNodePosition:String {
-        case Above = "above", Below = "below", Horizontal = "horizontal"
-        static var allValues:[RelativeNodePosition] {
-            return [.Above, .Below, .Horizontal]
-        }
-    }
     public typealias LineStyle = (color:UIColor, width:CGFloat)
     public enum BorderType: String {
         case Surround = "surround", Underline = "underline", None = "none"
