@@ -17,7 +17,7 @@ extension MapSwift {
     typealias NodeIdEventArgs = (event:MapSwiftMapModel.NodeRequestEvent, nodeId:String, toggle:Bool)
     typealias RectConverter = ((rect:CGRect)->(CGRect))
 }
-public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate, MapSwiftNodeViewDelegate {
+public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoordinatesDelegate, MapSwiftNodeViewDelegate, UIScrollViewDelegate {
 
     weak public var delegate:MapSwiftMapViewDelegate?
 
@@ -68,6 +68,8 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
     }
 
     func firstLayout() {
+        scrollView.opaque = false;
+        scrollView.alpha = 0
         scrollView.backgroundColor = UIColor.clearColor()
         mapContentView.backgroundColor = UIColor.clearColor()
         self.addSubview(scrollView)
@@ -88,18 +90,37 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         self.coordinateSystem.delegate = self
         self.setNeedsLayout()
     }
-    public override func layoutSubviews() {
-        self.scrollView.frame = self.bounds
+    var _contentSizeLaidOut:CGSize?
+    var isFirstLayout:Bool = true
+
+    private func centerScrollView() {
         let contentSize = self.mapContentView.frame.size
-        self.scrollView.contentSize = contentSize
         let hoffset = (self.bounds.size.width - contentSize.width)/2
         let hinset:CGFloat = max(0, hoffset)
         let voffset = (self.bounds.size.height - contentSize.height)/2
         let vinset:CGFloat = max(0, voffset)
         let insets = UIEdgeInsetsMake(vinset, hinset, vinset, hinset)
         self.scrollView.contentInset = insets
-        self.scrollView.contentOffset = CGPointMake(0, 0)
+        print(">>contentOffset:\(self.scrollView.contentOffset) hoffset:\(hoffset), voffset:\(voffset)")
+        if isFirstLayout  {
+            self.scrollView.contentOffset = CGPointMake(-hoffset, -voffset)
+            isFirstLayout = false
+        }
+        print("<<contentOffset:\(self.scrollView.contentOffset) hoffset:\(hoffset), voffset:\(voffset)")
+    }
+
+    public override func layoutSubviews() {
+        self.scrollView.frame = self.bounds
+        let contentSize = self.mapContentView.frame.size
+        if _contentSizeLaidOut == nil || _contentSizeLaidOut! != contentSize {
+            self.scrollView.contentSize = contentSize
+            self.scrollView.delegate = self
+            self.centerScrollView()
+            self.scrollView.setNeedsLayout()
+        }
         self.centerOnSelectedNode();
+        _contentSizeLaidOut = contentSize
+
     }
     func onContentPanGesture(pan:UIPanGestureRecognizer) {
         if let draggedNode = draggedNode, node = draggedNode.node {
@@ -147,6 +168,13 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
             }
             for evt in layoutChange.nodeIdEvents {
                 self.applyNodeIdEvent(evt.event, nodeId: evt.nodeId, toggle: evt.toggle)
+            }
+            if (!self.scrollView.opaque) {
+                UIView.animateWithDuration(0.5, delay: 0.5, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                    self.scrollView.alpha = 1
+                }, completion: { completed in
+                    self.scrollView.opaque = true;
+                })
             }
         }
         self.layoutChange = nil
@@ -391,5 +419,23 @@ public class MapSwiftMapView: UIView, MapSwiftMapModelDelegate, MapSwiftViewCoor
         queueViewTask({
             self.endDragging()
         });
+    }
+
+//MARK: - UIScrollViewDelegate
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
+//        print("offset:\(scrollView.contentOffset) insets:\(scrollView.contentInset)")
+        if scrollView.contentInset.left > 0 && scrollView.contentOffset.x > (scrollView.contentInset.left - 50) {
+            UIView.animateWithDuration(0.2, animations: {
+                scrollView.contentOffset.x = -scrollView.contentInset.left
+            })
+
+        }
+        if scrollView.contentInset.top > 0 && scrollView.contentOffset.y > (scrollView.contentInset.top - 50) {
+            UIView.animateWithDuration(0.2, animations: {
+                scrollView.contentOffset.y = -scrollView.contentInset.top
+            })
+
+        }
+
     }
 }
