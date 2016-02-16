@@ -134,28 +134,15 @@ class MapSwiftThemeTests: XCTestCase {
 
     //MARK: - controlPointsForStylesAndPosition
     func test_should_return_default_if_no_style_supplied() {
-        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwift.RelativeNodePosition.Above)
-        XCTAssertEqual(1, result.count)
-        XCTAssertEqual(CGSizeMake(0.75, 1.5), result.first)
-    }
-
-    func test_should_return_multiple_control_points_if_configured() {
-        let result = underTest.controlPointsForStylesAndPosition([], position: MapSwift.RelativeNodePosition.Below)
-        XCTAssertEqual(2, result.count)
-        XCTAssertEqual(CGSizeMake(0.5, 1.8), result.first)
-        XCTAssertEqual(CGSizeMake(0.3, 0.5), result.last)
+        let result = underTest.controlPointForStylesAndPosition([], position: MapSwift.RelativeNodePosition.Above)
+        XCTAssertEqual(CGSizeMake(0.75, 1.5), result)
     }
 
     func test_should_fallback_to_default_if_style_supplied() {
-        let result = underTest.controlPointsForStylesAndPosition(["curve"], position: MapSwift.RelativeNodePosition.Horizontal)
-        XCTAssertEqual(1, result.count)
-        XCTAssertEqual(CGSizeMake(0, 1), result.first)
+        let result = underTest.controlPointForStylesAndPosition(["curve"], position: MapSwift.RelativeNodePosition.Horizontal)
+        XCTAssertEqual(CGSizeMake(0, 1), result)
     }
 
-    func test_should_return_empty_array_if_configrued_without() {
-        let result = underTest.controlPointsForStylesAndPosition(["straightline"], position: MapSwift.RelativeNodePosition.Below)
-        XCTAssertEqual(0, result.count)
-    }
 
     //MARK: - nodeConnectionStyle
     func test_should_return_default_style() {

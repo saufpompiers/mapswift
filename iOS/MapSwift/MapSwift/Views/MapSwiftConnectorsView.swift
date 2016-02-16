@@ -204,12 +204,11 @@ class MapSwiftConnectorsView : UIView {
         let connectorBounds = CGRect.mapswift_rectContainingPoints(fromPoint, to: toPoint, minSize: 1)
 
         let convertedToAndFrom = connectorBounds.mapswift_pointsforFromAndToCGPoints(fromPoint, to: toPoint)
-        let controlPointMultipliers = self.theme.controlPointsForStylesAndPosition(connectorStyles, position: pos)
+        let controlPointMultiplier = self.theme.controlPointForStylesAndPosition(connectorStyles, position: pos)
         let curveType = self.theme.connectorCurveTypeForStyles(connectorStyles)
-        let controlPoints = controlPointMultipliers.map { (cp) -> MapSwift.Position.Point in
-            return MapSwift.Position.Point(type: MapSwift.Position.Measurement.Proportional, origin:convertedToAndFrom.from.origin, point: CGPointMake(cp.width, cp.height))
-        }
-        let frameConnector = MapSwiftConnectorView.Connector(nodes:connector, from:convertedToAndFrom.from, to: convertedToAndFrom.to, controlPoints:controlPoints, curveType:curveType);
+        let controlPoint = MapSwift.Position.Point(type: MapSwift.Position.Measurement.Proportional, origin:convertedToAndFrom.from.origin, point: CGPointMake(controlPointMultiplier.width, controlPointMultiplier.height))
+
+        let frameConnector = MapSwiftConnectorView.Connector(nodes:connector, from:convertedToAndFrom.from, to: convertedToAndFrom.to, controlPoint:controlPoint, curveType:curveType);
         return (frame:connectorBounds, connector:frameConnector)
     }
 

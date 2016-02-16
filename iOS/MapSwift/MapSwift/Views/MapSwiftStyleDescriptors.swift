@@ -101,10 +101,10 @@ extension MapSwift {
             self.text = text
         }
     }
-    class ControlPoints {
-        let points:[CGSize]
-        init(points:[CGSize]) {
-            self.points = points
+    class ControlPoint {
+        let point:CGSize
+        init(point:CGSize) {
+            self.point = point
         }
     }
 }

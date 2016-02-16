@@ -223,7 +223,7 @@ public class MapSwiftTheme {
         CurveType = "type",
         LineColor = "line:color",
         LineWidth = "line:width",
-        ControlPoints = "controlPoints"
+        ControlPoint = "controlPoint"
 
         static let Prefixes = ["connector"]
 
@@ -256,24 +256,23 @@ public class MapSwiftTheme {
         return curveType
     }
 
-    public func controlPointsForStylesAndPosition(styles:[String], position:MapSwift.RelativeNodePosition) -> [CGSize] {
+    public func controlPointForStylesAndPosition(styles:[String], position:MapSwift.RelativeNodePosition) -> CGSize {
         let cacheKey = cacheKeyForStyles("controlPointsForStylesAndPosition:\(position.rawValue)", styles: styles)
-        if let cached:MapSwift.ControlPoints = cache.itemForKey(cacheKey) {
-            return cached.points
+        if let cached:MapSwift.ControlPoint = cache.itemForKey(cacheKey) {
+            return cached.point
         }
 
-        var postFixes = ConnectorAttribute.ControlPoints.postFixes
+        var postFixes = ConnectorAttribute.ControlPoint.postFixes
         postFixes.append(position.rawValue)
-        var parsedPoints:[CGSize] = []
-        if let controlPoints = self.themeDictionary.valueForKeyWithOptions(ConnectorAttribute.Prefixes, keyOptions: optionsFromStyle(styles), keyPostFixes: postFixes) as? NSArray {
-            for item in controlPoints {
-                if let controlPoint = item as? NSDictionary, width = controlPoint["width"] as? CGFloat, height = controlPoint["height"] as? CGFloat {
-                    parsedPoints.append(CGSizeMake(width, height))
-                }
+
+        var parsedPoint = CGSizeMake(0, 1)
+        if let controlPoint = self.themeDictionary.valueForKeyWithOptions(ConnectorAttribute.Prefixes, keyOptions: optionsFromStyle(styles), keyPostFixes: postFixes) as? NSDictionary {
+            if let width = controlPoint["width"] as? CGFloat, height = controlPoint["height"] as? CGFloat {
+                parsedPoint = CGSizeMake(width, height)
             }
+
         }
-        let points = parsedPoints
-        cache.cacheItemForKey(MapSwift.ControlPoints(points:points), key: cacheKey)
-        return points
+        cache.cacheItemForKey(MapSwift.ControlPoint(point:parsedPoint), key: cacheKey)
+        return parsedPoint
     }
 }

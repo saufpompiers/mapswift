@@ -9,7 +9,7 @@
 import UIKit
 
 class MapSwiftConnectorView: UIView {
-    typealias Connector = (nodes:MapSwiftNodeConnector, from:MapSwift.Position.Point, to: MapSwift.Position.Point, controlPoints:[MapSwift.Position.Point], curveType:String)
+    typealias Connector = (nodes:MapSwiftNodeConnector, from:MapSwift.Position.Point, to: MapSwift.Position.Point, controlPoint:MapSwift.Position.Point, curveType:String)
     private var connectorInfo:(connector:Connector, line:MapSwift.LineStyle, inset:CGFloat)?
 
     override init(frame: CGRect) {
@@ -56,8 +56,7 @@ class MapSwiftConnectorView: UIView {
 
     private func drawQuadraticConnector(ctx:CGContext, fromPoint:CGPoint, toPoint:CGPoint, connector:Connector) {
         CGContextMoveToPoint(ctx, fromPoint.x , fromPoint.y )
-        var controlPoints = connector.controlPoints
-        let controlPoint = controlPoints.count > 0 ? containedPoint(connectorBounds.mapswift_CGPointForPositionPoint(controlPoints[0])) : toPoint
+        let controlPoint = containedPoint(connectorBounds.mapswift_CGPointForPositionPoint(connector.controlPoint))
         CGContextAddQuadCurveToPoint(ctx, controlPoint.x , controlPoint.y , toPoint.x , toPoint.y )
         CGContextStrokePath(ctx)
     }
@@ -91,7 +90,6 @@ class MapSwiftConnectorView: UIView {
     }
     override func drawRect(rect: CGRect) {
         if let connectorInfo = self.connectorInfo, ctx = UIGraphicsGetCurrentContext() {
-            var controlPoints = connectorInfo.connector.controlPoints
             func containedPoint(point:CGPoint) -> CGPoint {
                 return CGPointMake(min(max(point.x, 0), self.bounds.width), min(max(point.y, 0), self.bounds.height))
             }
