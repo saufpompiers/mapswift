@@ -220,6 +220,7 @@ public class MapSwiftTheme {
 //MARK: - Connector styling
     public enum ConnectorAttribute:String {
         case
+        CurveType = "type",
         LineColor = "line:color",
         LineWidth = "line:width",
         ControlPoints = "controlPoints"
@@ -243,6 +244,16 @@ public class MapSwiftTheme {
             return val
         }
         return fallback
+    }
+
+    public func connectorCurveTypeForStyles(styles:[String]) -> String {
+        let cacheKey = cacheKeyForStyles("connectorCurveTypeForStyles", styles: styles)
+        if let cached:String = cache.itemForKey(cacheKey) {
+            return cached
+        }
+        let curveType:String = connectAttribute(.CurveType, styles: styles, fallback: "quadratic")
+        cache.cacheItemForKey(curveType, key: cacheKey)
+        return curveType
     }
 
     public func controlPointsForStylesAndPosition(styles:[String], position:MapSwift.RelativeNodePosition) -> [CGSize] {

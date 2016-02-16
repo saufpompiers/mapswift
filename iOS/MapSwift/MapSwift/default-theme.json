@@ -61,17 +61,57 @@
         "level 4": {
             "connections": {
                 "style": "straightline",
+                "from": {
+                    "above": {
+                        "h": "nearest",
+                        "v": "center"
+                    },
+                    "below": {
+                        "h": "nearest",
+                        "v": "center"
+                    },
+                    "horizontal": {
+                        "h": "nearest",
+                        "v": "center"
+                    }
+                }
             }
         },
         "level 5": {
             "cornerRadius": 2.0,
-            "backgroundColor": "#ffff99"
+            "backgroundColor": "#ffff99",
+            "connections": {
+                "style": "blue-s-curve",
+                "to": {
+                    "h": "nearest",
+                    "v": "center"
+                }
+            }
+        },
+        "level 2": {
+            "connections": {
+                "style": "straightline",
+                "from": {
+                    "above": {
+                        "h": "nearest",
+                        "v": "center"
+                    },
+                    "below": {
+                        "h": "nearest",
+                        "v": "center"
+                    },
+                    "horizontal": {
+                        "h": "nearest",
+                        "v": "center"
+                    }
+                }
+            }
         },
         "level 3": {
             "backgroundColor": "transparent",
             "cornerRadius": 1.0,
             "connections": {
-                "style": "curve",
+                "style": "thick-s-curve",
                 "from": {
                     "above": {
                         "h": "nearest-inset",
@@ -111,6 +151,7 @@
     },
     "connector": {
         "default": {
+            "type": "quadratic",
             "line": {
                 "color": "#707070",
                 "width": 1.0
@@ -121,7 +162,21 @@
                 "horizontal": [{"width": 0, "height": 1}]
             }
         },
+        "blue-s-curve": {
+            "type": "s-curve",
+            "line": {
+                "color": "#0000FF",
+                "width": 1
+            }
+        },
+        "thick-s-curve": {
+            "type": "s-curve",
+            "line": {
+                "width": 2
+            }
+        },
         "curve": {
+            "type": "quadratic",
             "line": {
                 "width": 2
             },
@@ -131,22 +186,11 @@
                 "horizontal": [{"width": 0, "height": 1}]
             }
         },
-        "slight-curve": {
-            "controlPoints": {
-                "above": [{"width": 0.5, "height": 1}],
-                "below": [{"width": 0.5, "height": 1}],
-                "horizontal": [{"width": 0, "height": 1}]
-            }
-        },
         "straightline": {
+            "type": "straight",
             "line": {
                 "color": "#FF0000",
                 "width": 1
-            },
-            "controlPoints": {
-                "above": [{"width": 1, "height": 1}],
-                "below": [{"width": 1, "height": 1}],
-                "horizontal": [{"width": 1, "height": 1}]
             }
         }
 
