@@ -63,27 +63,21 @@ class MapSwiftConnectorView: UIView {
 
     private func drawSCurveConnector(ctx:CGContext, fromPoint:CGPoint, toPoint:CGPoint) {
         let initialRadius:CGFloat = 10
-        let minDiff:CGFloat = initialRadius * 2
         let dx:CGFloat = toPoint.x - fromPoint.x
         let dy:CGFloat = toPoint.y - fromPoint.y
+        let signX = dx/abs(dx)
+        let signY = dy/abs(dy)
+        let incrementX = (initialRadius < abs((dx / 2)) ? initialRadius * signX : (dx / 2))
+        let incrementY = (initialRadius < abs((dy / 2)) ? initialRadius * signY : (dy / 2))
         CGContextMoveToPoint(ctx, fromPoint.x , fromPoint.y )
-        if abs(dx) < minDiff || abs(dy) < minDiff {
-            CGContextAddQuadCurveToPoint(ctx, toPoint.x , fromPoint.y , toPoint.x , toPoint.y )
-        } else {
-            let signX = dx/abs(dx)
-            let signY = dy/abs(dy)
-            let incrementX = initialRadius * signX
-            let incrementY = initialRadius * signY
+        let cp1 = CGPointMake(incrementX + fromPoint.x, fromPoint.y)
+        let p1 = CGPointMake(cp1.x, incrementY + fromPoint.y)
+        CGContextAddQuadCurveToPoint(ctx, cp1.x , cp1.y , p1.x , p1.y)
 
-            let cp1 = CGPointMake(incrementX + fromPoint.x, fromPoint.y)
-            let p1 = CGPointMake(cp1.x, incrementY + fromPoint.y)
-            CGContextAddQuadCurveToPoint(ctx, cp1.x , cp1.y , p1.x , p1.y)
-
-            let rdx = toPoint.x - p1.x
-            let cp2 = CGPointMake(toPoint.x - rdx, toPoint.y - incrementY)
-            let cp3 = CGPointMake(toPoint.x - rdx, toPoint.y)
-            CGContextAddCurveToPoint(ctx, cp2.x, cp2.y, cp3.x, cp3.y, toPoint.x, toPoint.y)
-        }
+        let rdx = toPoint.x - p1.x
+        let cp2 = CGPointMake(toPoint.x - rdx, toPoint.y - incrementY)
+        let cp3 = CGPointMake(toPoint.x - rdx, toPoint.y)
+        CGContextAddCurveToPoint(ctx, cp2.x, cp2.y, cp3.x, cp3.y, toPoint.x, toPoint.y)
 
 
         CGContextStrokePath(ctx)
