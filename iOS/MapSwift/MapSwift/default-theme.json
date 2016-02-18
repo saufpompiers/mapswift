@@ -34,15 +34,11 @@
                 }
             },
             "connections": {
+                "default": {
+                    "h": "center",
+                    "v": "center"
+                },
                 "from": {
-                    "above": {
-                        "h": "center",
-                        "v": "center"
-                    },
-                    "below": {
-                        "h": "center",
-                        "v": "center"
-                    },
                     "horizontal": {
                         "h": "nearest-inset",
                         "v": "center"
@@ -61,19 +57,9 @@
         "level 4": {
             "connections": {
                 "style": "straightline",
-                "from": {
-                    "above": {
-                        "h": "nearest",
-                        "v": "center"
-                    },
-                    "below": {
-                        "h": "nearest",
-                        "v": "center"
-                    },
-                    "horizontal": {
-                        "h": "nearest",
-                        "v": "center"
-                    }
+                "default": {
+                    "h": "nearest",
+                    "v": "center"
                 }
             }
         },
@@ -91,19 +77,9 @@
         "level 2": {
             "connections": {
                 "style": "straightline",
-                "from": {
-                    "above": {
-                        "h": "nearest",
-                        "v": "center"
-                    },
-                    "below": {
-                        "h": "nearest",
-                        "v": "center"
-                    },
-                    "horizontal": {
-                        "h": "nearest",
-                        "v": "center"
-                    }
+                "default": {
+                    "h": "nearest",
+                    "v": "center"
                 }
             }
         },
@@ -112,21 +88,7 @@
             "cornerRadius": 1.0,
             "connections": {
                 "style": "thick-s-curve",
-                "from": {
-                    "above": {
-                        "h": "nearest-inset",
-                        "v": "base"
-                    },
-                    "below": {
-                        "h": "nearest-inset",
-                        "v": "base"
-                    },
-                    "horizontal": {
-                        "h": "nearest-inset",
-                        "v": "base"
-                    }
-                },
-                "to": {
+                "default": {
                     "h": "nearest-inset",
                     "v": "base"
                 }
@@ -180,7 +142,7 @@
             "line": {
                 "width": 2
             },
-            "controlPoints": {
+            "controlPoint": {
                 "above": {"width": 0, "height": 1},
                 "below": {"width": 0, "height": 1}
             }

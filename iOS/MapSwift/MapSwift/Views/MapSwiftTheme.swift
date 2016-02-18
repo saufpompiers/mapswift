@@ -72,6 +72,8 @@ public class MapSwiftTheme {
         TextMargin = "text:margin",
         FontSize = "text:font:size",
         FontWeight = "text:font:weight",
+        ConnectionsDefaultH = "connections:default:h",
+        ConnectionsDefaultV = "connections:default:v",
         ConnectionsFrom = "connections:from",
         ConnectionsToH = "connections:to:h",
         ConnectionsToV = "connections:to:v",
@@ -154,17 +156,67 @@ public class MapSwiftTheme {
             return cached
         }
         func calcConnectionJoinPositions(styles:[String], postFixes:[String], pos:MapSwift.RelativeNodePosition) -> MapSwift.ConnectionJoinPositions {
-            let postFixesH = postFixes + [pos.rawValue, "h"]
+            let postFixesH = postFixes + [pos.rawValue, "h"] 
             let postFixesV = postFixes + [pos.rawValue, "v"]
+            let defaultPostFixesH = NodeAttribute.ConnectionsDefaultH.postFixes
+            let defaultPostFixesV = NodeAttribute.ConnectionsDefaultV.postFixes
             var hString = ""
             var vString = ""
-            if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: styles, keyPostFixes: postFixesH) as? String {
-                hString = val
+
+            for (style) in optionsFromStyle(styles) {
+                if hString == "" {
+                    if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style], keyPostFixes: postFixesH) as? String {
+                        hString = val
+                    } else if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style],
+                        keyPostFixes: defaultPostFixesH) as? String {
+                        hString = val
+                    }
+                }
+                if vString == "" {
+                    if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style], keyPostFixes: postFixesV) as? String {
+                        vString = val
+                    } else if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style], keyPostFixes: defaultPostFixesV) as? String {
+                        vString = val
+                    }
+                }
             }
-            if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: styles, keyPostFixes: postFixesV) as? String {
-                vString = val
+
+            return MapSwift.ConnectionJoinPositions(h: MapSwift.ConnectionJoinPosition.parse(hString), v: MapSwift.ConnectionJoinPosition.parse(vString))
+        }
+        func calcConnectionToJoinPosition(styles:[String]) -> MapSwift.ConnectionJoinPositions {
+            let fallback = "center"
+            let defaultPostFixesH = NodeAttribute.ConnectionsDefaultH.postFixes
+            let defaultPostFixesV = NodeAttribute.ConnectionsDefaultV.postFixes
+            let postFixesH = NodeAttribute.ConnectionsToH.postFixes
+            let postFixesV = NodeAttribute.ConnectionsToV.postFixes
+            var hString = ""
+            var vString = ""
+            for (style) in optionsFromStyle(styles) {
+                if hString == "" {
+                    if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style], keyPostFixes: postFixesH) as? String {
+                        hString = val
+                    } else if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style],
+                        keyPostFixes: defaultPostFixesH) as? String {
+                            hString = val
+                    }
+
+                }
+                if vString == "" {
+                    if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style], keyPostFixes: postFixesV) as? String {
+                        vString = val
+                    } else if let val = self.themeDictionary.valueForKeyWithOptions(NodeAttribute.Prefixes, keyOptions: [style], keyPostFixes: defaultPostFixesV) as? String {
+                        vString = val
+                    }
+                }
+            }
+            if hString == "" {
+                hString = fallback
+            }
+            if vString == "" {
+                vString = fallback
             }
             return MapSwift.ConnectionJoinPositions(h: MapSwift.ConnectionJoinPosition.parse(hString), v: MapSwift.ConnectionJoinPosition.parse(vString))
+
         }
         let options = optionsFromStyle(styles)
         let postFixesFrom = NodeAttribute.ConnectionsFrom.postFixes
@@ -172,9 +224,7 @@ public class MapSwiftTheme {
         let fromBelow = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Below);
         let fromHorizontal = calcConnectionJoinPositions(options, postFixes:postFixesFrom, pos: .Horizontal);
         let from = MapSwift.ConnectionJoinsFrom(above:fromAbove, below:fromBelow, horizontal:fromHorizontal)
-        let toH = self.nodeAttribute(.ConnectionsToH, styles: styles, fallback: "center");
-        let toV = self.nodeAttribute(.ConnectionsToV, styles: styles, fallback: "center");
-        let to = MapSwift.ConnectionJoinPositions(h: MapSwift.ConnectionJoinPosition.parse(toH), v: MapSwift.ConnectionJoinPosition.parse(toV))
+        let to = calcConnectionToJoinPosition(styles)
 
         let style = self.nodeAttribute(.ConnectionsStyle, styles: styles, fallback: "")
         let lineWidth:CGFloat = connectAttribute(.LineWidth, styles: [style], fallback: 1.0)
